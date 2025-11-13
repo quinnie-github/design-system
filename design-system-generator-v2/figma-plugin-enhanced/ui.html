@@ -747,9 +747,10 @@
         // Send to plugin code
         parent.postMessage({
           pluginMessage: {
-            type: 'generate',
+            type: 'generate-system',
             systemName: systemName,
-            data: data
+            data: data,
+            options: data.options
           }
         }, '*');
       } catch (error) {

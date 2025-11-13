@@ -29,15 +29,18 @@ figma.ui.onmessage = async (msg) => {
     }
 
     if (msg.type === 'generate-system') {
+      // Accept data from message or use previously imported data
+      designSystemData = msg.data || designSystemData;
+
       if (!designSystemData) {
         figma.ui.postMessage({
-          type: 'error',
-          message: 'No design system data loaded. Please import JSON first.'
+          type: 'generation-error',
+          message: 'No design system data provided. Please provide JSON data.'
         });
         return;
       }
 
-      const options = msg.options;
+      const options = msg.options || {};
       const systemName = msg.systemName || 'Design System';
 
       figma.ui.postMessage({
@@ -63,7 +66,7 @@ figma.ui.onmessage = async (msg) => {
   } catch (error) {
     console.error('Plugin error:', error);
     figma.ui.postMessage({
-      type: 'error',
+      type: 'generation-error',
       message: error.message || 'An unexpected error occurred'
     });
     figma.notify('❌ Error: ' + error.message, { error: true });
