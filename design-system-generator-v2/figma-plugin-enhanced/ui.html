@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design System Generator v2.0</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #ffffff;
+      color: #1e293b;
+      font-size: 13px;
+    }
+
+    .container {
+      padding: 16px;
+    }
+
+    .header {
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    h1 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #0f172a;
+      margin-bottom: 4px;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .section {
+      margin-bottom: 24px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .input-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 500;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: inherit;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 11px;
+      font-family: 'SF Mono', Monaco, monospace;
+      resize: vertical;
+      line-height: 1.5;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    textarea::placeholder {
+      color: #94a3b8;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: #6366f1;
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #4f46e5;
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+      margin-top: 8px;
+    }
+
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .status-message {
+      padding: 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .status-message.show {
+      display: block;
+    }
+
+    .status-message.info {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #93c5fd;
+    }
+
+    .status-message.success {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #86efac;
+    }
+
+    .status-message.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+    }
+
+    .summary-box {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 12px;
+      display: none;
+    }
+
+    .summary-box.show {
+      display: block;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 12px;
+    }
+
+    .summary-label {
+      color: #64748b;
+    }
+
+    .summary-value {
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .checkbox-group {
+      margin-bottom: 12px;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .checkbox-label:hover {
+      background: #f8fafc;
+    }
+
+    .checkbox-label input {
+      margin-right: 8px;
+      cursor: pointer;
+    }
+
+    .checkbox-label span {
+      font-size: 12px;
+      color: #334155;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      margin-bottom: 12px;
+    }
+
+    #fileInput {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    .file-input-btn {
+      display: inline-block;
+      padding: 8px 16px;
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .file-input-btn:hover {
+      background: #e2e8f0;
+    }
+
+    .file-name {
+      display: inline-block;
+      margin-left: 8px;
+      font-size: 11px;
+      color: #64748b;
+    }
+
+    .divider {
+      height: 1px;
+      background: #e2e8f0;
+      margin: 20px 0;
+    }
+
+    .help-text {
+      font-size: 11px;
+      color: #64748b;
+      line-height: 1.5;
+      margin-top: 6px;
+    }
+
+    .step-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #e2e8f0;
+      color: #64748b;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .step.active {
+      background: #6366f1;
+      color: white;
+    }
+
+    .step.complete {
+      background: #10b981;
+      color: white;
+    }
+
+    .step-label {
+      font-size: 12px;
+      color: #64748b;
+    }
+
+    .step-label.active {
+      color: #1e293b;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎨 Design System Generator v2.0</h1>
+      <p class="subtitle">Import JSON and generate your design system</p>
+    </div>
+
+    <!-- Status Message -->
+    <div id="statusMessage" class="status-message"></div>
+
+    <!-- Step 1: Import JSON -->
+    <div class="section" id="importSection">
+      <div class="step-indicator">
+        <div class="step active" id="step1">1</div>
+        <div class="step-label active">Import JSON</div>
+      </div>
+
+      <div class="input-group">
+        <label>Import Design System JSON</label>
+
+        <!-- File Upload Option -->
+        <div class="file-input-wrapper">
+          <input type="file" id="fileInput" accept=".json">
+          <label for="fileInput" class="file-input-btn">
+            📁 Choose JSON File
+          </label>
+          <span class="file-name" id="fileName"></span>
+        </div>
+
+        <!-- Or Paste JSON -->
+        <label style="margin-top: 12px;">Or paste JSON directly:</label>
+        <textarea
+          id="jsonInput"
+          placeholder='Paste your design system JSON here...
+
+Example:
+{
+  "colors": {
+    "primary": ["#6366f1"],
+    "text": ["#1e293b"]
+  },
+  "typography": {
+    "fontFamilies": ["Inter"],
+    "fontSizes": ["12px", "14px", "16px"]
+  },
+  ...
+}'
+        ></textarea>
+        <p class="help-text">
+          Generate this JSON using the Design System Generator web app by analyzing a design screenshot.
+        </p>
+      </div>
+
+      <button id="importBtn" class="btn btn-primary">
+        ✅ Import & Validate JSON
+      </button>
+    </div>
+
+    <!-- Summary (shown after import) -->
+    <div class="summary-box" id="summaryBox">
+      <div style="font-weight: 600; margin-bottom: 8px; font-size: 12px;">📊 Design System Summary</div>
+      <div class="summary-item">
+        <span class="summary-label">Colors:</span>
+        <span class="summary-value" id="summaryColors">0</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Typography tokens:</span>
+        <span class="summary-value" id="summaryTypography">0</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Spacing values:</span>
+        <span class="summary-value" id="summarySpacing">0</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Button variants:</span>
+        <span class="summary-value" id="summaryButtons">0</span>
+      </div>
+      <div class="summary-item">
+        <span class="summary-label">Gradients:</span>
+        <span class="summary-value" id="summaryGradients">0</span>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- Step 2: Configuration -->
+    <div class="section" id="configSection" style="display: none;">
+      <div class="step-indicator">
+        <div class="step complete" id="step2Indicator">2</div>
+        <div class="step-label active">Configure & Generate</div>
+      </div>
+
+      <div class="input-group">
+        <label for="systemName">Design System Name</label>
+        <input
+          type="text"
+          id="systemName"
+          placeholder="My Design System"
+          value="My Design System"
+        >
+      </div>
+
+      <div class="input-group">
+        <label>Generation Options</label>
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="createVariables" checked>
+            <span>Create Figma variables</span>
+          </label>
+        </div>
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="generateComponents" checked>
+            <span>Generate components</span>
+          </label>
+        </div>
+        <div class="checkbox-group">
+          <label class="checkbox-label">
+            <input type="checkbox" id="createPage" checked>
+            <span>Create new page for design system</span>
+          </label>
+        </div>
+      </div>
+
+      <button id="generateBtn" class="btn btn-primary">
+        ✨ Generate Design System
+      </button>
+
+      <button id="cancelBtn" class="btn btn-secondary">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+  <script>
+    let designSystemData = null;
+
+    // File input handler
+    document.getElementById('fileInput').addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        document.getElementById('fileName').textContent = file.name;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          document.getElementById('jsonInput').value = event.target.result;
+        };
+        reader.readAsText(file);
+      }
+    });
+
+    // Import button
+    document.getElementById('importBtn').addEventListener('click', () => {
+      const jsonText = document.getElementById('jsonInput').value.trim();
+
+      if (!jsonText) {
+        showStatus('Please paste or upload a JSON file first', 'error');
+        return;
+      }
+
+      try {
+        // Parse JSON
+        designSystemData = JSON.parse(jsonText);
+
+        // Send to plugin code
+        parent.postMessage({
+          pluginMessage: {
+            type: 'import-json',
+            data: designSystemData
+          }
+        }, '*');
+
+      } catch (error) {
+        showStatus('Invalid JSON: ' + error.message, 'error');
+      }
+    });
+
+    // Generate button
+    document.getElementById('generateBtn').addEventListener('click', () => {
+      const systemName = document.getElementById('systemName').value.trim() || 'My Design System';
+
+      const options = {
+        createVariables: document.getElementById('createVariables').checked,
+        generateComponents: document.getElementById('generateComponents').checked,
+        createPage: document.getElementById('createPage').checked
+      };
+
+      // Send to plugin code
+      parent.postMessage({
+        pluginMessage: {
+          type: 'generate-system',
+          systemName: systemName,
+          options: options
+        }
+      }, '*');
+
+      // Disable button
+      const btn = document.getElementById('generateBtn');
+      btn.disabled = true;
+      btn.textContent = 'Generating...';
+    });
+
+    // Cancel button
+    document.getElementById('cancelBtn').addEventListener('click', () => {
+      parent.postMessage({
+        pluginMessage: { type: 'cancel' }
+      }, '*');
+    });
+
+    // Listen for messages from plugin code
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+
+      if (msg.type === 'json-imported') {
+        if (msg.success) {
+          showStatus('✅ JSON imported successfully!', 'success');
+
+          // Show summary
+          const summary = msg.summary;
+          document.getElementById('summaryColors').textContent = summary.colors;
+          document.getElementById('summaryTypography').textContent = summary.typography;
+          document.getElementById('summarySpacing').textContent = summary.spacing;
+          document.getElementById('summaryButtons').textContent = summary.buttons;
+          document.getElementById('summaryGradients').textContent = summary.gradients;
+          document.getElementById('summaryBox').classList.add('show');
+
+          // Show config section
+          document.getElementById('configSection').style.display = 'block';
+          document.getElementById('step2Indicator').classList.add('active');
+
+          // Scroll to config section
+          document.getElementById('configSection').scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+
+      if (msg.type === 'generation-started') {
+        showStatus(msg.message, 'info');
+      }
+
+      if (msg.type === 'generation-complete') {
+        if (msg.success) {
+          showStatus('✨ Design system generated successfully!', 'success');
+
+          // Re-enable button
+          const btn = document.getElementById('generateBtn');
+          btn.disabled = false;
+          btn.textContent = '✨ Generate Design System';
+
+          // Show results summary
+          const result = msg.result;
+          let message = 'Generated:\n';
+          if (result.variableCollectionId) message += '- Variable collection\n';
+          if (result.componentsCreated.length > 0) message += `- ${result.componentsCreated.length} components\n`;
+          if (result.pageCreated) message += '- New design system page\n';
+
+          showStatus(message, 'success');
+        }
+      }
+
+      if (msg.type === 'error') {
+        showStatus('❌ Error: ' + msg.message, 'error');
+
+        // Re-enable button
+        const btn = document.getElementById('generateBtn');
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = '✨ Generate Design System';
+        }
+      }
+    };
+
+    // Helper function to show status messages
+    function showStatus(message, type) {
+      const statusBox = document.getElementById('statusMessage');
+      statusBox.className = `status-message ${type} show`;
+      statusBox.textContent = message;
+
+      // Auto-hide after 5 seconds for success messages
+      if (type === 'success') {
+        setTimeout(() => {
+          statusBox.classList.remove('show');
+        }, 5000);
+      }
+    }
+  </script>
+</body>
+</html>
