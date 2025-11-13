@@ -583,18 +583,40 @@
   </div>
 
   <script>
-    const systemNameInput = document.getElementById('systemName');
-    const jsonInput = document.getElementById('jsonInput');
-    const fileInput = document.getElementById('fileInput');
-    const fileNameDisplay = document.getElementById('fileName');
-    const statusMessage = document.getElementById('statusMessage');
-    const summaryBox = document.getElementById('summaryBox');
-    const summaryContent = document.getElementById('summaryContent');
-    const generateBtn = document.getElementById('generateBtn');
-    const validateBtn = document.getElementById('validateBtn');
-    const createVariablesCheck = document.getElementById('createVariables');
-    const includeExamplesCheck = document.getElementById('includeExamples');
-    const includeInsightsCheck = document.getElementById('includeInsights');
+    // Wait for DOM to be fully loaded
+    document.addEventListener('DOMContentLoaded', () => {
+      initializePlugin();
+    });
+
+    // If already loaded, initialize immediately
+    if (document.readyState === 'loading') {
+      // DOM is still loading, wait for DOMContentLoaded
+    } else {
+      // DOM is already loaded, initialize now
+      initializePlugin();
+    }
+
+    function initializePlugin() {
+      // Get all DOM elements with safety checks
+      const systemNameInput = document.getElementById('systemName');
+      const jsonInput = document.getElementById('jsonInput');
+      const fileInput = document.getElementById('fileInput');
+      const fileNameDisplay = document.getElementById('fileName');
+      const statusMessage = document.getElementById('statusMessage');
+      const summaryBox = document.getElementById('summaryBox');
+      const summaryContent = document.getElementById('summaryContent');
+      const generateBtn = document.getElementById('generateBtn');
+      const validateBtn = document.getElementById('validateBtn');
+      const createVariablesCheck = document.getElementById('createVariables');
+      const includeExamplesCheck = document.getElementById('includeExamples');
+      const includeInsightsCheck = document.getElementById('includeInsights');
+
+      // Verify all required elements exist
+      if (!systemNameInput || !jsonInput || !fileInput || !statusMessage ||
+          !summaryBox || !summaryContent || !generateBtn || !validateBtn) {
+        console.error('Required DOM elements not found');
+        return;
+      }
 
     // File upload handler
     fileInput.addEventListener('change', (e) => {
@@ -737,17 +759,39 @@
       }
     });
 
-    // Listen for messages from plugin code
+    } // End of initializePlugin function
+
+    // Setup global message listener (outside initializePlugin)
     window.onmessage = (event) => {
+      // Safety check for event data
+      if (!event || !event.data || !event.data.pluginMessage) {
+        return;
+      }
+
       const msg = event.data.pluginMessage;
+      const generateBtn = document.getElementById('generateBtn');
+      const statusMessage = document.getElementById('statusMessage');
+
       if (msg.type === 'generation-complete') {
-        showStatus('Design system generated successfully! 🎉', 'success');
-        generateBtn.disabled = false;
-        generateBtn.innerHTML = '<span>✨</span> Generate Design System';
+        if (generateBtn && statusMessage) {
+          statusMessage.textContent = 'Design system generated successfully! 🎉';
+          statusMessage.className = 'status-message show success';
+          setTimeout(() => {
+            statusMessage.classList.remove('show');
+          }, 5000);
+          generateBtn.disabled = false;
+          generateBtn.innerHTML = '<span>✨</span> Generate Design System';
+        }
       } else if (msg.type === 'generation-error') {
-        showStatus(`Error: ${msg.message}`, 'error');
-        generateBtn.disabled = false;
-        generateBtn.innerHTML = '<span>✨</span> Generate Design System';
+        if (generateBtn && statusMessage) {
+          statusMessage.textContent = `Error: ${msg.message || 'Unknown error'}`;
+          statusMessage.className = 'status-message show error';
+          setTimeout(() => {
+            statusMessage.classList.remove('show');
+          }, 5000);
+          generateBtn.disabled = false;
+          generateBtn.innerHTML = '<span>✨</span> Generate Design System';
+        }
       }
     };
   </script>
