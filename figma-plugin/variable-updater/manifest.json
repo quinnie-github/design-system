@@ -1,0 +1,10 @@
+{
+  "name": "Variable Updater",
+  "id": "variable-updater-dsgpt",
+  "api": "1.0.0",
+  "main": "figma-variable-updater-plugin.js",
+  "ui": "ui.html",
+  "capabilities": [],
+  "enableProposedApi": false,
+  "editorType": ["figma"]
+}

@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Variable Updater</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .container {
+      background: white;
+      min-height: 100vh;
+    }
+
+    /* Header */
+    .header {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      padding: 24px 20px;
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+      50% { transform: scale(1.1) rotate(180deg); opacity: 0.8; }
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .logo {
+      font-size: 32px;
+      margin-bottom: 8px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-5px) rotate(5deg); }
+    }
+
+    .header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header p {
+      font-size: 13px;
+      opacity: 0.9;
+      font-weight: 400;
+    }
+
+    /* Content */
+    .content {
+      padding: 24px 20px;
+    }
+
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      background: #f8fafc;
+      padding: 6px;
+      border-radius: 12px;
+    }
+
+    .tab {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      background: transparent;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
+      color: #64748b;
+    }
+
+    .tab.active {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      box-shadow: 0 2px 8px rgba(240, 147, 251, 0.3);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Status */
+    .status {
+      padding: 14px 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: slideIn 0.3s ease-out;
+      border: 2px solid;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .status.success {
+      background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+      border-color: #22c55e;
+      color: #166534;
+    }
+
+    .status.error {
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      border-color: #ef4444;
+      color: #991b1b;
+    }
+
+    .status.info {
+      background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+      border-color: #0ea5e9;
+      color: #075985;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Section */
+    .section {
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .section-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-desc {
+      font-size: 13px;
+      color: #64748b;
+      margin-bottom: 16px;
+      line-height: 1.5;
+    }
+
+    /* Color Inputs */
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .color-input-group {
+      margin-bottom: 16px;
+    }
+
+    .color-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .color-input-wrapper {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .color-preview {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      border: 2px solid #e2e8f0;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .color-preview:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .color-text {
+      flex: 1;
+      padding: 10px 12px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 13px;
+      font-family: 'SF Mono', Monaco, monospace;
+      background: white;
+      transition: all 0.2s;
+    }
+
+    .color-text:focus {
+      outline: none;
+      border-color: #f093fb;
+      box-shadow: 0 0 0 4px rgba(240, 147, 251, 0.1);
+    }
+
+    /* Buttons */
+    .button {
+      width: 100%;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .button:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(240, 147, 251, 0.4);
+      margin-bottom: 12px;
+    }
+
+    .button-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(240, 147, 251, 0.5);
+    }
+
+    .button-secondary {
+      background: white;
+      color: #475569;
+      border: 2px solid #e2e8f0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .button-secondary:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+
+    .button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .button-icon {
+      font-size: 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .button-text {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Results */
+    .results {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 12px;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+
+    .result-item {
+      padding: 6px 0;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .result-item:last-child {
+      border-bottom: none;
+    }
+
+    .result-item.success {
+      color: #059669;
+    }
+
+    /* Token Manager */
+    .token-list {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px;
+      max-height: 300px;
+      overflow-y: auto;
+      margin-bottom: 16px;
+    }
+
+    .token-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid #f1f5f9;
+      transition: background 0.2s;
+    }
+
+    .token-item:hover {
+      background: #f8fafc;
+    }
+
+    .token-item:last-child {
+      border-bottom: none;
+    }
+
+    .token-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .token-value {
+      font-size: 12px;
+      color: #64748b;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+
+    /* Footer */
+    .footer {
+      padding: 20px;
+      text-align: center;
+      color: #94a3b8;
+      font-size: 11px;
+      border-top: 1px solid #e2e8f0;
+      background: #f8fafc;
+    }
+
+    .footer a {
+      color: #f093fb;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    /* Loading Spinner */
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .spinner {
+      display: inline-block;
+      width: 16px;
+      height: 16px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    /* Quick Presets */
+    .preset-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .preset-card {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .preset-card:hover {
+      border-color: #f093fb;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(240, 147, 251, 0.2);
+    }
+
+    .preset-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+
+    .preset-colors {
+      display: flex;
+      gap: 4px;
+    }
+
+    .preset-color {
+      width: 20px;
+      height: 20px;
+      border-radius: 4px;
+      border: 1px solid #e2e8f0;
+    }
+
+    /* Smart Setup Styles */
+    .component-checkbox {
+      display: flex;
+      align-items: flex-start;
+      padding: 12px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: white;
+      border: 1px solid #e2e8f0;
+      position: relative;
+    }
+
+    .component-checkbox:hover {
+      border-color: #667eea;
+      background: #f8f9ff;
+    }
+
+    .component-checkbox input[type="checkbox"] {
+      position: absolute;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .checkmark {
+      width: 20px;
+      height: 20px;
+      border: 2px solid #cbd5e1;
+      border-radius: 4px;
+      margin-right: 12px;
+      flex-shrink: 0;
+      position: relative;
+      transition: all 0.2s;
+    }
+
+    .component-checkbox input[type="checkbox"]:checked ~ .checkmark {
+      background: #667eea;
+      border-color: #667eea;
+    }
+
+    .component-checkbox input[type="checkbox"]:checked ~ .checkmark:after {
+      content: "✓";
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      color: white;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .component-info {
+      flex: 1;
+    }
+
+    .component-name {
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 4px;
+    }
+
+    .component-desc {
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    .component-category {
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-content">
+        <div class="logo">🎨</div>
+        <h1>Variable Updater</h1>
+        <p>Update design system colors & brand identity</p>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('quick')">⚡ Quick Update</button>
+        <button class="tab" onclick="switchTab('smart')">🤖 Smart Setup</button>
+        <button class="tab" onclick="switchTab('cleanup')">🧹 Cleanup</button>
+        <button class="tab" onclick="switchTab('advanced')">⚙️ Advanced</button>
+      </div>
+      <!-- Status -->
+      <div id="status" class="status hidden">
+        <span id="statusIcon">✅</span>
+        <span id="statusMessage"></span>
+      </div>
+
+      <!-- Quick Update Tab -->
+      <div id="quickTab" class="tab-content active">
+        <!-- Presets -->
+        <div class="section">
+          <div class="section-title">
+            <span>🎯</span>
+            <span>Brand Presets</span>
+          </div>
+          <div class="section-desc">
+            Click a preset to instantly apply brand colors
+          </div>
+          <div class="preset-grid">
+            <div class="preset-card" onclick="applyPreset('modern')">
+              <div class="preset-name">Modern Tech</div>
+              <div class="preset-colors">
+                <div class="preset-color" style="background: #667eea"></div>
+                <div class="preset-color" style="background: #764ba2"></div>
+                <div class="preset-color" style="background: #f093fb"></div>
+              </div>
+            </div>
+            <div class="preset-card" onclick="applyPreset('corporate')">
+              <div class="preset-name">Corporate Blue</div>
+              <div class="preset-colors">
+                <div class="preset-color" style="background: #2563eb"></div>
+                <div class="preset-color" style="background: #1e40af"></div>
+                <div class="preset-color" style="background: #3b82f6"></div>
+              </div>
+            </div>
+            <div class="preset-card" onclick="applyPreset('fresh')">
+              <div class="preset-name">Fresh & Green</div>
+              <div class="preset-colors">
+                <div class="preset-color" style="background: #10b981"></div>
+                <div class="preset-color" style="background: #059669"></div>
+                <div class="preset-color" style="background: #22c55e"></div>
+              </div>
+            </div>
+            <div class="preset-card" onclick="applyPreset('bold')">
+              <div class="preset-name">Bold & Vibrant</div>
+              <div class="preset-colors">
+                <div class="preset-color" style="background: #ef4444"></div>
+                <div class="preset-color" style="background: #f59e0b"></div>
+                <div class="preset-color" style="background: #ec4899"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Custom Colors -->
+        <div class="section">
+          <div class="section-title">
+            <span>🎨</span>
+            <span>Custom Brand Colors</span>
+          </div>
+          <div class="section-desc">
+            Paste your client's brand colors below
+          </div>
+
+          <div class="color-input-group">
+            <label class="color-label">Brand Primary</label>
+            <div class="color-input-wrapper">
+              <input type="color" class="color-preview" id="colorPrimary" value="#4d79c7">
+              <input type="text" class="color-text" id="colorPrimaryText" value="#4d79c7" oninput="syncColor('Primary')">
+            </div>
+          </div>
+
+          <div class="color-input-group">
+            <label class="color-label">Brand Secondary</label>
+            <div class="color-input-wrapper">
+              <input type="color" class="color-preview" id="colorSecondary" value="#5ca5a5">
+              <input type="text" class="color-text" id="colorSecondaryText" value="#5ca5a5" oninput="syncColor('Secondary')">
+            </div>
+          </div>
+
+          <div class="color-input-group">
+            <label class="color-label">Brand Accent</label>
+            <div class="color-input-wrapper">
+              <input type="color" class="color-preview" id="colorAccent" value="#d46a6a">
+              <input type="text" class="color-text" id="colorAccentText" value="#d46a6a" oninput="syncColor('Accent')">
+            </div>
+          </div>
+
+          <button class="button button-primary" onclick="updateVariables()">
+            <span class="button-icon">✨</span>
+            <span class="button-text">Update Design System</span>
+          </button>
+        </div>
+
+        <!-- Results -->
+        <div id="resultsSection" class="section hidden">
+          <div class="section-title">
+            <span>📊</span>
+            <span>Update Results</span>
+          </div>
+          <div class="results" id="results"></div>
+        </div>
+      </div>
+
+      <!-- Smart Setup Tab -->
+      <div id="smartTab" class="tab-content">
+        <div class="section">
+          <div class="section-title">
+            <span>🤖</span>
+            <span>Smart Component Setup</span>
+          </div>
+          <div class="section-desc">
+            Automatically apply your brand colors to professional components
+          </div>
+        </div>
+
+        <!-- Step 1: Brand Colors -->
+        <div class="section">
+          <div class="section-title">
+            <span>🎨</span>
+            <span>Step 1: Your Brand Colors</span>
+          </div>
+          <div class="section-desc">Enter your website's main colors</div>
+
+          <div class="color-picker" style="margin-top: 12px;">
+            <label class="label">Primary Color</label>
+            <div class="input-row">
+              <input type="color" id="smartPrimary" value="#2563eb" class="color-input">
+              <input type="text" id="smartPrimaryText" value="#2563eb" placeholder="#2563eb" class="text-input">
+            </div>
+            <div class="hint">Main interactive color (buttons, links)</div>
+          </div>
+
+          <div class="color-picker">
+            <label class="label">Secondary Color</label>
+            <div class="input-row">
+              <input type="color" id="smartSecondary" value="#10b981" class="color-input">
+              <input type="text" id="smartSecondaryText" value="#10b981" placeholder="#10b981" class="text-input">
+            </div>
+            <div class="hint">Success states, positive actions</div>
+          </div>
+
+          <div class="color-picker">
+            <label class="label">Accent Color</label>
+            <div class="input-row">
+              <input type="color" id="smartAccent" value="#f59e0b" class="color-input">
+              <input type="text" id="smartAccentText" value="#f59e0b" placeholder="#f59e0b" class="text-input">
+            </div>
+            <div class="hint">Warnings, highlights, attention</div>
+          </div>
+        </div>
+
+        <!-- Step 2: Component Selection -->
+        <div class="section">
+          <div class="section-title">
+            <span>📦</span>
+            <span>Step 2: Select Components</span>
+          </div>
+          <div class="section-desc">Choose which components your website needs</div>
+
+          <div style="margin-top: 12px;">
+            <div class="component-category">
+              <div style="font-weight: 600; margin-bottom: 8px; color: #1e293b;">🎯 Essential (Recommended)</div>
+              <label class="component-checkbox">
+                <input type="checkbox" checked onchange="toggleComponent('button')">
+                <span class="checkmark"></span>
+                <div class="component-info">
+                  <div class="component-name">Button</div>
+                  <div class="component-desc">Primary, secondary, and outline variants</div>
+                </div>
+              </label>
+
+              <label class="component-checkbox">
+                <input type="checkbox" checked onchange="toggleComponent('input')">
+                <span class="checkmark"></span>
+                <div class="component-info">
+                  <div class="component-name">Input Field</div>
+                  <div class="component-desc">Text inputs, textarea, with validation states</div>
+                </div>
+              </label>
+
+              <label class="component-checkbox">
+                <input type="checkbox" checked onchange="toggleComponent('alert')">
+                <span class="checkmark"></span>
+                <div class="component-info">
+                  <div class="component-name">Alert</div>
+                  <div class="component-desc">Success, error, warning, info notifications</div>
+                </div>
+              </label>
+
+              <label class="component-checkbox">
+                <input type="checkbox" checked onchange="toggleComponent('card')">
+                <span class="checkmark"></span>
+                <div class="component-info">
+                  <div class="component-name">Card</div>
+                  <div class="component-desc">Content containers with headers and actions</div>
+                </div>
+              </label>
+            </div>
+
+            <div class="component-category" style="margin-top: 16px;">
+              <div style="font-weight: 600; margin-bottom: 8px; color: #1e293b;">⭐ Additional</div>
+              <label class="component-checkbox">
+                <input type="checkbox" onchange="toggleComponent('badge')">
+                <span class="checkmark"></span>
+                <div class="component-info">
+                  <div class="component-name">Badge</div>
+                  <div class="component-desc">Status labels, tags, counts</div>
+                </div>
+              </label>
+
+              <label class="component-checkbox">
+                <input type="checkbox" onchange="toggleComponent('spinner')">
+                <span class="checkmark"></span>
+                <div class="component-info">
+                  <div class="component-name">Spinner</div>
+                  <div class="component-desc">Loading indicators</div>
+                </div>
+              </label>
+
+              <label class="component-checkbox">
+                <input type="checkbox" onchange="toggleComponent('progress')">
+                <span class="checkmark"></span>
+                <div class="component-info">
+                  <div class="component-name">Progress Bar</div>
+                  <div class="component-desc">Step indicators, progress tracking</div>
+                </div>
+              </label>
+
+              <label class="component-checkbox">
+                <input type="checkbox" onchange="toggleComponent('stepper')">
+                <span class="checkmark"></span>
+                <div class="component-info">
+                  <div class="component-name">Stepper</div>
+                  <div class="component-desc">Multi-step forms, wizards</div>
+                </div>
+              </label>
+
+              <label class="component-checkbox">
+                <input type="checkbox" onchange="toggleComponent('list')">
+                <span class="checkmark"></span>
+                <div class="component-info">
+                  <div class="component-name">List</div>
+                  <div class="component-desc">Item lists with actions</div>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Generate -->
+        <div class="section">
+          <div class="section-title">
+            <span>✨</span>
+            <span>Step 3: Generate Component Library</span>
+          </div>
+          <div id="smartSummary" class="result-item" style="padding: 16px; background: #f8fafc; border-radius: 12px; margin-bottom: 12px;">
+            <div style="font-weight: 600; margin-bottom: 8px;">Ready to generate:</div>
+            <div>📦 <span id="componentCount">4</span> components selected</div>
+            <div>🎨 3 brand colors configured</div>
+            <div>⚡ ~<span id="tokenCount">12</span> design tokens will be created</div>
+          </div>
+
+          <button class="button button-primary" onclick="generateSmartSetup()" style="width: 100%;">
+            <span class="button-icon">🚀</span>
+            <span class="button-text">Generate Component Library</span>
+          </button>
+        </div>
+
+        <!-- Results -->
+        <div id="smartResults" class="section hidden">
+          <div class="section-title">
+            <span>🎉</span>
+            <span>Generation Complete!</span>
+          </div>
+          <div id="smartResultsContent" class="result-item" style="padding: 16px; background: #ecfdf5; border-radius: 12px; border: 1px solid #10b981;">
+            <!-- Results will be inserted here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Cleanup Tab -->
+      <div id="cleanupTab" class="tab-content">
+        <div class="section">
+          <div class="section-title">
+            <span>🔍</span>
+            <span>Analyze Design System</span>
+          </div>
+          <div class="section-desc">
+            Find and fix color inconsistencies in messy designs
+          </div>
+          <button class="button button-primary" onclick="analyzeDesign()" style="width: 100%; margin-top: 12px;">
+            <span class="button-icon">🔍</span>
+            <span class="button-text">Analyze Design</span>
+          </button>
+        </div>
+
+        <!-- Analysis Results -->
+        <div id="analysisResults" class="section hidden">
+          <div class="section-title">
+            <span>📊</span>
+            <span>Analysis Results</span>
+          </div>
+          <div id="analysisContent" class="result-item" style="padding: 16px; background: #f8fafc; border-radius: 12px;">
+            <!-- Results will be inserted here -->
+          </div>
+        </div>
+
+        <!-- Color Groups -->
+        <div id="colorGroups" class="section hidden">
+          <div class="section-title">
+            <span>🎨</span>
+            <span>Color Groups Found</span>
+          </div>
+          <div id="colorGroupsContent">
+            <!-- Color groups will be inserted here -->
+          </div>
+          <button class="button button-success" onclick="cleanupDesign()" style="width: 100%; margin-top: 12px;">
+            <span class="button-icon">✨</span>
+            <span class="button-text">Clean Up & Standardize</span>
+          </button>
+        </div>
+
+        <!-- Cleanup Report -->
+        <div id="cleanupReport" class="section hidden">
+          <div class="section-title">
+            <span>✅</span>
+            <span>Cleanup Complete</span>
+          </div>
+          <div id="cleanupContent" class="result-item success" style="padding: 16px;">
+            <!-- Cleanup results will be inserted here -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Advanced Tab -->
+      <div id="advancedTab" class="tab-content">
+        <div class="section">
+          <div class="section-title">
+            <span>🔧</span>
+            <span>Token Manager</span>
+          </div>
+          <div class="section-desc">
+            Manage all design tokens in your Tokens collection
+          </div>
+
+          <button class="button button-primary" onclick="getTokens()">
+            <span class="button-icon">📥</span>
+            <span class="button-text">Load Tokens</span>
+          </button>
+
+          <div id="tokenList" class="token-list hidden"></div>
+
+          <button class="button button-secondary" onclick="exportTokens()">
+            <span class="button-icon">💾</span>
+            <span class="button-text">Export to CSS</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      Powered by <a href="#">Design System GPT</a> • Brand your design system in seconds
+    </div>
+  </div>
+
+  <script>
+    // Sync color picker with text input
+    function syncColor(type) {
+      const textInput = document.getElementById(`color${type}Text`);
+      const colorPicker = document.getElementById(`color${type}`);
+
+      if (textInput.value.match(/^#[0-9A-F]{6}$/i)) {
+        colorPicker.value = textInput.value;
+      }
+    }
+
+    // Listen for color picker changes
+    document.querySelectorAll('.color-preview').forEach(picker => {
+      picker.addEventListener('input', (e) => {
+        const id = e.target.id;
+        const textInput = document.getElementById(id + 'Text');
+        textInput.value = e.target.value;
+      });
+    });
+
+    // Switch tabs
+    function switchTab(tabName) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+
+      const tabs = document.querySelectorAll('.tab');
+      if (tabName === 'quick') {
+        tabs[0].classList.add('active');
+        document.getElementById('quickTab').classList.add('active');
+      } else if (tabName === 'smart') {
+        tabs[1].classList.add('active');
+        document.getElementById('smartTab').classList.add('active');
+      } else if (tabName === 'cleanup') {
+        tabs[2].classList.add('active');
+        document.getElementById('cleanupTab').classList.add('active');
+      } else if (tabName === 'advanced') {
+        tabs[3].classList.add('active');
+        document.getElementById('advancedTab').classList.add('active');
+      }
+    }
+
+    // Apply preset
+    function applyPreset(preset) {
+      const presets = {
+        modern: { primary: '#667eea', secondary: '#764ba2', accent: '#f093fb' },
+        corporate: { primary: '#2563eb', secondary: '#1e40af', accent: '#3b82f6' },
+        fresh: { primary: '#10b981', secondary: '#059669', accent: '#22c55e' },
+        bold: { primary: '#ef4444', secondary: '#f59e0b', accent: '#ec4899' }
+      };
+
+      const colors = presets[preset];
+      document.getElementById('colorPrimary').value = colors.primary;
+      document.getElementById('colorPrimaryText').value = colors.primary;
+      document.getElementById('colorSecondary').value = colors.secondary;
+      document.getElementById('colorSecondaryText').value = colors.secondary;
+      document.getElementById('colorAccent').value = colors.accent;
+      document.getElementById('colorAccentText').value = colors.accent;
+
+      showStatus('Preset applied! Click "Update Design System" to apply changes.', 'success');
+    }
+
+    // Show status message
+    function showStatus(message, type) {
+      const statusEl = document.getElementById('status');
+      const iconEl = document.getElementById('statusIcon');
+      const messageEl = document.getElementById('statusMessage');
+
+      const icons = {
+        success: '✅',
+        error: '❌',
+        info: 'ℹ️'
+      };
+
+      iconEl.textContent = icons[type] || icons.info;
+      messageEl.textContent = message;
+      statusEl.className = `status ${type}`;
+      statusEl.classList.remove('hidden');
+    }
+
+    // Update variables
+    function updateVariables() {
+      // Get color values from inputs
+      const colors = {
+        primary: document.getElementById('colorPrimaryText').value || document.getElementById('colorPrimary').value,
+        secondary: document.getElementById('colorSecondaryText').value || document.getElementById('colorSecondary').value,
+        accent: document.getElementById('colorAccentText').value || document.getElementById('colorAccent').value
+      };
+
+      showStatus('Updating design system variables...', 'info');
+      parent.postMessage({ pluginMessage: { type: 'update-variables', colors: colors } }, '*');
+    }
+
+    // Get tokens
+    function getTokens() {
+      parent.postMessage({ pluginMessage: { type: 'get-tokens' } }, '*');
+    }
+
+    // Export tokens
+    function exportTokens() {
+      parent.postMessage({ pluginMessage: { type: 'export-tokens' } }, '*');
+    }
+
+    // Analyze design system
+    function analyzeDesign() {
+      showStatus('Analyzing design system...', 'info');
+      parent.postMessage({ pluginMessage: { type: 'analyze-design' } }, '*');
+    }
+
+    // Cleanup design system
+    function cleanupDesign() {
+      showStatus('Cleaning up design system...', 'info');
+      parent.postMessage({ pluginMessage: { type: 'cleanup-design' } }, '*');
+    }
+
+    // Smart Setup functions
+    var selectedComponents = { button: true, input: true, alert: true, card: true };
+
+    function toggleComponent(name) {
+      selectedComponents[name] = !selectedComponents[name];
+      updateSmartSummary();
+    }
+
+    function updateSmartSummary() {
+      var count = Object.values(selectedComponents).filter(Boolean).length;
+      document.getElementById('componentCount').textContent = count;
+      document.getElementById('tokenCount').textContent = count * 3;
+    }
+
+    function generateSmartSetup() {
+      var colors = {
+        primary: document.getElementById('smartPrimaryText').value || document.getElementById('smartPrimary').value,
+        secondary: document.getElementById('smartSecondaryText').value || document.getElementById('smartSecondary').value,
+        accent: document.getElementById('smartAccentText').value || document.getElementById('smartAccent').value
+      };
+
+      var components = Object.keys(selectedComponents).filter(function(key) {
+        return selectedComponents[key];
+      });
+
+      if (components.length === 0) {
+        showStatus('Please select at least one component', 'error');
+        return;
+      }
+
+      showStatus('Generating component library...', 'info');
+      parent.postMessage({
+        pluginMessage: {
+          type: 'generate-smart-setup',
+          colors: colors,
+          components: components
+        }
+      }, '*');
+    }
+
+    // Sync color inputs for smart tab
+    document.addEventListener('DOMContentLoaded', function() {
+      var smartColorInputs = [
+        { color: 'smartPrimary', text: 'smartPrimaryText' },
+        { color: 'smartSecondary', text: 'smartSecondaryText' },
+        { color: 'smartAccent', text: 'smartAccentText' }
+      ];
+
+      smartColorInputs.forEach(function(pair) {
+        var colorInput = document.getElementById(pair.color);
+        var textInput = document.getElementById(pair.text);
+
+        if (colorInput && textInput) {
+          colorInput.addEventListener('input', function(e) {
+            textInput.value = e.target.value;
+          });
+
+          textInput.addEventListener('input', function(e) {
+            if (e.target.value.match(/^#[0-9A-F]{6}$/i)) {
+              colorInput.value = e.target.value;
+            }
+          });
+        }
+      });
+    });
+
+    // Listen for messages from plugin
+    window.onmessage = (event) => {
+      const msg = event.data.pluginMessage;
+
+      if (msg.type === 'update-complete') {
+        const boundText = msg.boundCount > 0 ? ` & bound ${msg.boundCount} elements` : '';
+        showStatus(`✨ Successfully updated ${msg.updatedCount} variables${boundText}!`, 'success');
+
+        document.getElementById('resultsSection').classList.remove('hidden');
+        const resultsHtml = msg.results.map(r =>
+          `<div class="result-item success">${r}</div>`
+        ).join('');
+        document.getElementById('results').innerHTML = resultsHtml;
+      } else if (msg.type === 'tokens-loaded') {
+        const tokenList = document.getElementById('tokenList');
+        tokenList.classList.remove('hidden');
+
+        if (msg.tokens.length === 0) {
+          tokenList.innerHTML = '<div style="padding:12px;color:#64748b;">No tokens found. Create Tokens collection first.</div>';
+        } else {
+          const tokensHtml = msg.tokens.map(token => `
+            <div class="token-item">
+              <div>
+                <div class="token-name">${token.name}</div>
+                <div class="token-value">${token.lightValue}</div>
+              </div>
+            </div>
+          `).join('');
+          tokenList.innerHTML = tokensHtml;
+        }
+      } else if (msg.type === 'export-complete') {
+        showStatus('✅ Tokens exported to new page!', 'success');
+      } else if (msg.type === 'analysis-complete') {
+        showStatus('✅ Analysis complete!', 'success');
+        document.getElementById('analysisResults').classList.remove('hidden');
+        document.getElementById('analysisContent').innerHTML = `
+          <div style="margin-bottom: 16px;">
+            <strong style="font-size: 16px; color: #1e293b;">📊 Summary</strong>
+          </div>
+          <div style="display: grid; gap: 12px;">
+            <div style="display: flex; justify-content: space-between;">
+              <span>Total unique colors:</span>
+              <strong>${msg.totalColors}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>Color groups found:</span>
+              <strong>${msg.colorGroups.length}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>Elements analyzed:</span>
+              <strong>${msg.elementsCount}</strong>
+            </div>
+          </div>
+        `;
+
+        // Show color groups
+        document.getElementById('colorGroups').classList.remove('hidden');
+        let groupsHTML = '';
+        msg.colorGroups.forEach((group, index) => {
+          const role = ['Primary', 'Secondary', 'Accent', 'Neutral'][index] || `Color ${index + 1}`;
+          groupsHTML += `
+            <div style="background: #f8fafc; padding: 12px; border-radius: 8px; margin-bottom: 8px;">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
+                <div style="width: 24px; height: 24px; border-radius: 6px; background: ${group.representative}; border: 2px solid white; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
+                <strong>${role}</strong>
+                <span style="color: #64748b;">(${group.count} variations, ${group.usageCount} uses)</span>
+              </div>
+              <div style="font-size: 12px; color: #64748b;">Representative: ${group.representative}</div>
+            </div>
+          `;
+        });
+        document.getElementById('colorGroupsContent').innerHTML = groupsHTML;
+      } else if (msg.type === 'cleanup-complete') {
+        showStatus('✅ Cleanup complete!', 'success');
+        document.getElementById('cleanupReport').classList.remove('hidden');
+        document.getElementById('cleanupContent').innerHTML = `
+          <div style="margin-bottom: 16px;">
+            <strong style="font-size: 18px;">🎉 Design System Standardized!</strong>
+          </div>
+          <div style="display: grid; gap: 12px; margin-top: 16px;">
+            <div style="display: flex; justify-content: space-between;">
+              <span>Colors consolidated:</span>
+              <strong>${msg.colorsReduced.before} → ${msg.colorsReduced.after}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>Elements updated:</span>
+              <strong>${msg.elementsUpdated}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>Variables created:</span>
+              <strong>${msg.variablesCreated}</strong>
+            </div>
+          </div>
+          <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+            <p style="color: #64748b; font-size: 13px;">✨ Your design is now using a standardized color system with proper tokens!</p>
+          </div>
+        `;
+      } else if (msg.type === 'smart-setup-complete') {
+        showStatus('🎉 Component library generated successfully!', 'success');
+        document.getElementById('smartResults').classList.remove('hidden');
+        document.getElementById('smartResultsContent').innerHTML = `
+          <div style="margin-bottom: 16px;">
+            <strong style="font-size: 18px;">🎉 Your Component Library is Ready!</strong>
+          </div>
+          <div style="display: grid; gap: 12px; margin-top: 16px;">
+            <div style="display: flex; justify-content: space-between;">
+              <span>📦 Components generated:</span>
+              <strong>${msg.componentsCount}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>🎨 Design tokens created:</span>
+              <strong>${msg.tokensCount}</strong>
+            </div>
+            <div style="display: flex; justify-content: space-between;">
+              <span>📄 Page created:</span>
+              <strong>${msg.pageName || 'Component Library'}</strong>
+            </div>
+          </div>
+          <div style="margin-top: 16px; padding: 12px; background: #f1f5f9; border-radius: 8px;">
+            <div style="font-weight: 600; margin-bottom: 8px; color: #1e293b;">✨ Next Steps:</div>
+            <ul style="margin: 0; padding-left: 20px; color: #64748b; font-size: 13px;">
+              <li style="margin-bottom: 4px;">Review the generated components</li>
+              <li style="margin-bottom: 4px;">Customize any component variants</li>
+              <li style="margin-bottom: 4px;">Use Token Sync to export to code</li>
+              <li>Publish as a library for team use</li>
+            </ul>
+          </div>
+        `;
+
+        // Scroll results into view
+        document.getElementById('smartResults').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      } else if (msg.type === 'error') {
+        showStatus(`Error: ${msg.message}`, 'error');
+      }
+    };
+  </script>
+</body>
+</html>

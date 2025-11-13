@@ -1,0 +1,176 @@
+# Spacing Token Rules
+# Defines the spacing system and when to use different spacing values
+
+metadata:
+  version: "1.0"
+  last_updated: "2025-01-27"
+  description: "Spacing system guidelines and token usage rules"
+
+# Spacing Scale
+scale:
+  xs: 4
+  sm: 8
+  md: 16
+  lg: 24
+  xl: 32
+  2xl: 48
+  3xl: 64
+  4xl: 96
+
+# Spacing Categories
+categories:
+  component_internal:
+    description: "Spacing within individual components"
+    tokens:
+      - space-xs: "Tight spacing for related elements"
+      - space-sm: "Small spacing for grouped elements"
+      - space-md: "Standard spacing for component padding"
+    usage:
+      - "Padding inside buttons, inputs, and small components"
+      - "Spacing between icon and text"
+      - "Gap between form elements"
+    examples:
+      - "Button padding: space-sm"
+      - "Input padding: space-sm"
+      - "Icon + text gap: space-xs"
+
+  component_external:
+    description: "Spacing between components and sections"
+    tokens:
+      - space-md: "Standard spacing between components"
+      - space-lg: "Larger spacing for section separation"
+      - space-xl: "Major spacing for page sections"
+    usage:
+      - "Gap between cards in a grid"
+      - "Spacing between form sections"
+      - "Margin between major UI sections"
+    examples:
+      - "Card grid gap: space-md"
+      - "Form section spacing: space-lg"
+      - "Page section margins: space-xl"
+
+  layout:
+    description: "Spacing for overall page and layout structure"
+    tokens:
+      - space-lg: "Standard page margins"
+      - space-xl: "Large page margins"
+      - space-2xl: "Maximum page margins"
+    usage:
+      - "Page container padding"
+      - "Sidebar margins"
+      - "Content area padding"
+    examples:
+      - "Page container: space-lg"
+      - "Mobile page margins: space-md"
+      - "Desktop page margins: space-xl"
+
+# Spacing Rules
+rules:
+  consistency:
+    - "Use the same spacing token for similar elements"
+    - "Maintain consistent spacing patterns across components"
+    - "Follow the 8px grid system (all tokens are multiples of 4px)"
+  
+  hierarchy:
+    - "Larger spacing for more important separations"
+    - "Smaller spacing for related elements"
+    - "Use space-xl and above sparingly for major sections only"
+  
+  responsive:
+    - "Reduce spacing on mobile devices"
+    - "Increase spacing on larger screens"
+    - "Use relative spacing when possible"
+
+# Component-Specific Spacing
+component_spacing:
+  buttons:
+    padding: "space-sm"
+    gap: "space-xs"
+    margin: "space-xs"
+  
+  cards:
+    padding: "space-md"
+    gap: "space-md"
+    margin: "space-sm"
+  
+  forms:
+    field_spacing: "space-md"
+    section_spacing: "space-lg"
+    label_spacing: "space-xs"
+  
+  navigation:
+    item_spacing: "space-md"
+    section_spacing: "space-lg"
+    padding: "space-md"
+  
+  modals:
+    padding: "space-lg"
+    header_spacing: "space-md"
+    footer_spacing: "space-md"
+
+# Spacing Tokens
+tokens:
+  space-xs:
+    value: "4px"
+    usage: "Tight spacing, icon + text gaps"
+    examples: ["Button icon spacing", "Form label spacing"]
+  
+  space-sm:
+    value: "8px"
+    usage: "Small component padding, related elements"
+    examples: ["Button padding", "Input padding", "Small component gaps"]
+  
+  space-md:
+    value: "16px"
+    usage: "Standard spacing, component padding"
+    examples: ["Card padding", "Form field spacing", "Component gaps"]
+  
+  space-lg:
+    value: "24px"
+    usage: "Large spacing, section separation"
+    examples: ["Page margins", "Section spacing", "Large component gaps"]
+  
+  space-xl:
+    value: "32px"
+    usage: "Major spacing, page sections"
+    examples: ["Page section margins", "Large layout spacing"]
+  
+  space-2xl:
+    value: "48px"
+    usage: "Maximum spacing, major page sections"
+    examples: ["Hero section spacing", "Major page divisions"]
+  
+  space-3xl:
+    value: "64px"
+    usage: "Extra large spacing, special cases"
+    examples: ["Landing page sections", "Large hero areas"]
+
+# Anti-patterns
+anti_patterns:
+  - "Using arbitrary spacing values instead of tokens"
+  - "Inconsistent spacing between similar elements"
+  - "Too much or too little spacing for the content"
+  - "Not following the 8px grid system"
+  - "Using spacing tokens for non-spacing properties"
+  - "Mixing different spacing scales in the same component"
+
+# Responsive Spacing
+responsive:
+  mobile:
+    multiplier: 0.75
+    max_spacing: "space-lg"
+    examples:
+      - "space-md becomes 12px on mobile"
+      - "space-lg becomes 18px on mobile"
+  
+  tablet:
+    multiplier: 1.0
+    examples:
+      - "Use standard spacing values"
+  
+  desktop:
+    multiplier: 1.25
+    max_spacing: "space-3xl"
+    examples:
+      - "space-md becomes 20px on desktop"
+      - "space-lg becomes 30px on desktop"

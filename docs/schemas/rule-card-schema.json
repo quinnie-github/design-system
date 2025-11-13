@@ -1,0 +1,151 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Rule Card Schema",
+  "description": "Schema for Design System Rule Cards (DS-[Layer]-[###])",
+  "type": "object",
+  "required": ["id", "title", "layer", "context", "decision", "rationale"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^DS-[A-Za-z]+-\\d{3}$",
+      "description": "Unique identifier in format DS-[Layer]-[###]"
+    },
+    "title": {
+      "type": "string",
+      "description": "Short imperative name for the rule"
+    },
+    "layer": {
+      "type": "string",
+      "enum": ["Foundations", "Component", "Interaction", "Layout", "Pattern", "Content", "Accessibility", "System"],
+      "description": "Design system layer this rule applies to"
+    },
+    "component": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Components this rule applies to (e.g., ['Button', 'Input'])"
+    },
+    "context": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Situations where this rule applies (e.g., ['single-select', 'option-count'])"
+    },
+    "decision": {
+      "type": "object",
+      "description": "What to do - can be conditional logic or simple description",
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "if": {
+              "type": "array",
+              "items": { "type": "object" }
+            }
+          }
+        },
+        {
+          "type": "string"
+        }
+      ]
+    },
+    "rationale": {
+      "type": "string",
+      "description": "Why we do it - explains the reasoning"
+    },
+    "whenToUse": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Conditions when to use this rule"
+    },
+    "whenNotToUse": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Conditions when NOT to use this rule"
+    },
+    "inputs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Signals the rule consumes (e.g., ['viewport', 'content-density', 'theme', 'state'])"
+    },
+    "dependencies": {
+      "type": "object",
+      "properties": {
+        "tokens": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "components": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "patterns": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "variants": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Variants of this rule if any"
+    },
+    "accessibility": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Specific a11y requirements"
+    },
+    "metrics": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "How we know it worked (e.g., ['task-completion', 'error-rate'])"
+    },
+    "codeBinding": {
+      "type": "object",
+      "properties": {
+        "tokenNames": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "cssVars": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "props": {
+          "type": "object"
+        },
+        "aria": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "events": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "examples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "description": { "type": "string" },
+          "link": { "type": "string" },
+          "screenshot": { "type": "string" }
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "beta", "stable", "deprecated"],
+      "default": "stable"
+    },
+    "owner": {
+      "type": "string",
+      "description": "Who owns/maintains this rule"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
+

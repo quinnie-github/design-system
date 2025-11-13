@@ -1,0 +1,17 @@
+{
+  "name": "Design System GPT",
+  "id": "design-system-gpt",
+  "api": "1.0.0",
+  "main": "chat-plugin.js",
+  "ui": "chat-ui.html",
+  "capabilities": [],
+  "enableProposedApi": false,
+  "editorType": [
+    "figma"
+  ],
+  "networkAccess": {
+    "allowedDomains": [
+      "none"
+    ]
+  }
+}

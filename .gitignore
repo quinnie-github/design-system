@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/
+build/
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Generated files
+docs/generated/
+src/styles/
+src/components/
+
+# Backups
+scripts/backups/
+*.backup
+*.bak
+
+# Test files
+test-export/
+preview-*.html
+
+# Temporary files
+*.tmp
+*.temp
+.cache/
+

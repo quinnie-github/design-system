@@ -1,0 +1,27 @@
+{
+  "figma": {
+    "collection": "Tokens",
+    "fileHint": "Design System GPT base"
+  },
+  "paths": {
+    "tokensCss": "src/styles/tokens.css",
+    "themeCss": "src/styles/theme.css",
+    "backupDir": "scripts/backups"
+  },
+  "prefix": "pi",
+  "modes": {
+    "light": "Light",
+    "dark": "Dark"
+  },
+  "types": {
+    "color": ["color.", "kpi.", "brand.", "surface.", "text."],
+    "number": ["radius.", "space.", "elevation.", "opacity."],
+    "string": ["font."]
+  },
+  "tailwind": {
+    "writeTheme": true,
+    "colorKeys": ["primary","success","warning","danger","info","surface","foreground"],
+    "radiusKeys": ["md","lg","xl","2xl"]
+  },
+  "dryRun": false
+}

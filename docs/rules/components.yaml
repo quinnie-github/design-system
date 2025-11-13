@@ -1,0 +1,306 @@
+# Component Rules
+# Defines component usage guidelines, token requirements, and design patterns
+
+metadata:
+  version: "1.0"
+  last_updated: "2025-01-27"
+  description: "Component usage guidelines and design system patterns"
+
+# Component Categories
+categories:
+  layout:
+    description: "Components that provide structure and layout"
+    components:
+      - Container
+      - Grid
+      - Stack
+      - Flex
+      - Spacer
+    token_requirements:
+      - spacing: ["space-md", "space-lg", "space-xl"]
+      - layout: ["container-max-width", "grid-gap"]
+
+  navigation:
+    description: "Components for navigation and wayfinding"
+    components:
+      - Header
+      - Navigation
+      - Breadcrumb
+      - Pagination
+      - Tabs
+    token_requirements:
+      - colors: ["brand-primary", "text-primary", "surface-elevated"]
+      - spacing: ["space-md", "space-lg"]
+      - typography: ["text-base", "font-medium"]
+
+  forms:
+    description: "Components for data input and user interaction"
+    components:
+      - Input
+      - Textarea
+      - Select
+      - Checkbox
+      - Radio
+      - Button
+      - FormGroup
+    token_requirements:
+      - colors: ["interactive-primary", "border-default", "text-primary"]
+      - spacing: ["space-sm", "space-md"]
+      - typography: ["text-sm", "text-base"]
+      - states: ["interactive-hover", "interactive-active", "interactive-disabled"]
+
+  data_display:
+    description: "Components for displaying information and data"
+    components:
+      - Card
+      - Table
+      - List
+      - Badge
+      - Tag
+      - Avatar
+      - KPI
+    token_requirements:
+      - colors: ["surface-base", "text-primary", "kpi-positive", "kpi-negative"]
+      - spacing: ["space-sm", "space-md", "space-lg"]
+      - typography: ["text-sm", "text-base", "text-lg"]
+      - borders: ["border-default", "border-subtle"]
+
+  feedback:
+    description: "Components for user feedback and status communication"
+    components:
+      - Alert
+      - Toast
+      - Modal
+      - Tooltip
+      - Progress
+      - Spinner
+    token_requirements:
+      - colors: ["kpi-positive", "kpi-negative", "kpi-warning", "surface-overlay"]
+      - spacing: ["space-md", "space-lg"]
+      - typography: ["text-sm", "text-base"]
+
+# Component Specifications
+components:
+  Button:
+    description: "Interactive element for user actions"
+    variants:
+      primary:
+        background: "brand-primary"
+        text: "text-inverse"
+        border: "brand-primary"
+        hover: "interactive-hover"
+        active: "interactive-active"
+        disabled: "interactive-disabled"
+      secondary:
+        background: "surface-elevated"
+        text: "text-primary"
+        border: "border-default"
+        hover: "surface-interactive"
+      ghost:
+        background: "transparent"
+        text: "text-primary"
+        border: "transparent"
+        hover: "surface-interactive"
+    sizes:
+      small:
+        padding: "space-xs space-sm"
+        font_size: "text-xs"
+        height: "32px"
+      medium:
+        padding: "space-sm space-md"
+        font_size: "text-sm"
+        height: "40px"
+      large:
+        padding: "space-md space-lg"
+        font_size: "text-base"
+        height: "48px"
+    usage:
+      - "Primary actions and CTAs"
+      - "Form submissions"
+      - "Navigation actions"
+    avoid:
+      - "Multiple primary buttons on the same page"
+      - "Using buttons for navigation (use links instead)"
+      - "Too many button variants in one interface"
+
+  Card:
+    description: "Container for related content and actions"
+    variants:
+      default:
+        background: "surface-base"
+        border: "border-subtle"
+        shadow: "shadow-sm"
+        padding: "space-md"
+      elevated:
+        background: "surface-elevated"
+        border: "border-default"
+        shadow: "shadow-md"
+        padding: "space-lg"
+      interactive:
+        background: "surface-base"
+        border: "border-default"
+        shadow: "shadow-sm"
+        padding: "space-md"
+        hover: "surface-interactive"
+    usage:
+      - "Grouping related information"
+      - "Displaying content blocks"
+      - "Creating interactive content areas"
+    avoid:
+      - "Using cards for single pieces of information"
+      - "Nesting cards too deeply"
+      - "Cards without clear content hierarchy"
+
+  Input:
+    description: "Text input for user data entry"
+    variants:
+      default:
+        background: "surface-base"
+        border: "border-default"
+        text: "text-primary"
+        placeholder: "text-tertiary"
+        focus: "border-focus"
+      error:
+        background: "surface-base"
+        border: "kpi-negative"
+        text: "text-primary"
+        placeholder: "text-tertiary"
+        focus: "border-focus"
+      disabled:
+        background: "surface-disabled"
+        border: "border-subtle"
+        text: "text-tertiary"
+        placeholder: "text-tertiary"
+    sizes:
+      small:
+        padding: "space-xs space-sm"
+        font_size: "text-sm"
+        height: "32px"
+      medium:
+        padding: "space-sm space-md"
+        font_size: "text-base"
+        height: "40px"
+      large:
+        padding: "space-md space-lg"
+        font_size: "text-lg"
+        height: "48px"
+    usage:
+      - "Text input fields"
+      - "Search inputs"
+      - "Form data entry"
+    avoid:
+      - "Using inputs for display-only content"
+      - "Missing labels or helper text"
+      - "Inconsistent input sizing"
+
+  KPI:
+    description: "Key Performance Indicator display component"
+    variants:
+      positive:
+        value_color: "kpi-positive"
+        label_color: "text-secondary"
+        background: "surface-base"
+        border: "border-subtle"
+      negative:
+        value_color: "kpi-negative"
+        label_color: "text-secondary"
+        background: "surface-base"
+        border: "border-subtle"
+      neutral:
+        value_color: "text-primary"
+        label_color: "text-secondary"
+        background: "surface-base"
+        border: "border-subtle"
+    usage:
+      - "Dashboard metrics"
+      - "Performance indicators"
+      - "Data visualization"
+    avoid:
+      - "Using for non-numeric data"
+      - "Too many KPIs in one view"
+      - "Inconsistent color coding"
+
+# Token Requirements by Component Type
+token_requirements:
+  interactive_components:
+    required:
+      - "interactive-primary"
+      - "interactive-hover"
+      - "interactive-active"
+      - "interactive-disabled"
+    optional:
+      - "interactive-secondary"
+      - "interactive-focus"
+  
+  surface_components:
+    required:
+      - "surface-base"
+      - "border-default"
+    optional:
+      - "surface-elevated"
+      - "border-subtle"
+      - "shadow-sm"
+  
+  text_components:
+    required:
+      - "text-primary"
+      - "text-secondary"
+    optional:
+      - "text-tertiary"
+      - "text-inverse"
+  
+  data_components:
+    required:
+      - "kpi-positive"
+      - "kpi-negative"
+    optional:
+      - "kpi-warning"
+      - "kpi-neutral"
+
+# Component Composition Rules
+composition:
+  forms:
+    - "Always include labels for inputs"
+    - "Use consistent spacing between form elements"
+    - "Provide clear error states and validation"
+    - "Group related fields together"
+  
+  cards:
+    - "Include clear visual hierarchy"
+    - "Use consistent padding and spacing"
+    - "Provide clear actions when needed"
+    - "Maintain consistent border and shadow styles"
+  
+  navigation:
+    - "Use consistent spacing between items"
+    - "Provide clear active states"
+    - "Ensure accessibility with proper focus states"
+    - "Use appropriate typography hierarchy"
+
+# Accessibility Requirements
+accessibility:
+  color_contrast:
+    - "All text must meet WCAG AA contrast requirements"
+    - "Interactive elements must have clear focus states"
+    - "Error states must be clearly distinguishable"
+  
+  keyboard_navigation:
+    - "All interactive components must be keyboard accessible"
+    - "Focus order must be logical and predictable"
+    - "Focus indicators must be clearly visible"
+  
+  screen_readers:
+    - "All components must have appropriate ARIA labels"
+    - "Form inputs must have associated labels"
+    - "Interactive elements must have descriptive text"
+
+# Anti-patterns
+anti_patterns:
+  - "Using components without proper token integration"
+  - "Creating too many component variants"
+  - "Inconsistent spacing and sizing"
+  - "Poor accessibility implementation"
+  - "Components that don't follow design system patterns"
+  - "Hard-coded values instead of design tokens"
+  - "Missing error states and loading states"
+  - "Inconsistent interaction patterns"

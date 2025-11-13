@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Feature Template Schema",
+  "description": "Schema for Feature Templates (PM prompts → responses)",
+  "type": "object",
+  "required": ["id", "feature", "intent", "patterns", "rules"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^FT-\\d{3}$",
+      "description": "Unique identifier in format FT-[###]"
+    },
+    "feature": {
+      "type": "string",
+      "description": "Feature name (e.g., 'Collect Feedback')"
+    },
+    "intent": {
+      "type": "string",
+      "description": "What the feature is trying to achieve"
+    },
+    "pmPrompt": {
+      "type": "string",
+      "description": "Example PM prompt that triggers this template"
+    },
+    "patterns": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "UI patterns used (e.g., ['IconButtons', 'InlineForm', 'Chips', 'Toast'])"
+    },
+    "rules": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Rule Card IDs this feature uses (e.g., ['DS-Layout-001', 'DS-Content-030'])"
+    },
+    "businessRules": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Business logic constraints"
+    },
+    "a11y": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Accessibility requirements"
+    },
+    "devHooks": {
+      "type": "object",
+      "properties": {
+        "dataAttributes": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "events": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "apiEndpoints": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "metrics": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Success metrics (e.g., ['CTR thumbs', 'submitRate'])"
+    },
+    "edgeCases": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Edge cases to handle"
+    },
+    "outputs": {
+      "type": "object",
+      "properties": {
+        "design": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Figma components to use"
+        },
+        "code": {
+          "type": "object",
+          "description": "Code props/configuration"
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["draft", "beta", "stable", "deprecated"],
+      "default": "stable"
+    },
+    "lastUpdated": {
+      "type": "string",
+      "format": "date-time"
+    }
+  }
+}
+

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    button {
+      padding: 12px 24px;
+      background: #18A0FB;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      margin: 5px;
+    }
+    button:hover {
+      background: #0d8ce8;
+    }
+  </style>
+</head>
+<body>
+  <h2>Minimal Test Plugin</h2>
+  <p>If you see this, the plugin loaded!</p>
+  <button onclick="test()">Test Button</button>
+  <button onclick="close()">Close</button>
+
+  <script>
+    function test() {
+      parent.postMessage({ pluginMessage: { type: 'test' } }, '*');
+    }
+
+    function close() {
+      parent.postMessage({ pluginMessage: { type: 'close' } }, '*');
+    }
+  </script>
+</body>
+</html>

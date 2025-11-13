@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Variable Updater</title>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: #ffffff;
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    
+    .title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin: 0 0 8px 0;
+    }
+    
+    .subtitle {
+      font-size: 12px;
+      color: #666;
+      margin: 0;
+    }
+    
+    .section {
+      margin-bottom: 20px;
+    }
+    
+    .section-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin: 0 0 8px 0;
+    }
+    
+    .button {
+      width: 100%;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .button-primary {
+      background: #4d79c7;
+      color: white;
+    }
+    
+    .button-primary:hover {
+      background: #2b58b6;
+    }
+    
+    .button-secondary {
+      background: #f3f4f6;
+      color: #374151;
+      margin-top: 8px;
+    }
+    
+    .button-secondary:hover {
+      background: #e5e7eb;
+    }
+    
+    .results {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 12px;
+      max-height: 200px;
+      overflow-y: auto;
+      font-size: 12px;
+      font-family: 'Monaco', 'Menlo', monospace;
+    }
+    
+    .result-item {
+      margin: 2px 0;
+    }
+    
+    .success {
+      color: #059669;
+    }
+    
+    .error {
+      color: #dc2626;
+    }
+    
+    .info {
+      color: #2563eb;
+    }
+    
+    .status {
+      text-align: center;
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+    
+    .status-success {
+      background: #d1fae5;
+      color: #065f46;
+    }
+    
+    .status-error {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+    
+    .palette-preview {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+    
+    .palette-item {
+      text-align: center;
+    }
+    
+    .color-swatch {
+      width: 100%;
+      height: 30px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+    }
+    
+    .color-label {
+      font-size: 10px;
+      color: #666;
+    }
+    
+    .full-spectrum {
+      margin-bottom: 20px;
+    }
+    
+    .spectrum-group {
+      margin-bottom: 16px;
+    }
+    
+    .spectrum-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #1a1a1a;
+      margin-bottom: 8px;
+    }
+    
+    .spectrum-row {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 4px;
+    }
+    
+    .spectrum-swatch {
+      width: 20px;
+      height: 20px;
+      border-radius: 2px;
+      position: relative;
+    }
+    
+    .spectrum-label {
+      font-size: 8px;
+      color: #666;
+      text-align: center;
+      margin-top: 2px;
+    }
+    
+    .spectrum-tooltip {
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #1a1a1a;
+      color: white;
+      padding: 4px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      white-space: nowrap;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s;
+      z-index: 1000;
+    }
+    
+    .spectrum-swatch:hover .spectrum-tooltip {
+      opacity: 1;
+    }
+
+    /* Tokens Management Styles */
+    .tokens-controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .button-small {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .tokens-list {
+      max-height: 400px;
+      overflow-y: auto;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 8px;
+    }
+
+    .token-item {
+      display: flex;
+      align-items: center;
+      padding: 8px;
+      border-bottom: 1px solid #f0f0f0;
+      gap: 12px;
+    }
+
+    .token-item:last-child {
+      border-bottom: none;
+    }
+
+    .token-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .token-name {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .token-values {
+      display: flex;
+      gap: 16px;
+      font-size: 12px;
+      color: #666;
+    }
+
+    .token-value {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .color-swatch {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      border: 1px solid #ddd;
+    }
+
+    .token-actions {
+      display: flex;
+      gap: 4px;
+    }
+
+    .btn-edit, .btn-delete {
+      padding: 4px 8px;
+      font-size: 11px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn-edit {
+      background: #007bff;
+      color: white;
+    }
+
+    .btn-delete {
+      background: #dc3545;
+      color: white;
+    }
+
+    /* Modal Styles */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 8px;
+      width: 90%;
+      max-width: 500px;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      color: #666;
+    }
+
+    .modal-body {
+      padding: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 4px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      margin-top: 24px;
+    }
+
+    /* Responsive Design */
+    .section {
+      max-width: 100%;
+      overflow-x: auto;
+    }
+
+    .button {
+      min-width: 120px;
+      margin: 2px;
+    }
+
+    .tokens-list, .changes-list {
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .token-item, .change-item {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .token-values, .change-details {
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    /* Tonal Palette Creator Styles */
+    .palette-controls {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .color-input-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .color-input-group input[type="color"] {
+      width: 40px;
+      height: 32px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .palette-preview-grid {
+      margin-top: 20px;
+      padding: 16px;
+      background: #f8f9fa;
+      border-radius: 8px;
+    }
+
+    .preview-title {
+      font-weight: 600;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+
+    .tonal-spectrum {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(60px, 1fr));
+      gap: 8px;
+    }
+
+    .tonal-swatch {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 8px;
+      background: white;
+      border-radius: 6px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+
+    .tonal-swatch-color {
+      width: 40px;
+      height: 40px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+      border: 1px solid #ddd;
+    }
+
+    .tonal-swatch-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: #666;
+    }
+
+    .tonal-swatch-hex {
+      font-size: 9px;
+      color: #999;
+      margin-top: 2px;
+    }
+
+    /* Changes Table Styles */
+    .changes-controls {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .changes-list {
+      max-height: 500px;
+      overflow-y: auto;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      padding: 8px;
+    }
+
+    .change-item {
+      display: flex;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid #f0f0f0;
+      gap: 12px;
+    }
+
+    .change-item:last-child {
+      border-bottom: none;
+    }
+
+    .change-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: bold;
+    }
+
+    .change-icon.added {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .change-icon.updated {
+      background: #d1ecf1;
+      color: #0c5460;
+    }
+
+    .change-icon.deleted {
+      background: #f8d7da;
+      color: #721c24;
+    }
+
+    .change-details {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .change-variable {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .change-description {
+      font-size: 12px;
+      color: #666;
+    }
+
+    .change-time {
+      font-size: 10px;
+      color: #999;
+      margin-top: 4px;
+    }
+
+    /* Mobile Responsive */
+    @media (max-width: 600px) {
+      .palette-controls {
+        grid-template-columns: 1fr;
+      }
+      
+      .tonal-spectrum {
+        grid-template-columns: repeat(5, 1fr);
+      }
+      
+      .token-item, .change-item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      
+      .token-actions, .change-actions {
+        width: 100%;
+        justify-content: flex-end;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="title">Variable Updater</div>
+    <div class="subtitle">Update Primitives collection with new tonal palettes</div>
+  </div>
+  
+  <div class="section">
+    <div class="section-title">Tonal Palette Preview</div>
+    <div class="palette-preview">
+      <div class="palette-item">
+        <div class="color-swatch" style="background: #d46a6a;"></div>
+        <div class="color-label">PI Red 500 (Base)</div>
+      </div>
+      <div class="palette-item">
+        <div class="color-swatch" style="background: #5ca5a5;"></div>
+        <div class="color-label">PI Green 500 (Base)</div>
+      </div>
+      <div class="palette-item">
+        <div class="color-swatch" style="background: #4d79c7;"></div>
+        <div class="color-label">PI Blue 500 (Base)</div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="section full-spectrum">
+    <div class="section-title">Full Tonal Spectrum Preview</div>
+    
+    <div class="spectrum-group">
+      <div class="spectrum-title">PI Red Palette</div>
+      <div class="spectrum-row">
+        <div class="spectrum-swatch" style="background: #fef2f2;">
+          <div class="spectrum-tooltip">PI Color/PI Red/50 - #fef2f2</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #fee2e2;">
+          <div class="spectrum-tooltip">PI Color/PI Red/100 - #fee2e2</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #fecaca;">
+          <div class="spectrum-tooltip">PI Color/PI Red/200 - #fecaca</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #fca5a5;">
+          <div class="spectrum-tooltip">PI Color/PI Red/300 - #fca5a5</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #f87171;">
+          <div class="spectrum-tooltip">PI Color/PI Red/400 - #f87171</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #d46a6a;">
+          <div class="spectrum-tooltip">PI Color/PI Red/500 - #d46a6a (Base)</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #b91c1c;">
+          <div class="spectrum-tooltip">PI Color/PI Red/600 - #b91c1c</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #991b1b;">
+          <div class="spectrum-tooltip">PI Color/PI Red/700 - #991b1b</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #7f1d1d;">
+          <div class="spectrum-tooltip">PI Color/PI Red/800 - #7f1d1d</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #450a0a;">
+          <div class="spectrum-tooltip">PI Color/PI Red/900 - #450a0a</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #2d0a0a;">
+          <div class="spectrum-tooltip">PI Color/PI Red/950 - #2d0a0a</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="spectrum-group">
+      <div class="spectrum-title">PI Green Palette</div>
+      <div class="spectrum-row">
+        <div class="spectrum-swatch" style="background: #f0f5f5;">
+          <div class="spectrum-tooltip">PI Color/PI Green/50 - #f0f5f5</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #deeced;">
+          <div class="spectrum-tooltip">PI Color/PI Green/100 - #deeced</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #bddbda;">
+          <div class="spectrum-tooltip">PI Color/PI Green/200 - #bddbda</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #9cc9c5;">
+          <div class="spectrum-tooltip">PI Color/PI Green/300 - #9cc9c5</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #7bb7b0;">
+          <div class="spectrum-tooltip">PI Color/PI Green/400 - #7bb7b0</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #5ca5a5;">
+          <div class="spectrum-tooltip">PI Color/PI Green/500 - #5ca5a5 (Base)</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #4a8a8a;">
+          <div class="spectrum-tooltip">PI Color/PI Green/600 - #4a8a8a</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #386f6f;">
+          <div class="spectrum-tooltip">PI Color/PI Green/700 - #386f6f</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #265454;">
+          <div class="spectrum-tooltip">PI Color/PI Green/800 - #265454</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #143939;">
+          <div class="spectrum-tooltip">PI Color/PI Green/900 - #143939</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #0a1e1e;">
+          <div class="spectrum-tooltip">PI Color/PI Green/950 - #0a1e1e</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="spectrum-group">
+      <div class="spectrum-title">PI Blue Palette</div>
+      <div class="spectrum-row">
+        <div class="spectrum-swatch" style="background: #f0f1f5;">
+          <div class="spectrum-tooltip">PI Color/PI Blue/50 - #f0f1f5</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #dee3ed;">
+          <div class="spectrum-tooltip">PI Color/PI Blue/100 - #dee3ed</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #b8c3e0;">
+          <div class="spectrum-tooltip">PI Color/PI Blue/200 - #b8c3e0</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #8cabd9;">
+          <div class="spectrum-tooltip">PI Color/PI Blue/300 - #8cabd9</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #6093d2;">
+          <div class="spectrum-tooltip">PI Color/PI Blue/400 - #6093d2</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #4d79c7;">
+          <div class="spectrum-tooltip">PI Color/PI Blue/500 - #4d79c7 (Base)</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #2b58b6;">
+          <div class="spectrum-tooltip">PI Color/PI Blue/600 - #2b58b6</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #1d3e91;">
+          <div class="spectrum-tooltip">PI Color/PI Blue/700 - #1d3e91</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #113269;">
+          <div class="spectrum-tooltip">PI Color/PI Blue/800 - #113269</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #081e3f;">
+          <div class="spectrum-tooltip">PI Color/PI Blue/900 - #081e3f</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #040f1f;">
+          <div class="spectrum-tooltip">PI Color/PI Blue/950 - #040f1f</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="spectrum-group">
+      <div class="spectrum-title">PI Yellow Palette</div>
+      <div class="spectrum-row">
+        <div class="spectrum-swatch" style="background: #fefce8;">
+          <div class="spectrum-tooltip">PI Color/PI Yellow/50 - #fefce8</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #fef3c7;">
+          <div class="spectrum-tooltip">PI Color/PI Yellow/100 - #fef3c7</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #fde68a;">
+          <div class="spectrum-tooltip">PI Color/PI Yellow/200 - #fde68a</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #fcd34d;">
+          <div class="spectrum-tooltip">PI Color/PI Yellow/300 - #fcd34d</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #fbbf24;">
+          <div class="spectrum-tooltip">PI Color/PI Yellow/400 - #fbbf24</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #f59e0b;">
+          <div class="spectrum-tooltip">PI Color/PI Yellow/500 - #f59e0b (Base)</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #d97706;">
+          <div class="spectrum-tooltip">PI Color/PI Yellow/600 - #d97706</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #b45309;">
+          <div class="spectrum-tooltip">PI Color/PI Yellow/700 - #b45309</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #92400e;">
+          <div class="spectrum-tooltip">PI Color/PI Yellow/800 - #92400e</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #78350f;">
+          <div class="spectrum-tooltip">PI Color/PI Yellow/900 - #78350f</div>
+        </div>
+        <div class="spectrum-swatch" style="background: #451a03;">
+          <div class="spectrum-tooltip">PI Color/PI Yellow/950 - #451a03</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="section">
+    <button id="update-btn" class="button button-primary">
+      🎨 Update Variables (44 total)
+    </button>
+    <button id="tokens-btn" class="button button-primary">
+      🏷️ Create Tokens Collection
+    </button>
+    <button id="manage-tokens-btn" class="button button-primary">
+      ⚙️ Manage Semantic Variables
+    </button>
+    <button id="palette-creator-btn" class="button button-primary">
+      🌈 Create Tonal Palette
+    </button>
+    <button id="export-btn" class="button button-secondary">
+      📤 Export to Code
+    </button>
+    <button id="changes-btn" class="button button-secondary">
+      📊 View Changes
+    </button>
+  </div>
+  
+  <div id="status" class="status" style="display: none;"></div>
+  
+  <!-- Semantic Variables Management Interface -->
+  <div id="tokens-management" class="section" style="display: none;">
+    <div class="section-title">Semantic Variables Manager</div>
+    
+    <div class="tokens-controls">
+      <button id="add-variable-btn" class="button button-small">+ Add Variable</button>
+      <button id="refresh-tokens-btn" class="button button-small">🔄 Refresh</button>
+      <button id="close-tokens-btn" class="button button-small">✕ Close</button>
+    </div>
+    
+    <div id="tokens-list" class="tokens-list">
+      <!-- Variables will be populated here -->
+    </div>
+  </div>
+
+  <!-- Tonal Palette Creator Interface -->
+  <div id="palette-creator" class="section" style="display: none;">
+    <div class="section-title">Tonal Palette Creator</div>
+    
+    <div class="palette-controls">
+      <div class="form-group">
+        <label>Palette Name:</label>
+        <input type="text" id="palette-name" placeholder="e.g., PI Purple" />
+      </div>
+      <div class="form-group">
+        <label>Base Color (500):</label>
+        <div class="color-input-group">
+          <input type="color" id="base-color" value="#4d79c7" />
+          <input type="text" id="base-color-hex" placeholder="#4d79c7" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Collection:</label>
+        <select id="palette-collection">
+          <option value="Primitives">Primitives</option>
+          <option value="PI Color">PI Color</option>
+          <option value="Custom">Create New Collection</option>
+        </select>
+      </div>
+      <div class="form-actions">
+        <button id="generate-palette-btn" class="button button-primary">Generate Tonal Palette</button>
+        <button id="close-palette-btn" class="button button-secondary">Close</button>
+      </div>
+    </div>
+    
+    <div id="palette-preview" class="palette-preview-grid" style="display: none;">
+      <div class="preview-title">Preview: <span id="preview-name"></span></div>
+      <div class="tonal-spectrum">
+        <!-- Generated spectrum will appear here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Changes Table Interface -->
+  <div id="changes-table" class="section" style="display: none;">
+    <div class="section-title">Recent Changes</div>
+    <div class="changes-controls">
+      <button id="refresh-changes-btn" class="button button-small">🔄 Refresh</button>
+      <button id="close-changes-btn" class="button button-small">✕ Close</button>
+    </div>
+    <div id="changes-list" class="changes-list">
+      <!-- Changes will be populated here -->
+    </div>
+  </div>
+
+  <!-- Add Variable Modal -->
+  <div id="add-variable-modal" class="modal" style="display: none;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Add New Semantic Variable</h3>
+        <button id="close-modal-btn" class="close-btn">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Variable Name:</label>
+          <input type="text" id="var-name" placeholder="e.g., Brand Primary" />
+        </div>
+        <div class="form-group">
+          <label>Type:</label>
+          <select id="var-type">
+            <option value="COLOR">Color</option>
+            <option value="FLOAT">Number</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Light Mode Value:</label>
+          <input type="text" id="var-light" placeholder="#4d79c7 or 8" />
+        </div>
+        <div class="form-group">
+          <label>Dark Mode Value:</label>
+          <input type="text" id="var-dark" placeholder="#4d79c7 or 8" />
+        </div>
+        <div class="form-actions">
+          <button id="save-variable-btn" class="button button-primary">Save Variable</button>
+          <button id="cancel-variable-btn" class="button button-secondary">Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-title">Update Results</div>
+    <div id="results" class="results" style="display: none;"></div>
+  </div>
+  
+  <script>
+    const updateBtn = document.getElementById('update-btn');
+    const diffBtn = document.getElementById('diff-btn');
+    const status = document.getElementById('status');
+    const results = document.getElementById('results');
+    
+    updateBtn.addEventListener('click', () => {
+      parent.postMessage({ pluginMessage: { type: 'update-variables' } }, '*');
+      showStatus('Updating variables...', 'info');
+    });
+    
+    const tokensBtn = document.getElementById('tokens-btn');
+    tokensBtn.addEventListener('click', () => {
+      parent.postMessage({ pluginMessage: { type: 'create-tokens' } }, '*');
+      showStatus('Creating Tokens collection...', 'info');
+    });
+    
+    const manageTokensBtn = document.getElementById('manage-tokens-btn');
+    manageTokensBtn.addEventListener('click', () => {
+      showTokensManagement();
+      parent.postMessage({ pluginMessage: { type: 'get-tokens' } }, '*');
+    });
+    
+    const exportBtn = document.getElementById('export-btn');
+    exportBtn.addEventListener('click', () => {
+      parent.postMessage({ pluginMessage: { type: 'export-tokens' } }, '*');
+      showStatus('Exporting tokens to code...', 'info');
+    });
+    
+    const paletteCreatorBtn = document.getElementById('palette-creator-btn');
+    paletteCreatorBtn.addEventListener('click', () => {
+      showPaletteCreator();
+    });
+    
+    const changesBtn = document.getElementById('changes-btn');
+    changesBtn.addEventListener('click', () => {
+      showChangesTable();
+      parent.postMessage({ pluginMessage: { type: 'get-changes' } }, '*');
+    });
+    
+    function showStatus(message, type) {
+      status.textContent = message;
+      status.className = `status status-${type}`;
+      status.style.display = 'block';
+    }
+    
+    function showResults(resultItems) {
+      results.innerHTML = resultItems.map(item => 
+        `<div class="result-item ${item.type}">${item.text}</div>`
+      ).join('');
+      results.style.display = 'block';
+    }
+    
+    function showTokensManagement() {
+      document.getElementById('tokens-management').style.display = 'block';
+    }
+    
+    function hideTokensManagement() {
+      document.getElementById('tokens-management').style.display = 'none';
+    }
+    
+    function showAddVariableModal() {
+      document.getElementById('add-variable-modal').style.display = 'flex';
+    }
+    
+    function hideAddVariableModal() {
+      document.getElementById('add-variable-modal').style.display = 'none';
+      // Clear form
+      document.getElementById('var-name').value = '';
+      document.getElementById('var-light').value = '';
+      document.getElementById('var-dark').value = '';
+    }
+    
+    function renderTokensList(tokens) {
+      const tokensList = document.getElementById('tokens-list');
+      if (!tokens || tokens.length === 0) {
+        tokensList.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">No semantic variables found. Click "Add Variable" to create some.</div>';
+        return;
+      }
+      
+      tokensList.innerHTML = tokens.map(token => `
+        <div class="token-item">
+          <div class="token-info">
+            <div class="token-name">${token.name}</div>
+            <div class="token-values">
+              <div class="token-value">
+                <span>Light:</span>
+                ${token.type === 'COLOR' ? `<div class="color-swatch" style="background: ${token.lightValue};"></div>` : ''}
+                <span>${token.lightValue}</span>
+              </div>
+              <div class="token-value">
+                <span>Dark:</span>
+                ${token.type === 'COLOR' ? `<div class="color-swatch" style="background: ${token.darkValue};"></div>` : ''}
+                <span>${token.darkValue}</span>
+              </div>
+            </div>
+          </div>
+          <div class="token-actions">
+            <button class="btn-edit" onclick="editToken('${token.id}')">Edit</button>
+            <button class="btn-delete" onclick="deleteToken('${token.id}')">Delete</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function editToken(tokenId) {
+      // For now, just show a simple prompt
+      const newValue = prompt('Enter new value (format: lightValue,darkValue):');
+      if (newValue) {
+        const [light, dark] = newValue.split(',');
+        parent.postMessage({ 
+          pluginMessage: { 
+            type: 'update-token', 
+            tokenId: tokenId, 
+            lightValue: light.trim(), 
+            darkValue: dark.trim() 
+          } 
+        }, '*');
+      }
+    }
+    
+    function deleteToken(tokenId) {
+      if (confirm('Are you sure you want to delete this variable?')) {
+        parent.postMessage({ 
+          pluginMessage: { 
+            type: 'delete-token', 
+            tokenId: tokenId 
+          } 
+        }, '*');
+      }
+    }
+    
+    function showPaletteCreator() {
+      document.getElementById('palette-creator').style.display = 'block';
+    }
+    
+    function hidePaletteCreator() {
+      document.getElementById('palette-creator').style.display = 'none';
+    }
+    
+    function showChangesTable() {
+      document.getElementById('changes-table').style.display = 'block';
+    }
+    
+    function hideChangesTable() {
+      document.getElementById('changes-table').style.display = 'none';
+    }
+    
+    function renderChangesList(changes) {
+      const changesList = document.getElementById('changes-list');
+      if (!changes || changes.length === 0) {
+        changesList.innerHTML = '<div style="text-align: center; color: #666; padding: 20px;">No recent changes found.</div>';
+        return;
+      }
+      
+      changesList.innerHTML = changes.map(change => `
+        <div class="change-item">
+          <div class="change-icon ${change.type}">${change.type === 'added' ? '+' : change.type === 'updated' ? '↻' : '×'}</div>
+          <div class="change-details">
+            <div class="change-variable">${change.variableName}</div>
+            <div class="change-description">${change.description}</div>
+            <div class="change-time">${change.timestamp}</div>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function generateTonalPalette(baseColor) {
+      // Generate a tonal spectrum from 50 to 950
+      const shades = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950];
+      const spectrum = [];
+      
+      // Convert hex to RGB
+      const hex = baseColor.replace('#', '');
+      const r = parseInt(hex.substr(0, 2), 16);
+      const g = parseInt(hex.substr(2, 2), 16);
+      const b = parseInt(hex.substr(4, 2), 16);
+      
+      shades.forEach(shade => {
+        let factor;
+        if (shade <= 500) {
+          // Lighter shades
+          factor = 1 + (500 - shade) / 500 * 0.8;
+        } else {
+          // Darker shades
+          factor = 1 - (shade - 500) / 450 * 0.7;
+        }
+        
+        const newR = Math.min(255, Math.max(0, Math.round(r * factor)));
+        const newG = Math.min(255, Math.max(0, Math.round(g * factor)));
+        const newB = Math.min(255, Math.max(0, Math.round(b * factor)));
+        
+        const hexColor = `#${newR.toString(16).padStart(2, '0')}${newG.toString(16).padStart(2, '0')}${newB.toString(16).padStart(2, '0')}`;
+        
+        spectrum.push({
+          shade: shade,
+          hex: hexColor,
+          label: shade === 500 ? 'Base' : shade.toString()
+        });
+      });
+      
+      return spectrum;
+    }
+    
+    function renderPalettePreview(paletteName, spectrum) {
+      const preview = document.getElementById('palette-preview');
+      const previewName = document.getElementById('preview-name');
+      const tonalSpectrum = document.querySelector('.tonal-spectrum');
+      
+      previewName.textContent = paletteName;
+      
+      tonalSpectrum.innerHTML = spectrum.map(swatch => `
+        <div class="tonal-swatch">
+          <div class="tonal-swatch-color" style="background: ${swatch.hex};"></div>
+          <div class="tonal-swatch-label">${swatch.label}</div>
+          <div class="tonal-swatch-hex">${swatch.hex}</div>
+        </div>
+      `).join('');
+      
+      preview.style.display = 'block';
+    }
+    
+    // Add event listeners for new buttons
+    document.getElementById('add-variable-btn').addEventListener('click', showAddVariableModal);
+    document.getElementById('close-tokens-btn').addEventListener('click', hideTokensManagement);
+    document.getElementById('refresh-tokens-btn').addEventListener('click', () => {
+      parent.postMessage({ pluginMessage: { type: 'get-tokens' } }, '*');
+    });
+    document.getElementById('close-modal-btn').addEventListener('click', hideAddVariableModal);
+    document.getElementById('cancel-variable-btn').addEventListener('click', hideAddVariableModal);
+    document.getElementById('save-variable-btn').addEventListener('click', () => {
+      const name = document.getElementById('var-name').value;
+      const type = document.getElementById('var-type').value;
+      const light = document.getElementById('var-light').value;
+      const dark = document.getElementById('var-dark').value;
+      
+      if (!name || !light || !dark) {
+        alert('Please fill in all fields');
+        return;
+      }
+      
+      parent.postMessage({ 
+        pluginMessage: { 
+          type: 'add-token', 
+          name: name, 
+          type: type, 
+          lightValue: light, 
+          darkValue: dark 
+        } 
+      }, '*');
+      hideAddVariableModal();
+    });
+    
+    // Palette Creator event listeners
+    document.getElementById('close-palette-btn').addEventListener('click', hidePaletteCreator);
+    document.getElementById('base-color').addEventListener('input', (e) => {
+      document.getElementById('base-color-hex').value = e.target.value;
+    });
+    document.getElementById('base-color-hex').addEventListener('input', (e) => {
+      if (e.target.value.match(/^#[0-9A-Fa-f]{6}$/)) {
+        document.getElementById('base-color').value = e.target.value;
+      }
+    });
+    document.getElementById('generate-palette-btn').addEventListener('click', () => {
+      const paletteName = document.getElementById('palette-name').value;
+      const baseColor = document.getElementById('base-color').value;
+      const collection = document.getElementById('palette-collection').value;
+      
+      if (!paletteName || !baseColor) {
+        alert('Please fill in palette name and base color');
+        return;
+      }
+      
+      // Generate preview
+      const spectrum = generateTonalPalette(baseColor);
+      renderPalettePreview(paletteName, spectrum);
+      
+      // Send to plugin
+      parent.postMessage({ 
+        pluginMessage: { 
+          type: 'create-tonal-palette', 
+          paletteName: paletteName,
+          baseColor: baseColor,
+          collection: collection,
+          spectrum: spectrum
+        } 
+      }, '*');
+    });
+    
+    // Changes Table event listeners
+    document.getElementById('close-changes-btn').addEventListener('click', hideChangesTable);
+    document.getElementById('refresh-changes-btn').addEventListener('click', () => {
+      parent.postMessage({ pluginMessage: { type: 'get-changes' } }, '*');
+    });
+    
+    // Listen for messages from plugin
+    window.onmessage = (event) => {
+      const { type, results: resultItems, updatedCount, message, tokens, changes } = event.data.pluginMessage;
+      
+      if (type === 'update-complete') {
+        showStatus(`✅ Successfully updated ${updatedCount} variables!`, 'success');
+        showResults(resultItems.map(text => ({ text, type: text.includes('✅') ? 'success' : 'error' })));
+      } else if (type === 'error') {
+        showStatus(`❌ Error: ${message}`, 'error');
+        showResults([{ text: message, type: 'error' }]);
+      } else if (type === 'tokens-loaded') {
+        renderTokensList(tokens);
+        showStatus(`✅ Loaded ${tokens.length} semantic variables`, 'success');
+      } else if (type === 'token-added') {
+        showStatus('✅ Variable added successfully!', 'success');
+        parent.postMessage({ pluginMessage: { type: 'get-tokens' } }, '*');
+      } else if (type === 'token-updated') {
+        showStatus('✅ Variable updated successfully!', 'success');
+        parent.postMessage({ pluginMessage: { type: 'get-tokens' } }, '*');
+      } else if (type === 'token-deleted') {
+        showStatus('✅ Variable deleted successfully!', 'success');
+        parent.postMessage({ pluginMessage: { type: 'get-tokens' } }, '*');
+      } else if (type === 'export-complete') {
+        showStatus('✅ Tokens exported to code successfully!', 'success');
+      } else if (type === 'palette-created') {
+        showStatus('✅ Tonal palette created successfully!', 'success');
+        hidePaletteCreator();
+      } else if (type === 'changes-loaded') {
+        renderChangesList(changes);
+        showStatus(`✅ Loaded ${changes.length} recent changes`, 'success');
+      }
+    };
+  </script>
+</body>
+</html>

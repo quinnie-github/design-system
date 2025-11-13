@@ -1,0 +1,44 @@
+{
+  "name": "design-system-gpt",
+  "version": "1.0.0",
+  "description": "Intelligent design system manager that bridges Figma, tokens, and code",
+  "main": "index.js",
+  "scripts": {
+    "sync": "npx tsx scripts/sync-figma-to-tokens.ts",
+    "audit": "npx tsx scripts/audit-tokens.ts",
+    "build-knowledge": "npx tsx scripts/build-knowledge-base.ts",
+    "build-rule-cards": "npx tsx scripts/build-rule-cards.ts",
+    "map-components": "npx tsx scripts/map-component-tokens.ts",
+    "validate-manifests": "node scripts/validate-manifests.js",
+    "dev": "npx tsx scripts/sync-figma-to-tokens.ts && npx tsx scripts/audit-tokens.ts",
+    "build": "npm run validate-manifests && npm run build-knowledge && npm run build-rule-cards && npm run map-components",
+    "test": "npm run audit",
+    "ds-gpt": "npx tsx cli/ds-gpt.ts"
+  },
+  "bin": {
+    "ds-gpt": "./cli/ds-gpt.ts"
+  },
+  "keywords": [
+    "design-system",
+    "figma",
+    "tokens",
+    "ai",
+    "design-ops"
+  ],
+  "author": "Quinnie Chen",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0",
+    "commander": "^11.0.0",
+    "inquirer": "^9.0.0",
+    "chalk": "^5.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

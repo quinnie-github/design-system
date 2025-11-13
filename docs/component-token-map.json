@@ -1,0 +1,456 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "last_updated": "2025-10-28T03:39:17.732Z",
+    "total_components": 4,
+    "total_tokens": 13
+  },
+  "components": [
+    {
+      "id": "button-primary",
+      "name": "Button Primary",
+      "type": "component",
+      "description": "Primary action button with brand styling",
+      "tokens": [
+        {
+          "property": "background",
+          "token_name": "brand-primary",
+          "token_type": "color",
+          "is_semantic": true,
+          "is_primitive": false,
+          "value": "#4d79c7"
+        },
+        {
+          "property": "color",
+          "token_name": "text-inverse",
+          "token_type": "color",
+          "is_semantic": true,
+          "is_primitive": false,
+          "value": "#ffffff"
+        },
+        {
+          "property": "padding",
+          "token_name": "space-sm",
+          "token_type": "number",
+          "is_semantic": true,
+          "is_primitive": false,
+          "value": "8px 16px"
+        },
+        {
+          "property": "border-radius",
+          "token_name": "radius-md",
+          "token_type": "number",
+          "is_semantic": true,
+          "is_primitive": false,
+          "value": "8px"
+        }
+      ],
+      "variants": [
+        {
+          "name": "hover",
+          "properties": {
+            "background": "interactive-hover"
+          },
+          "tokens": [
+            {
+              "property": "background",
+              "token_name": "interactive-hover",
+              "token_type": "color",
+              "is_semantic": true,
+              "is_primitive": false,
+              "value": "#2b58b6"
+            }
+          ]
+        }
+      ],
+      "usage_count": 15,
+      "last_modified": "2025-10-28T03:39:17.731Z"
+    },
+    {
+      "id": "card-default",
+      "name": "Card Default",
+      "type": "component",
+      "description": "Standard card component for content display",
+      "tokens": [
+        {
+          "property": "background",
+          "token_name": "surface-base",
+          "token_type": "color",
+          "is_semantic": true,
+          "is_primitive": false,
+          "value": "#ffffff"
+        },
+        {
+          "property": "border",
+          "token_name": "border-subtle",
+          "token_type": "color",
+          "is_semantic": true,
+          "is_primitive": false,
+          "value": "#e5e7eb"
+        },
+        {
+          "property": "padding",
+          "token_name": "space-md",
+          "token_type": "number",
+          "is_semantic": true,
+          "is_primitive": false,
+          "value": "16px"
+        },
+        {
+          "property": "border-radius",
+          "token_name": "radius-lg",
+          "token_type": "number",
+          "is_semantic": true,
+          "is_primitive": false,
+          "value": "12px"
+        }
+      ],
+      "variants": [],
+      "usage_count": 8,
+      "last_modified": "2025-10-28T03:39:17.732Z"
+    },
+    {
+      "id": "kpi-card",
+      "name": "KPI Card",
+      "type": "component",
+      "description": "Key Performance Indicator display card",
+      "tokens": [
+        {
+          "property": "background",
+          "token_name": "surface-base",
+          "token_type": "color",
+          "is_semantic": true,
+          "is_primitive": false,
+          "value": "#ffffff"
+        },
+        {
+          "property": "value-color",
+          "token_name": "kpi-positive",
+          "token_type": "color",
+          "is_semantic": true,
+          "is_primitive": false,
+          "value": "#5ca5a5"
+        },
+        {
+          "property": "label-color",
+          "token_name": "text-secondary",
+          "token_type": "color",
+          "is_semantic": true,
+          "is_primitive": false,
+          "value": "#6b7280"
+        },
+        {
+          "property": "padding",
+          "token_name": "space-lg",
+          "token_type": "number",
+          "is_semantic": true,
+          "is_primitive": false,
+          "value": "24px"
+        }
+      ],
+      "variants": [
+        {
+          "name": "negative",
+          "properties": {
+            "value-color": "kpi-negative"
+          },
+          "tokens": [
+            {
+              "property": "value-color",
+              "token_name": "kpi-negative",
+              "token_type": "color",
+              "is_semantic": true,
+              "is_primitive": false,
+              "value": "#d46a6a"
+            }
+          ]
+        }
+      ],
+      "usage_count": 12,
+      "last_modified": "2025-10-28T03:39:17.732Z"
+    },
+    {
+      "id": "input-field",
+      "name": "Input Field",
+      "type": "component",
+      "description": "Text input field for form data entry",
+      "tokens": [
+        {
+          "property": "background",
+          "token_name": "surface-base",
+          "token_type": "color",
+          "is_semantic": true,
+          "is_primitive": false,
+          "value": "#ffffff"
+        },
+        {
+          "property": "border",
+          "token_name": "border-default",
+          "token_type": "color",
+          "is_semantic": true,
+          "is_primitive": false,
+          "value": "#d1d5db"
+        },
+        {
+          "property": "color",
+          "token_name": "text-primary",
+          "token_type": "color",
+          "is_semantic": true,
+          "is_primitive": false,
+          "value": "#1f2937"
+        },
+        {
+          "property": "padding",
+          "token_name": "space-sm",
+          "token_type": "number",
+          "is_semantic": true,
+          "is_primitive": false,
+          "value": "8px 12px"
+        }
+      ],
+      "variants": [
+        {
+          "name": "error",
+          "properties": {
+            "border": "kpi-negative"
+          },
+          "tokens": [
+            {
+              "property": "border",
+              "token_name": "kpi-negative",
+              "token_type": "color",
+              "is_semantic": true,
+              "is_primitive": false,
+              "value": "#d46a6a"
+            }
+          ]
+        }
+      ],
+      "usage_count": 20,
+      "last_modified": "2025-10-28T03:39:17.732Z"
+    }
+  ],
+  "token_usage": [
+    {
+      "token_name": "brand-primary",
+      "token_type": "color",
+      "usage_count": 1,
+      "components": [
+        "Button Primary"
+      ],
+      "properties": [
+        "background"
+      ],
+      "is_semantic": true,
+      "is_primitive": false
+    },
+    {
+      "token_name": "text-inverse",
+      "token_type": "color",
+      "usage_count": 1,
+      "components": [
+        "Button Primary"
+      ],
+      "properties": [
+        "color"
+      ],
+      "is_semantic": true,
+      "is_primitive": false
+    },
+    {
+      "token_name": "space-sm",
+      "token_type": "number",
+      "usage_count": 2,
+      "components": [
+        "Button Primary",
+        "Input Field"
+      ],
+      "properties": [
+        "padding",
+        "padding"
+      ],
+      "is_semantic": true,
+      "is_primitive": false
+    },
+    {
+      "token_name": "radius-md",
+      "token_type": "number",
+      "usage_count": 1,
+      "components": [
+        "Button Primary"
+      ],
+      "properties": [
+        "border-radius"
+      ],
+      "is_semantic": true,
+      "is_primitive": false
+    },
+    {
+      "token_name": "surface-base",
+      "token_type": "color",
+      "usage_count": 3,
+      "components": [
+        "Card Default",
+        "KPI Card",
+        "Input Field"
+      ],
+      "properties": [
+        "background",
+        "background",
+        "background"
+      ],
+      "is_semantic": true,
+      "is_primitive": false
+    },
+    {
+      "token_name": "border-subtle",
+      "token_type": "color",
+      "usage_count": 1,
+      "components": [
+        "Card Default"
+      ],
+      "properties": [
+        "border"
+      ],
+      "is_semantic": true,
+      "is_primitive": false
+    },
+    {
+      "token_name": "space-md",
+      "token_type": "number",
+      "usage_count": 1,
+      "components": [
+        "Card Default"
+      ],
+      "properties": [
+        "padding"
+      ],
+      "is_semantic": true,
+      "is_primitive": false
+    },
+    {
+      "token_name": "radius-lg",
+      "token_type": "number",
+      "usage_count": 1,
+      "components": [
+        "Card Default"
+      ],
+      "properties": [
+        "border-radius"
+      ],
+      "is_semantic": true,
+      "is_primitive": false
+    },
+    {
+      "token_name": "kpi-positive",
+      "token_type": "color",
+      "usage_count": 1,
+      "components": [
+        "KPI Card"
+      ],
+      "properties": [
+        "value-color"
+      ],
+      "is_semantic": true,
+      "is_primitive": false
+    },
+    {
+      "token_name": "text-secondary",
+      "token_type": "color",
+      "usage_count": 1,
+      "components": [
+        "KPI Card"
+      ],
+      "properties": [
+        "label-color"
+      ],
+      "is_semantic": true,
+      "is_primitive": false
+    },
+    {
+      "token_name": "space-lg",
+      "token_type": "number",
+      "usage_count": 1,
+      "components": [
+        "KPI Card"
+      ],
+      "properties": [
+        "padding"
+      ],
+      "is_semantic": true,
+      "is_primitive": false
+    },
+    {
+      "token_name": "border-default",
+      "token_type": "color",
+      "usage_count": 1,
+      "components": [
+        "Input Field"
+      ],
+      "properties": [
+        "border"
+      ],
+      "is_semantic": true,
+      "is_primitive": false
+    },
+    {
+      "token_name": "text-primary",
+      "token_type": "color",
+      "usage_count": 1,
+      "components": [
+        "Input Field"
+      ],
+      "properties": [
+        "color"
+      ],
+      "is_semantic": true,
+      "is_primitive": false
+    }
+  ],
+  "dependencies": [
+    {
+      "component": "Button Primary",
+      "depends_on": [],
+      "used_by": [],
+      "token_dependencies": [
+        "brand-primary",
+        "text-inverse",
+        "space-sm",
+        "radius-md"
+      ]
+    },
+    {
+      "component": "Card Default",
+      "depends_on": [],
+      "used_by": [],
+      "token_dependencies": [
+        "surface-base",
+        "border-subtle",
+        "space-md",
+        "radius-lg"
+      ]
+    },
+    {
+      "component": "KPI Card",
+      "depends_on": [],
+      "used_by": [],
+      "token_dependencies": [
+        "surface-base",
+        "kpi-positive",
+        "text-secondary",
+        "space-lg"
+      ]
+    },
+    {
+      "component": "Input Field",
+      "depends_on": [],
+      "used_by": [],
+      "token_dependencies": [
+        "surface-base",
+        "border-default",
+        "text-primary",
+        "space-sm"
+      ]
+    }
+  ]
+}

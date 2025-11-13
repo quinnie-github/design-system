@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Design System GPT</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #4d79c7 0%, #5ca5a5 100%);
+      padding: 0;
+      overflow-x: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .container {
+      background: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #4d79c7 0%, #5ca5a5 100%);
+      padding: 24px 20px;
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+      animation: pulse 4s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+      50% { transform: scale(1.1) rotate(180deg); opacity: 0.8; }
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .logo {
+      font-size: 32px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-5px) rotate(5deg); }
+    }
+
+    .header-title {
+      text-align: left;
+    }
+
+    .header h1 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .header p {
+      font-size: 13px;
+      opacity: 0.9;
+      font-weight: 400;
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+
+    .new-chat-btn, .settings-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 36px;
+      height: 36px;
+      color: white;
+    }
+
+    .new-chat-btn:hover, .settings-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: scale(1.05);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+      box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+    }
+
+    .chat-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .messages {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      background: #f8fafc;
+      min-height: 0;
+    }
+
+    .message {
+      display: flex;
+      gap: 12px;
+      animation: fadeIn 0.3s ease-in;
+    }
+
+    .message.user {
+      flex-direction: row-reverse;
+    }
+
+    .message-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      font-weight: 600;
+      flex-shrink: 0;
+      transition: all 0.2s;
+    }
+
+    .message-avatar:hover {
+      transform: scale(1.05);
+    }
+
+    .message.user .message-avatar {
+      background: linear-gradient(135deg, #4d79c7 0%, #5ca5a5 100%);
+      color: white;
+      box-shadow: 0 2px 8px rgba(77, 121, 199, 0.3);
+    }
+
+    .message.assistant .message-avatar {
+      background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+      color: #64748b;
+      border: 2px solid #e2e8f0;
+    }
+
+    .message-content {
+      flex: 1;
+      max-width: 85%;
+      min-width: 0;
+    }
+
+    .message.user .message-content {
+      text-align: right;
+    }
+
+    .message-bubble {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 16px 20px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: #1e293b;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+      transition: all 0.2s;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    .message-bubble p {
+      margin: 0 0 12px 0;
+    }
+
+    .message-bubble p:last-child {
+      margin-bottom: 0;
+    }
+
+    .message-bubble h1,
+    .message-bubble h2,
+    .message-bubble h3 {
+      margin: 16px 0 12px 0;
+      font-weight: 700;
+      color: #1e293b;
+      line-height: 1.4;
+    }
+
+    .message-bubble h1 {
+      font-size: 18px;
+      margin-top: 0;
+    }
+
+    .message-bubble h2 {
+      font-size: 16px;
+    }
+
+    .message-bubble h3 {
+      font-size: 15px;
+    }
+
+    .message-bubble strong {
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    .message-bubble em {
+      font-style: italic;
+      color: #64748b;
+    }
+
+    .message-bubble code {
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 2px 6px;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 12px;
+      color: #4d79c7;
+    }
+
+    .message-bubble pre {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin: 12px 0;
+      overflow-x: auto;
+    }
+
+    .message-bubble pre code {
+      background: transparent;
+      border: none;
+      padding: 0;
+      font-size: 12px;
+      color: #1e293b;
+    }
+
+    .message-bubble a {
+      color: #4d79c7;
+      text-decoration: none;
+      font-weight: 600;
+      border-bottom: 1px solid #4d79c7;
+      transition: all 0.2s;
+    }
+
+    .message-bubble a:hover {
+      color: #2b58b6;
+      border-bottom-color: #2b58b6;
+    }
+
+    .message-bubble hr {
+      border: none;
+      border-top: 2px solid #e2e8f0;
+      margin: 16px 0;
+    }
+
+    /* Message Pills - Styled bullet points */
+    .message-pill {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 10px 16px;
+      margin: 8px 0;
+      font-size: 13px;
+      line-height: 1.5;
+      color: #1e293b;
+      transition: all 0.2s;
+      cursor: default;
+    }
+
+    .message-pill::before {
+      content: '✓';
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 20px;
+      height: 20px;
+      background: linear-gradient(135deg, #4d79c7 0%, #5ca5a5 100%);
+      color: white;
+      border-radius: 50%;
+      font-size: 12px;
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .message-pill.numbered::before {
+      content: attr(data-number);
+      background: #f1f5f9;
+      color: #4d79c7;
+      border: 2px solid #e2e8f0;
+      font-size: 11px;
+    }
+
+    .message-pill:hover {
+      background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+      border-color: #4d79c7;
+      transform: translateX(4px);
+      box-shadow: 0 2px 8px rgba(77, 121, 199, 0.15);
+    }
+
+    .message.user .message-bubble .message-pill {
+      background: rgba(255, 255, 255, 0.2);
+      border-color: rgba(255, 255, 255, 0.4);
+      color: white;
+    }
+
+    .message.user .message-bubble .message-pill::before {
+      background: rgba(255, 255, 255, 0.3);
+      color: white;
+    }
+
+    .message.user .message-bubble .message-pill:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.6);
+    }
+
+    .message.user .message-bubble {
+      background: linear-gradient(135deg, #4d79c7 0%, #5ca5a5 100%);
+      color: white;
+      border-color: transparent;
+      box-shadow: 0 4px 12px rgba(77, 121, 199, 0.3);
+    }
+
+    .message.assistant .message-bubble {
+      background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+      border-color: #e2e8f0;
+    }
+
+    .message-bubble:hover {
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .message-actions {
+      margin-top: 8px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .action-button {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+
+    .action-button:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .action-button.primary {
+      background: linear-gradient(135deg, #4d79c7 0%, #5ca5a5 100%);
+      border-color: transparent;
+      color: white;
+      box-shadow: 0 4px 12px rgba(77, 121, 199, 0.3);
+    }
+
+    .action-button.primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(77, 121, 199, 0.4);
+    }
+
+    .input-container {
+      border-top: 2px solid #e2e8f0;
+      padding: 20px;
+      background: white;
+      box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .input-wrapper {
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+    }
+
+    .input-field {
+      flex: 1;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      resize: none;
+      min-height: 44px;
+      max-height: 120px;
+      outline: none;
+      transition: all 0.2s;
+      background: #f8fafc;
+    }
+
+    .input-field:focus {
+      border-color: #4d79c7;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(77, 121, 199, 0.1);
+      outline: none;
+    }
+
+    .input-field::placeholder {
+      color: #9ca3af;
+    }
+
+    .send-button {
+      background: linear-gradient(135deg, #4d79c7 0%, #5ca5a5 100%);
+      border: none;
+      border-radius: 12px;
+      padding: 12px 20px;
+      color: white;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 4px 12px rgba(77, 121, 199, 0.3);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .send-button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .send-button:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .send-button:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(77, 121, 199, 0.4);
+    }
+
+    .send-button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .send-button:disabled {
+      background: #d1d5db;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none !important;
+    }
+
+    .typing-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #6b7280;
+      font-size: 12px;
+      font-style: italic;
+    }
+
+    .typing-dots {
+      display: flex;
+      gap: 2px;
+    }
+
+    .typing-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #6b7280;
+      animation: typing 1.4s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(1) { animation-delay: -0.32s; }
+    .typing-dot:nth-child(2) { animation-delay: -0.16s; }
+
+    .welcome-message {
+      text-align: center;
+      padding: 40px 20px;
+      color: #64748b;
+    }
+
+    .welcome-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+
+    .welcome-subtitle {
+      font-size: 14px;
+      color: #64748b;
+      margin-bottom: 16px;
+    }
+
+    .welcome-tip {
+      font-size: 13px;
+      color: #475569;
+      margin-bottom: 24px;
+      padding: 12px 16px;
+      background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+      border: 2px solid #0ea5e9;
+      border-radius: 12px;
+      color: #075985;
+      font-weight: 500;
+    }
+
+    .quick-actions {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+
+    .quick-action {
+      background: white;
+      border: 2px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+      color: inherit;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .quick-action:hover {
+      background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+      border-color: #4d79c7;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(77, 121, 199, 0.2);
+    }
+
+    .quick-action-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 6px;
+    }
+
+    .quick-action-desc {
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    .error-message {
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      border: 2px solid #ef4444;
+      border-radius: 12px;
+      padding: 14px 18px;
+      color: #991b1b;
+      font-size: 13px;
+      font-weight: 500;
+      margin: 16px 20px;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    .component-suggestion {
+      background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+      border: 2px solid #0ea5e9;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-top: 10px;
+    }
+
+    .component-name {
+      font-weight: 600;
+      color: #075985;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .component-description {
+      font-size: 13px;
+      color: #0c4a6e;
+      margin-bottom: 10px;
+      line-height: 1.5;
+    }
+
+    .component-tokens {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .token-tag {
+      background: white;
+      color: #0c4a6e;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      border: 1px solid #0ea5e9;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes typing {
+      0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+      40% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Scrollbar styling */
+    .messages::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .messages::-webkit-scrollbar-track {
+      background: #f1f5f9;
+    }
+
+    .messages::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 3px;
+    }
+
+    .messages::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
+    }
+
+    /* Modal styles */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 16px;
+      width: 90%;
+      max-width: 400px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      border: 2px solid #e2e8f0;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 24px;
+      border-bottom: 2px solid #e2e8f0;
+      background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+    }
+
+    .modal-header h3 {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #1f2937;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      cursor: pointer;
+      color: #6b7280;
+      padding: 0;
+      width: 24px;
+      height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .close-btn:hover {
+      color: #374151;
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 12px;
+      padding: 24px;
+      border-top: 2px solid #e2e8f0;
+      background: #f8fafc;
+    }
+
+    .setting-group {
+      margin-bottom: 24px;
+    }
+
+    .setting-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: #475569;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .setting-group small {
+      display: block;
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 6px;
+      font-style: italic;
+    }
+
+    .setting-group small a {
+      color: #4d79c7;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .setting-group small a:hover {
+      text-decoration: underline;
+    }
+
+    .setting-group input,
+    .setting-group select {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 13px;
+      background: #f8fafc;
+      transition: all 0.2s;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+
+    .setting-group input:focus,
+    .setting-group select:focus {
+      outline: none;
+      border-color: #4d79c7;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(77, 121, 199, 0.1);
+    }
+
+    .button {
+      width: 100%;
+      padding: 14px 20px;
+      border: none;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .button:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .button-primary {
+      background: linear-gradient(135deg, #4d79c7 0%, #5ca5a5 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(77, 121, 199, 0.3);
+    }
+
+    .button-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(77, 121, 199, 0.4);
+    }
+
+    .button-secondary {
+      background: white;
+      color: #475569;
+      border: 2px solid #e2e8f0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .button-secondary:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+
+    .button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+      <div class="header-content">
+        <div class="header-left">
+          <div class="logo">🤖</div>
+          <div class="header-title">
+            <h1>Design System GPT</h1>
+            <p>Your intelligent design system assistant</p>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button id="new-chat-btn" class="new-chat-btn" title="Start New Chat">
+            <span>💬</span>
+          </button>
+          <button id="settings-btn" class="settings-btn" title="Settings">
+            <span>⚙️</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="content">
+      <div class="chat-container">
+    <div class="messages" id="messages">
+      <div class="welcome-message" id="welcome-message">
+        <div class="welcome-title">Welcome to Design System GPT!</div>
+        <div class="welcome-subtitle">Ask me about components, tokens, or design patterns</div>
+        <div class="welcome-tip">💡 <strong>Tip:</strong> Use "New Chat" or Ctrl/Cmd+N to start fresh anytime!</div>
+        <div class="quick-actions">
+          <div class="quick-action" data-action="suggest-component">
+            <div class="quick-action-title">Find Component</div>
+            <div class="quick-action-desc">Suggest components for your needs</div>
+          </div>
+          <div class="quick-action" data-action="explain-tokens">
+            <div class="quick-action-title">Explain Tokens</div>
+            <div class="quick-action-desc">Learn about design tokens</div>
+          </div>
+          <div class="quick-action" data-action="design-pattern">
+            <div class="quick-action-title">Design Pattern</div>
+            <div class="quick-action-desc">Get design recommendations</div>
+          </div>
+          <div class="quick-action" data-action="audit-system">
+            <div class="quick-action-title">Audit System</div>
+            <div class="quick-action-desc">Check for issues</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-container">
+      <div class="input-wrapper">
+        <textarea 
+          id="message-input" 
+          class="input-field" 
+          placeholder="Ask about components, tokens, or design patterns..."
+          rows="1"
+        ></textarea>
+        <button id="send-button" class="send-button">
+          <span>Send</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Modal -->
+  <div id="settings-modal" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Settings</h3>
+        <button id="close-settings" class="close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="setting-group">
+          <label for="api-key-input">OpenAI API Key</label>
+          <input 
+            type="password" 
+            id="api-key-input" 
+            placeholder="sk-..." 
+            class="input-field"
+          />
+          <small>Required for AI features. Get your key from <a href="https://platform.openai.com/api-keys" target="_blank">OpenAI Platform</a></small>
+        </div>
+        <div class="setting-group">
+          <label for="model-select">AI Model</label>
+          <select id="model-select" class="input-field">
+            <option value="gpt-4o-mini">GPT-4o Mini (Recommended)</option>
+            <option value="gpt-4o">GPT-4o</option>
+            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+          </select>
+        </div>
+        <div class="setting-group">
+          <label for="max-tokens">Max Tokens</label>
+          <input 
+            type="number" 
+            id="max-tokens" 
+            value="1000" 
+            min="100" 
+            max="4000" 
+            class="input-field"
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="save-settings" class="button button-primary">Save Settings</button>
+        <button id="cancel-settings" class="button button-secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    class DesignSystemGPT {
+      constructor() {
+        this.messagesContainer = document.getElementById('messages');
+        this.messageInput = document.getElementById('message-input');
+        this.sendButton = document.getElementById('send-button');
+        this.welcomeMessage = document.getElementById('welcome-message');
+        this.connectionStatus = document.getElementById('connection-status');
+        
+        this.isTyping = false;
+        this.messageHistory = [];
+        
+        this.initializeEventListeners();
+        this.loadKnowledgeBase();
+      }
+
+      initializeEventListeners() {
+        this.sendButton.addEventListener('click', () => this.sendMessage());
+        this.messageInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            this.sendMessage();
+          }
+          // Ctrl/Cmd + N for new chat
+          if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+            e.preventDefault();
+            this.startNewChat();
+          }
+        });
+        
+        this.messageInput.addEventListener('input', () => {
+          this.autoResize();
+        });
+
+        // New chat functionality
+        document.getElementById('new-chat-btn').addEventListener('click', () => {
+          this.startNewChat();
+        });
+
+        document.getElementById('new-chat-input-btn').addEventListener('click', () => {
+          this.startNewChat();
+        });
+
+        // Settings functionality
+        document.getElementById('settings-btn').addEventListener('click', () => {
+          this.showSettings();
+        });
+
+        document.getElementById('close-settings').addEventListener('click', () => {
+          this.hideSettings();
+        });
+
+        document.getElementById('cancel-settings').addEventListener('click', () => {
+          this.hideSettings();
+        });
+
+        document.getElementById('save-settings').addEventListener('click', () => {
+          this.saveSettings();
+        });
+
+        // Quick action buttons
+        document.querySelectorAll('.quick-action').forEach(button => {
+          button.addEventListener('click', (e) => {
+            const action = e.currentTarget.dataset.action;
+            this.handleQuickAction(action);
+          });
+        });
+      }
+
+      autoResize() {
+        this.messageInput.style.height = 'auto';
+        this.messageInput.style.height = Math.min(this.messageInput.scrollHeight, 120) + 'px';
+      }
+
+      async loadKnowledgeBase() {
+        try {
+          // In a real implementation, this would load the knowledge base
+          // For now, we'll use mock data
+          this.knowledgeBase = {
+            components: ['Button', 'Card', 'Input', 'KPI', 'Modal', 'Navigation'],
+            tokens: ['brand-primary', 'surface-base', 'text-primary', 'space-md', 'radius-lg'],
+            patterns: ['Dashboard Layout', 'Form Design', 'Data Display', 'Navigation Pattern']
+          };
+          console.log('Knowledge base loaded');
+        } catch (error) {
+          console.error('Failed to load knowledge base:', error);
+          this.showError('Failed to load design system knowledge base');
+        }
+      }
+
+      async sendMessage() {
+        const message = this.messageInput.value.trim();
+        if (!message) return;
+
+        this.addMessage('user', message);
+        this.messageInput.value = '';
+        this.autoResize();
+        this.hideWelcomeMessage();
+
+        this.setTyping(true);
+        
+        // Add to history
+        this.messageHistory.push({ role: 'user', content: message });
+        
+        // Send to plugin for AI processing
+        parent.postMessage({ 
+          pluginMessage: { 
+            type: 'chat-message', 
+            message: message,
+            messageHistory: this.messageHistory
+          } 
+        }, '*');
+        
+        // Fallback response after 5 seconds if no AI response
+        setTimeout(() => {
+          if (this.isTyping) {
+            this.setTyping(false);
+            this.addMessage('assistant', this.getFallbackResponse(message));
+          }
+        }, 5000);
+      }
+
+      async getAIResponse(message) {
+        // In a real implementation, this would call the OpenAI API
+        // For now, we'll use mock responses based on the message content
+        
+        const lowerMessage = message.toLowerCase();
+        
+        if (lowerMessage.includes('button') || lowerMessage.includes('cta')) {
+          return {
+            content: "I found several button components that might work for you:\n\n**Button Primary** - For main actions and CTAs\n- Uses: brand-primary, text-inverse, space-sm, radius-md\n- Best for: Primary actions, form submissions\n\n**Button Secondary** - For secondary actions\n- Uses: surface-elevated, text-primary, border-default\n- Best for: Alternative actions, less important CTAs",
+            actions: [
+              { text: "Create Button Primary", action: "create-component", component: "Button Primary" },
+              { text: "Create Button Secondary", action: "create-component", component: "Button Secondary" },
+              { text: "Show All Buttons", action: "list-components", type: "button" }
+            ]
+          };
+        }
+        
+        if (lowerMessage.includes('card') || lowerMessage.includes('container')) {
+          return {
+            content: "Here are the card components available:\n\n**Card Default** - Standard content container\n- Uses: surface-base, border-subtle, space-md, radius-lg\n- Best for: Content grouping, information display\n\n**KPI Card** - For displaying metrics\n- Uses: surface-base, kpi-positive/negative, text-primary\n- Best for: Dashboard metrics, performance indicators",
+            actions: [
+              { text: "Create Card Default", action: "create-component", component: "Card Default" },
+              { text: "Create KPI Card", action: "create-component", component: "KPI Card" },
+              { text: "Show Card Variants", action: "list-components", type: "card" }
+            ]
+          };
+        }
+        
+        if (lowerMessage.includes('token') || lowerMessage.includes('color') || lowerMessage.includes('spacing')) {
+          return {
+            content: "Here's what I know about design tokens:\n\n**Color Tokens:**\n- brand-primary: #4d79c7 (Primary brand color)\n- surface-base: #ffffff (Background surfaces)\n- text-primary: #1f2937 (Main text color)\n- kpi-positive: #5ca5a5 (Success/positive states)\n\n**Spacing Tokens:**\n- space-sm: 8px (Small padding/margins)\n- space-md: 16px (Standard spacing)\n- space-lg: 24px (Large spacing)\n\n**Usage:** Always use semantic tokens instead of hard-coded values for consistency and theming.",
+            actions: [
+              { text: "Show All Colors", action: "list-tokens", type: "color" },
+              { text: "Show All Spacing", action: "list-tokens", type: "spacing" },
+              { text: "Audit Token Usage", action: "audit-tokens" }
+            ]
+          };
+        }
+        
+        if (lowerMessage.includes('dashboard') || lowerMessage.includes('layout')) {
+          return {
+            content: "For dashboard layouts, I recommend this component combination:\n\n**Layout Structure:**\n1. **Header** - Navigation and user info\n2. **Sidebar** - Navigation menu\n3. **Main Content** - Dashboard cards and data\n4. **KPI Cards** - Key metrics display\n5. **Data Tables** - Detailed information\n\n**Recommended Components:**\n- Card Default for content containers\n- KPI Card for metrics\n- Button Primary for actions\n- Input Field for filters",
+            actions: [
+              { text: "Create Dashboard Layout", action: "create-layout", type: "dashboard" },
+              { text: "Show KPI Components", action: "list-components", type: "kpi" },
+              { text: "Design System Audit", action: "audit-system" }
+            ]
+          };
+        }
+        
+        // Default response
+        return {
+          content: "I can help you with:\n\n• **Component suggestions** - Find the right components for your needs\n• **Token explanations** - Understand design tokens and their usage\n• **Design patterns** - Get recommendations for layouts and interactions\n• **System audits** - Check for consistency and best practices\n\nWhat would you like to know about?",
+          actions: [
+            { text: "Find Components", action: "suggest-component" },
+            { text: "Explain Tokens", action: "explain-tokens" },
+            { text: "Design Patterns", action: "design-pattern" },
+            { text: "System Audit", action: "audit-system" }
+          ]
+        };
+      }
+
+      addMessage(type, content, actions = []) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${type}`;
+        
+        const avatar = document.createElement('div');
+        avatar.className = 'message-avatar';
+        avatar.textContent = type === 'user' ? 'U' : 'DS';
+        
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'message-content';
+        
+        const bubble = document.createElement('div');
+        bubble.className = 'message-bubble';
+        
+        // Format content with markdown-like rendering
+        bubble.innerHTML = this.formatMessage(content);
+        
+        contentDiv.appendChild(bubble);
+        
+        if (actions.length > 0) {
+          const actionsDiv = document.createElement('div');
+          actionsDiv.className = 'message-actions';
+          
+          actions.forEach(action => {
+            const button = document.createElement('button');
+            button.className = `action-button ${action.type === 'primary' ? 'primary' : ''}`;
+            button.textContent = action.text;
+            button.addEventListener('click', () => this.handleAction(action));
+            actionsDiv.appendChild(button);
+          });
+          
+          contentDiv.appendChild(actionsDiv);
+        }
+        
+        messageDiv.appendChild(avatar);
+        messageDiv.appendChild(contentDiv);
+        
+        this.messagesContainer.appendChild(messageDiv);
+        this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+        
+        this.messageHistory.push({ type, content, timestamp: new Date() });
+      }
+
+      setTyping(typing) {
+        this.isTyping = typing;
+        this.sendButton.disabled = typing;
+        
+        if (typing) {
+          const typingDiv = document.createElement('div');
+          typingDiv.className = 'message assistant';
+          typingDiv.id = 'typing-indicator';
+          
+          const avatar = document.createElement('div');
+          avatar.className = 'message-avatar';
+          avatar.textContent = 'DS';
+          
+          const content = document.createElement('div');
+          content.className = 'message-content';
+          
+          const bubble = document.createElement('div');
+          bubble.className = 'message-bubble';
+          
+          const typingIndicator = document.createElement('div');
+          typingIndicator.className = 'typing-indicator';
+          typingIndicator.innerHTML = 'Design System GPT is thinking<span class="typing-dots"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></span>';
+          
+          bubble.appendChild(typingIndicator);
+          content.appendChild(bubble);
+          typingDiv.appendChild(avatar);
+          typingDiv.appendChild(content);
+          
+          this.messagesContainer.appendChild(typingDiv);
+          this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
+        } else {
+          const typingIndicator = document.getElementById('typing-indicator');
+          if (typingIndicator) {
+            typingIndicator.remove();
+          }
+        }
+      }
+
+      hideWelcomeMessage() {
+        this.welcomeMessage.classList.add('hidden');
+      }
+
+      handleQuickAction(action) {
+        const messages = {
+          'suggest-component': 'What kind of component do you need? (e.g., button, card, input)',
+          'explain-tokens': 'What would you like to know about design tokens?',
+          'design-pattern': 'What design pattern are you looking for? (e.g., dashboard, form, navigation)',
+          'audit-system': 'I\'ll run a design system audit to check for consistency and issues...'
+        };
+        
+        this.messageInput.value = messages[action] || '';
+        this.messageInput.focus();
+        this.autoResize();
+      }
+
+      handleAction(action) {
+        switch (action.action) {
+          case 'create-component':
+            this.createComponent(action.component);
+            break;
+          case 'list-components':
+            this.listComponents(action.type);
+            break;
+          case 'list-tokens':
+            this.listTokens(action.type);
+            break;
+          case 'audit-tokens':
+            this.auditTokens();
+            break;
+          case 'create-layout':
+            this.createLayout(action.type);
+            break;
+          case 'audit-system':
+            this.auditSystem();
+            break;
+          default:
+            console.log('Unknown action:', action);
+        }
+      }
+
+      createComponent(componentName) {
+        // In a real implementation, this would create the component in Figma
+        this.addMessage('assistant', `Creating ${componentName} component in Figma...`);
+        parent.postMessage({ pluginMessage: { type: 'create-component', component: componentName } }, '*');
+      }
+
+      listComponents(type) {
+        const components = this.knowledgeBase.components.filter(comp => 
+          !type || comp.toLowerCase().includes(type.toLowerCase())
+        );
+        
+        this.addMessage('assistant', `Available ${type || 'components'}:\n\n${components.map(comp => `• ${comp}`).join('\n')}`);
+      }
+
+      listTokens(type) {
+        const tokens = this.knowledgeBase.tokens.filter(token => 
+          !type || token.includes(type)
+        );
+        
+        this.addMessage('assistant', `Available ${type || 'tokens'}:\n\n${tokens.map(token => `• ${token}`).join('\n')}`);
+      }
+
+      auditTokens() {
+        this.addMessage('assistant', 'Running token audit...');
+        parent.postMessage({ pluginMessage: { type: 'audit-tokens' } }, '*');
+      }
+
+      createLayout(type) {
+        this.addMessage('assistant', `Creating ${type} layout...`);
+        parent.postMessage({ pluginMessage: { type: 'create-layout', layout: type } }, '*');
+      }
+
+      auditSystem() {
+        this.addMessage('assistant', 'Running comprehensive design system audit...');
+        parent.postMessage({ pluginMessage: { type: 'audit-system' } }, '*');
+      }
+
+      formatMessage(content) {
+        // Escape HTML first
+        let formatted = content
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;');
+        
+        // Headers
+        formatted = formatted.replace(/^### (.*$)/gim, '<h3>$1</h3>');
+        formatted = formatted.replace(/^## (.*$)/gim, '<h2>$1</h2>');
+        formatted = formatted.replace(/^# (.*$)/gim, '<h1>$1</h1>');
+        
+        // Bold text
+        formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+        formatted = formatted.replace(/\*(.*?)\*/g, '<em>$1</em>');
+        
+        // Code blocks
+        formatted = formatted.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+        formatted = formatted.replace(/`([^`]+)`/g, '<code>$1</code>');
+        
+        // Links
+        formatted = formatted.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>');
+        
+        // Horizontal rules
+        formatted = formatted.replace(/^---$/gim, '<hr>');
+        
+        // Lists - Convert bullet points to styled pills
+        formatted = formatted.replace(/^•\s+(.+)$/gim, '<div class="message-pill">$1</div>');
+        formatted = formatted.replace(/^-\s+(.+)$/gim, '<div class="message-pill">$1</div>');
+        formatted = formatted.replace(/^\*\s+(.+)$/gim, '<div class="message-pill">$1</div>');
+        
+        // Numbered lists
+        formatted = formatted.replace(/^\d+\.\s+(.+)$/gim, '<div class="message-pill numbered">$1</div>');
+        
+        // Line breaks
+        formatted = formatted.replace(/\n\n/g, '</p><p>');
+        formatted = formatted.replace(/\n/g, '<br>');
+        
+        // Wrap in paragraph if not already wrapped
+        if (!formatted.startsWith('<')) {
+          formatted = '<p>' + formatted + '</p>';
+        }
+        
+        return formatted;
+      }
+
+      showError(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'error-message';
+        errorDiv.textContent = message;
+        this.messagesContainer.appendChild(errorDiv);
+        setTimeout(() => errorDiv.remove(), 5000);
+      }
+
+      startNewChat() {
+        // Clear all messages except welcome
+        const messages = this.messagesContainer.querySelectorAll('.message');
+        messages.forEach(msg => msg.remove());
+        
+        // Show welcome message again
+        this.welcomeMessage.classList.remove('hidden');
+        
+        // Clear input
+        this.messageInput.value = '';
+        this.autoResize();
+        
+        // Reset message history
+        this.messageHistory = [];
+        
+        // Show confirmation
+        this.addMessage('assistant', 'New chat started! How can I help you with your design system?');
+      }
+
+      showSettings() {
+        const modal = document.getElementById('settings-modal');
+        modal.classList.remove('hidden');
+        
+        // Load current settings
+        this.loadSettings();
+      }
+
+      hideSettings() {
+        const modal = document.getElementById('settings-modal');
+        modal.classList.add('hidden');
+      }
+
+      loadSettings() {
+        // Load settings from storage or use defaults
+        const apiKey = localStorage.getItem('openai_api_key') || '';
+        const model = localStorage.getItem('ai_model') || 'gpt-4o-mini';
+        const maxTokens = localStorage.getItem('max_tokens') || '1000';
+        
+        document.getElementById('api-key-input').value = apiKey;
+        document.getElementById('model-select').value = model;
+        document.getElementById('max-tokens').value = maxTokens;
+      }
+
+      saveSettings() {
+        const apiKey = document.getElementById('api-key-input').value.trim();
+        const model = document.getElementById('model-select').value;
+        const maxTokens = document.getElementById('max-tokens').value;
+        
+        if (!apiKey) {
+          alert('Please enter your OpenAI API key');
+          return;
+        }
+        
+        // Save to localStorage
+        localStorage.setItem('openai_api_key', apiKey);
+        localStorage.setItem('ai_model', model);
+        localStorage.setItem('max_tokens', maxTokens);
+        
+        // Send to plugin
+        parent.postMessage({ 
+          pluginMessage: { 
+            type: 'set-api-key', 
+            apiKey: apiKey 
+          } 
+        }, '*');
+        
+        this.hideSettings();
+        this.addMessage('assistant', 'Settings saved! AI features are now available.');
+      }
+
+      getFallbackResponse(message) {
+        const lowerMessage = message.toLowerCase();
+        
+        if (lowerMessage.includes('data table') || lowerMessage.includes('table')) {
+          return `For data table integrations, I recommend these patterns:
+
+**Table Component Patterns:**
+• **Sortable Headers** - Use \`Button Secondary\` for sort controls
+• **Action Buttons** - Use \`Button Primary\` for main actions, \`Button Secondary\` for secondary actions
+• **Status Indicators** - Use \`KPI Card\` components for status badges
+• **Row Selection** - Use \`Input Field\` (checkbox variant) for selection
+
+**Integration Features:**
+• **Filtering** - Add \`Input Field\` components above the table
+• **Pagination** - Use \`Button Secondary\` for page controls
+• **Export** - Use \`Button Primary\` for export actions
+
+**Layout Structure:**
+1. Filter bar (Input Field components)
+2. Table with sortable headers
+3. Action bar (Button components)
+4. Pagination controls
+
+Would you like me to create a specific table layout for you?`;
+        }
+        
+        if (lowerMessage.includes('component') || lowerMessage.includes('button') || lowerMessage.includes('card')) {
+          return `I can help you find the right components! Here are some options:
+
+**Available Components:**
+• **Button Primary** - For main actions and CTAs
+• **Button Secondary** - For secondary actions
+• **Card Default** - For content containers
+• **KPI Card** - For displaying metrics and data
+• **Input Field** - For forms and data entry
+
+**Quick Actions:**
+• Ask me to "show me all components"
+• Ask "what component should I use for [specific need]"
+• Ask "create a [component type] for me"
+
+What specific component are you looking for?`;
+        }
+        
+        if (lowerMessage.includes('token') || lowerMessage.includes('color') || lowerMessage.includes('spacing')) {
+          return `I can help you understand your design tokens! Here's what's available:
+
+**Color Tokens:**
+• \`brand-primary\` - Your main brand color
+• \`brand-secondary\` - Secondary brand color
+• \`kpi-positive\` - Success/positive indicators
+• \`kpi-negative\` - Error/negative indicators
+• \`surface-base\` - Background colors
+• \`text-primary\` - Main text color
+
+**Spacing Tokens:**
+• \`space-sm\` - Small spacing (8px)
+• \`space-md\` - Medium spacing (16px)
+• \`space-lg\` - Large spacing (24px)
+
+**Usage:**
+• Use semantic tokens (like \`brand-primary\`) instead of primitive colors
+• Apply spacing tokens consistently across components
+• Check contrast ratios for accessibility
+
+Would you like me to explain any specific tokens or show you how to use them?`;
+        }
+        
+        return `I'm here to help with your design system! I can assist with:
+
+• **Component recommendations** - Find the right components for your needs
+• **Token explanations** - Understand design tokens and their usage
+• **Layout suggestions** - Get recommendations for UI patterns
+• **Design patterns** - Learn best practices for your design system
+
+**Quick Tips:**
+• Be specific about what you're trying to build
+• Ask about components, tokens, or patterns
+• I can create layouts and suggest improvements
+
+What would you like to know about your design system?`;
+      }
+    }
+
+    // Initialize the chat interface
+    document.addEventListener('DOMContentLoaded', () => {
+      window.designSystemGPT = new DesignSystemGPT();
+    });
+
+    // Handle messages from the plugin
+    window.addEventListener('message', (event) => {
+      const { type, data, response, actions, suggestions, error } = event.data.pluginMessage || {};
+      
+      // Get the current instance
+      const gpt = window.designSystemGPT;
+      if (!gpt) return;
+      
+      switch (type) {
+        case 'component-created':
+          // Handle component creation response
+          break;
+        case 'audit-complete':
+          // Handle audit results
+          break;
+        case 'ai-response':
+          // Handle AI response (with Rule Card support)
+          if (error) {
+            gpt.addMessage('assistant', `Error: ${error}`);
+          } else {
+            // Check if this is a Rule Card-based response
+            const ruleCardData = event.data.pluginMessage;
+            if (ruleCardData.template || ruleCardData.rules) {
+              // Format Rule Card response with metadata
+              let formattedResponse = response;
+              
+              if (ruleCardData.template) {
+                formattedResponse += `\n\n---\n\n*Matched Feature Template: **${ruleCardData.template.feature}** (${ruleCardData.confidence ? `Confidence: ${Math.round(ruleCardData.confidence * 100)}%` : ''})*`;
+              }
+              
+              if (ruleCardData.rules && ruleCardData.rules.length > 0) {
+                formattedResponse += `\n\n*Applied ${ruleCardData.rules.length} design system rule(s)*`;
+              }
+              
+              gpt.addMessage('assistant', formattedResponse, actions || []);
+            } else {
+              gpt.addMessage('assistant', response, actions || []);
+            }
+            
+            // Add to message history
+            gpt.messageHistory.push({ role: 'assistant', content: response });
+          }
+          gpt.setTyping(false);
+          break;
+        case 'plugin-ready':
+          // Show Rule Card system status
+          const { ruleCardsCount, templatesCount } = event.data.pluginMessage;
+          if (ruleCardsCount > 0 || templatesCount > 0) {
+            gpt.addMessage('assistant', `✅ Design System GPT ready!\n\n📚 **Knowledge Base Loaded:**\n- ${ruleCardsCount} Rule Cards\n- ${templatesCount} Feature Templates\n\nI can help you with:\n• PM feature questions\n• Design system rules\n• Component recommendations\n• Token explanations\n\nTry asking: "Let users give quick feedback after an article" or "How should I handle form validation?"`);
+          }
+          break;
+        case 'rule-cards-loaded':
+          // Handle Rule Cards loaded
+          break;
+        case 'feature-templates-loaded':
+          // Handle Feature Templates loaded
+          break;
+        case 'custom-rule-added':
+          // Handle custom rule added
+          if (event.data.pluginMessage.success) {
+            gpt.addMessage('assistant', `✅ Custom rule added successfully!\n\n**${event.data.pluginMessage.rule.title}** (${event.data.pluginMessage.rule.id})\n\nThis rule is now part of your design system knowledge base.`);
+          } else {
+            gpt.addMessage('assistant', `❌ Error adding custom rule: ${event.data.pluginMessage.error}`);
+          }
+          break;
+        case 'rules-search-result':
+          // Handle rules search
+          const { rules, query } = event.data.pluginMessage;
+          if (rules.length > 0) {
+            let searchResponse = `Found ${rules.length} rule(s) matching "${query}":\n\n`;
+            rules.forEach(rule => {
+              searchResponse += `**${rule.title}** (${rule.id})\n`;
+              searchResponse += `- Layer: ${rule.layer}\n`;
+              searchResponse += `- Rationale: ${rule.rationale}\n\n`;
+            });
+            gpt.addMessage('assistant', searchResponse);
+          } else {
+            gpt.addMessage('assistant', `No rules found matching "${query}". Try different keywords or ask me a question about your design system.`);
+          }
+          break;
+        case 'component-suggestions':
+          // Handle component suggestions
+          if (error) {
+            gpt.addMessage('assistant', `Error getting suggestions: ${error}`);
+          } else {
+            gpt.addMessage('assistant', `Found ${suggestions.length} component suggestions:`, suggestions);
+          }
+          gpt.setTyping(false);
+          break;
+        case 'layout-assembly':
+          // Handle layout assembly
+          if (error) {
+            gpt.addMessage('assistant', `Error assembling layout: ${error}`);
+          } else {
+            gpt.addMessage('assistant', `Layout assembled successfully! Created frame: ${data.frame?.name}`);
+          }
+          gpt.setTyping(false);
+          break;
+        case 'api-key-result':
+          // Handle API key setting result
+          if (error) {
+            gpt.addMessage('assistant', `Error setting API key: ${error}`);
+          } else {
+            gpt.addMessage('assistant', 'API key saved successfully! AI features are now available.');
+          }
+          break;
+        case 'error':
+          // Handle errors
+          gpt.addMessage('assistant', `Error: ${error || data}`);
+          gpt.setTyping(false);
+          break;
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,1393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Analysis Tester</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      padding: 40px;
+      background: #f8fafc;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      padding: 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-bottom: 8px;
+      color: #1e293b;
+    }
+
+    .subtitle {
+      color: #64748b;
+      margin-bottom: 32px;
+    }
+
+    .section {
+      margin-bottom: 32px;
+      padding-bottom: 32px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .section:last-child {
+      border-bottom: none;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      color: #334155;
+    }
+
+    .btn-primary {
+      background: #6366f1;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-primary:hover {
+      background: #4f46e5;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+      padding: 10px 20px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-right: 8px;
+    }
+
+    .status-box {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      display: none;
+    }
+
+    .status-box.info {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #93c5fd;
+    }
+
+    .status-box.success {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #86efac;
+    }
+
+    .status-box.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+    }
+
+    #imagePreview {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 16px;
+      border: 1px solid #e2e8f0;
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .preview-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .preview-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+
+    .preview-visual {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 60px;
+    }
+
+    .preview-component {
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .info-box {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 16px;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .code-block {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 12px;
+      line-height: 1.6;
+      margin-top: 12px;
+    }
+
+    .json-key {
+      color: #7dd3fc;
+    }
+
+    .json-string {
+      color: #86efac;
+    }
+
+    .json-number {
+      color: #fbbf24;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🧪 AI Analysis & Preview Tester</h1>
+    <p class="subtitle">Test the AI analysis and component preview logic without Figma</p>
+
+    <div id="statusBox" class="status-box"></div>
+
+    <!-- Upload Section -->
+    <div class="section">
+      <div class="section-title">📸 Upload Screenshot</div>
+      <input type="file" id="imageInput" accept="image/*" style="display: none">
+      <button class="btn-primary" onclick="document.getElementById('imageInput').click()">
+        Choose Image
+      </button>
+      <button class="btn-secondary" onclick="analyzeImage()">
+        🤖 Analyze with AI
+      </button>
+      <button class="btn-secondary" onclick="testWithMockData()">
+        🧪 Test with Mock Data (Biology Site)
+      </button>
+      <div style="margin-top: 12px; padding: 10px; background: #fef3c7; border: 1px solid #fbbf24; border-radius: 6px; font-size: 12px; color: #92400e;">
+        <strong>💡 Note:</strong> "Analyze with AI" requires the proxy server running.<br>
+        Start it with: <code style="background: white; padding: 2px 6px; border-radius: 3px;">cd figma-plugin/design-system-generator/server && npm start</code>
+      </div>
+      <img id="imagePreview" style="display: none">
+    </div>
+
+    <!-- Component Preview Section (FIRST) -->
+    <div class="section" id="previewSection" style="display: none">
+      <div class="section-title">👁️ Component Preview</div>
+      <div id="usageGuidance"></div>
+      <div id="componentPreview" class="preview-grid"></div>
+    </div>
+
+    <!-- Application Insights Section (SECOND - More Visual) -->
+    <div class="section" id="applicationInsightsSection" style="display: none">
+      <div class="section-title">🎯 How to Apply These Components</div>
+      <div class="section-description" style="margin-bottom: 16px; color: #64748b;">
+        Step-by-step guidance with visual examples and recommended usage percentages
+      </div>
+      <div id="applicationInsightsContent"></div>
+    </div>
+
+    <!-- SaaS Template Example (THIRD - Full Application) -->
+    <div class="section" id="saasTemplateSection" style="display: none">
+      <div class="section-title">🎨 Reference Design: SaaS Dashboard</div>
+      <div class="section-description" style="margin-bottom: 16px; color: #64748b;">
+        See how all the extracted components come together in a real application. This template uses the detected colors, button styles, spacing, and composition patterns from your reference.
+      </div>
+      <div id="saasTemplateContainer"></div>
+      <div style="margin-top: 16px; padding: 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; color: white;">
+        <div style="font-weight: 600; margin-bottom: 8px;">💡 Notice the Design System Application:</div>
+        <div style="font-size: 13px; line-height: 1.8; opacity: 0.95;">
+          • Navigation uses ghost buttons with brand color for active state<br>
+          • Primary CTA (New Project) uses the detected CTA color<br>
+          • Hero section uses brand gradient background<br>
+          • Cards have brand color left border accent<br>
+          • Spacing follows 80px → 40px → 24px → 16px hierarchy<br>
+          • All buttons use the detected corner radius
+        </div>
+      </div>
+
+      <!-- Export to Figma Button -->
+      <div style="margin-top: 24px; padding: 20px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 12px; text-align: center;">
+        <div style="font-size: 18px; font-weight: 700; color: white; margin-bottom: 8px;">✨ Ready to use in Figma?</div>
+        <div style="font-size: 14px; color: rgba(255,255,255,0.9); margin-bottom: 16px;">Export this design system and import it into your Figma plugin</div>
+        <button onclick="exportToFigma()" style="background: white; color: #059669; padding: 12px 32px; border: none; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
+          📦 Export to Figma Plugin
+        </button>
+      </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="exportModal" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); z-index: 1000; padding: 20px; overflow: auto;">
+      <div style="max-width: 800px; margin: 40px auto; background: white; border-radius: 16px; padding: 32px; box-shadow: 0 20px 60px rgba(0,0,0,0.3);">
+        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 24px;">
+          <div>
+            <h2 style="margin: 0 0 8px 0; font-size: 24px; color: #1e293b;">📦 Export to Figma</h2>
+            <p style="margin: 0; color: #64748b; font-size: 14px;">Copy this JSON and paste it into your Figma plugin</p>
+          </div>
+          <button onclick="closeExportModal()" style="background: #f1f5f9; border: none; border-radius: 8px; width: 36px; height: 36px; cursor: pointer; font-size: 20px; color: #64748b;">×</button>
+        </div>
+
+        <div style="background: #1e293b; border-radius: 8px; padding: 16px; margin-bottom: 16px; max-height: 400px; overflow: auto;">
+          <pre id="exportJSON" style="margin: 0; color: #e2e8f0; font-size: 13px; font-family: 'Courier New', monospace; white-space: pre-wrap; word-wrap: break-word;"></pre>
+        </div>
+
+        <div style="display: flex; gap: 12px;">
+          <button onclick="copyExportToClipboard()" style="flex: 1; background: #059669; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">
+            📋 Copy to Clipboard
+          </button>
+          <button onclick="downloadExportJSON()" style="flex: 1; background: #4f46e5; color: white; padding: 12px 24px; border: none; border-radius: 8px; font-size: 14px; font-weight: 600; cursor: pointer;">
+            💾 Download JSON
+          </button>
+        </div>
+
+        <div id="exportStatus" style="margin-top: 16px; padding: 12px; border-radius: 8px; font-size: 14px; display: none;"></div>
+
+        <div style="margin-top: 24px; padding: 16px; background: #f8fafc; border-radius: 8px; border-left: 4px solid #4f46e5;">
+          <div style="font-weight: 600; color: #1e293b; margin-bottom: 8px;">📝 Next Steps:</div>
+          <ol style="margin: 0; padding-left: 20px; color: #64748b; font-size: 13px; line-height: 1.8;">
+            <li>Click "Copy to Clipboard" above</li>
+            <li>Open your Figma file</li>
+            <li>Run the Design System Generator plugin</li>
+            <li>Find the "Import from JSON" section</li>
+            <li>Paste the JSON and click "Import"</li>
+            <li>Watch your design system get created! ✨</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- Debug: Parsed Data (Collapsed by default) -->
+    <div class="section" id="parsedDataSection" style="display: none">
+      <div class="section-title" style="cursor: pointer; user-select: none; display: flex; align-items: center; gap: 8px;" onclick="toggleParsedData()">
+        <span id="parsedDataToggle">▶</span>
+        🔍 Debug: Parsed Data (for troubleshooting)
+      </div>
+      <div id="parsedDataContent" style="display: none; margin-top: 12px;">
+        <div id="parsedDataText" class="code-block"></div>
+      </div>
+    </div>
+
+    <!-- Debug: Raw AI Response (Collapsed by default) -->
+    <div class="section" id="aiResponseSection" style="display: none">
+      <div class="section-title" style="cursor: pointer; user-select: none; display: flex; align-items: center; gap: 8px;" onclick="toggleAIResponse()">
+        <span id="aiResponseToggle">▶</span>
+        🤖 Debug: Raw AI Response (for troubleshooting)
+      </div>
+      <div id="aiResponseContent" style="display: none; margin-top: 12px;">
+        <div id="aiResponseText" class="code-block"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var currentImage = null;
+    var aiColorInsights = null;
+
+    // Toggle functions for debug sections
+    function toggleParsedData() {
+      var content = document.getElementById('parsedDataContent');
+      var toggle = document.getElementById('parsedDataToggle');
+      if (content.style.display === 'none') {
+        content.style.display = 'block';
+        toggle.textContent = '▼';
+      } else {
+        content.style.display = 'none';
+        toggle.textContent = '▶';
+      }
+    }
+
+    function toggleAIResponse() {
+      var content = document.getElementById('aiResponseContent');
+      var toggle = document.getElementById('aiResponseToggle');
+      if (content.style.display === 'none') {
+        content.style.display = 'block';
+        toggle.textContent = '▼';
+      } else {
+        content.style.display = 'none';
+        toggle.textContent = '▶';
+      }
+    }
+
+    // Handle image upload
+    document.getElementById('imageInput').addEventListener('change', function(e) {
+      var file = e.target.files[0];
+      if (!file) return;
+
+      var reader = new FileReader();
+      reader.onload = function(event) {
+        var img = document.getElementById('imagePreview');
+        img.src = event.target.result;
+        img.style.display = 'block';
+        currentImage = event.target.result.split(',')[1]; // Get base64 data
+        showStatus('success', '✅ Image loaded! Click "Analyze with AI" to process.');
+      };
+      reader.readAsDataURL(file);
+    });
+
+    async function analyzeImage() {
+      if (!currentImage) {
+        showStatus('error', '❌ Please upload an image first');
+        return;
+      }
+
+      var apiKey = prompt('Enter your Anthropic API key:');
+      if (!apiKey) {
+        showStatus('error', '❌ API key required');
+        return;
+      }
+
+      showStatus('info', '🤖 Analyzing with Claude Vision via proxy server...');
+
+      try {
+        // Use local proxy server to avoid CORS
+        var proxyUrl = 'http://localhost:3002/api/analyze';
+
+        var analysisPrompt = `Analyze this design screenshot for design system generation. CRITICAL: Extract exact button styles, gradients, and distinguish brand vs functional colors.
+
+1. **ALL BUTTONS/CTAs** (MOST IMPORTANT): For EVERY button or call-to-action you see, provide:
+   - Exact location (e.g., "Hero CTA", "Navigation", "Footer")
+   - Background color (hex code) OR gradient (if gradient, specify: "linear-gradient(135deg, #start 0%, #end 100%)")
+   - Text color (hex code)
+   - Border style and color (if any)
+   - Corner radius (be precise: 0, 4, 8, 12, 16, 24, or 30px)
+   - Approximate height in pixels
+   - Approximate padding (horizontal × vertical)
+   - Button type (Primary CTA, Secondary, Text-only)
+
+2. **GRADIENTS** (CRITICAL): If the design uses gradients anywhere (backgrounds, buttons, overlays):
+   - List each gradient with exact format: "linear-gradient(135deg, #start 0%, #end 100%)"
+   - Specify where used: hero background, button, card overlay, etc.
+   - Identify gradient direction: 135deg (diagonal), 90deg (left-to-right), 180deg (top-to-bottom)
+   Example: "Hero background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
+
+3. **Color Classification** (Brand vs Functional):
+   For each color, specify:
+   - BRAND COLOR (identity, emotional, decorative)
+     Example: Purple gradient in hero = brand
+   - FUNCTIONAL COLOR (UI elements, buttons, actions)
+     Example: Black CTA button = functional
+   - BACKGROUND (neutral surfaces)
+   - TEXT (readable content)
+
+   Format: "Color #XXXXXX - [BRAND/FUNCTIONAL/BACKGROUND/TEXT] - XX% coverage - Used in: [description]"
+
+4. **BRAND ATMOSPHERE** (IMPORTANT): Describe the visual mood/feeling:
+   - What emotions does the design evoke?
+   - What visual techniques create this mood (gradients, shadows, spacing)?
+   - How should colors/gradients be used in software UI?
+   - Button style recommendations (Primary CTA, Secondary, Tertiary)
+
+5. **APPLICATION INSIGHTS** (Show how to recreate this style):
+   Provide step-by-step guidance on applying these components with SPECIFIC examples of gradient usage if detected.
+
+FORMAT: Use clear sections with "**BUTTONS:**", "**GRADIENTS:**", "**BRAND COLORS:**", "**FUNCTIONAL COLORS:**", "**BRAND ATMOSPHERE:**", "**APPLICATION INSIGHTS:**"
+
+Be EXTREMELY specific about button styles, gradient usage, and provide actionable styling guidance!`;
+
+        var response = await fetch(proxyUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            apiKey: apiKey,
+            imageData: currentImage,
+            prompt: analysisPrompt
+          })
+        });
+
+        if (!response.ok) {
+          var errorData = await response.json();
+          throw new Error(errorData.error || 'Proxy request failed: ' + response.status);
+        }
+
+        var data = await response.json();
+        var aiResponse = data.content[0].text;
+
+        // Display AI response
+        document.getElementById('aiResponseSection').style.display = 'block';
+        document.getElementById('aiResponseText').textContent = aiResponse;
+
+        // Parse the response
+        aiColorInsights = parseAIColorInsights(aiResponse);
+
+        // Display Application Insights (user-facing with visuals)
+        if (aiColorInsights.applicationInsights) {
+          document.getElementById('applicationInsightsSection').style.display = 'block';
+          renderVisualApplicationInsights(aiColorInsights);
+        }
+
+        // Generate preview
+        generatePreview();
+
+        // Generate SaaS template example
+        document.getElementById('saasTemplateSection').style.display = 'block';
+        generateSaaSTemplate(aiColorInsights);
+
+        // Display parsed data (debug)
+        document.getElementById('parsedDataSection').style.display = 'block';
+        document.getElementById('parsedDataText').textContent = JSON.stringify(aiColorInsights, null, 2);
+
+        showStatus('success', '✅ Analysis complete! Scroll down to see component preview and reference dashboard.');
+
+      } catch (error) {
+        showStatus('error', '❌ AI analysis failed: ' + error.message);
+        console.error(error);
+      }
+    }
+
+    function parseAIColorInsights(rawAIResponse) {
+      var insights = {
+        colors: [],
+        buttons: [],
+        brandColors: [],
+        functionalColors: [],
+        primaryColor: null,
+        ctaColor: null,
+        cornerRadius: null,
+        brandAtmosphere: null,
+        applicationInsights: null,
+        gradients: [] // NEW: Store detected gradients
+      };
+
+      console.log('===== PARSING AI RESPONSE =====');
+      console.log('Response length:', rawAIResponse.length);
+
+      try {
+        // ===== PARSE BUTTONS SECTION =====
+        // Fixed: Pattern now matches **BUTTONS:** (colon before final asterisks, not after)
+        var buttonsSection = rawAIResponse.match(/\*\*(?:ALL )?BUTTONS?(?:\/CTAs?)?:\*\*([\s\S]*?)(?=\*\*[A-Z]|\*\*$|$)/i);
+        console.log('Buttons section found:', !!buttonsSection);
+        if (buttonsSection) {
+          console.log('Buttons section content length:', buttonsSection[1] ? buttonsSection[1].length : 0);
+          console.log('First 200 chars:', buttonsSection[1] ? buttonsSection[1].substring(0, 200) : 'null');
+        }
+        if (buttonsSection && buttonsSection[1]) {
+          var buttonLines = buttonsSection[1].split('\n');
+          var currentButton = null;
+
+          console.log('Total button lines:', buttonLines.length);
+
+          buttonLines.forEach(function(line, index) {
+            // Check if this line starts a new button
+            if (line.match(/(?:Hero|Primary|Secondary|Navigation|Footer|CTA).*Button/i) || line.match(/^\s*\d+\./)) {
+              if (currentButton && currentButton.background) {
+                console.log('Pushing button:', JSON.stringify(currentButton));
+                insights.buttons.push(currentButton);
+              }
+              console.log('Line', index, '- Starting new button:', line.trim());
+              currentButton = { location: line.trim() };
+            }
+
+            if (currentButton) {
+              var bgMatch = line.match(/background.*?#([0-9a-fA-F]{3,6})/i);
+              var textMatch = line.match(/text.*?color.*?#([0-9a-fA-F]{3,6})/i);
+              var radiusMatch = line.match(/(?:corner )?radius.*?(\d+)\s*px/i);
+              var heightMatch = line.match(/height.*?(\d+)\s*px/i);
+              var borderMatch = line.match(/border.*?#([0-9a-fA-F]{3,6})/i);
+
+              if (bgMatch) {
+                currentButton.background = '#' + bgMatch[1];
+                console.log('  Found background:', currentButton.background);
+              }
+              if (textMatch) {
+                currentButton.textColor = '#' + textMatch[1];
+                console.log('  Found text color:', currentButton.textColor);
+              }
+              if (radiusMatch) {
+                currentButton.cornerRadius = parseInt(radiusMatch[1]);
+                console.log('  Found radius:', currentButton.cornerRadius);
+              }
+              if (heightMatch) {
+                currentButton.height = parseInt(heightMatch[1]);
+                console.log('  Found height:', currentButton.height);
+              }
+              if (borderMatch) currentButton.borderColor = '#' + borderMatch[1];
+
+              if (line.match(/primary|cta|main/i)) currentButton.type = 'primary-cta';
+              if (line.match(/secondary/i)) currentButton.type = 'secondary';
+            }
+          });
+
+          if (currentButton && currentButton.background) {
+            console.log('Pushing final button:', JSON.stringify(currentButton));
+            insights.buttons.push(currentButton);
+          }
+
+          console.log('Total buttons extracted:', insights.buttons.length);
+        }
+
+        // ===== PARSE BRAND COLORS SECTION =====
+        // Fixed: Pattern now matches **BRAND COLORS:** (colon before final asterisks)
+        var brandSection = rawAIResponse.match(/\*\*BRAND COLORS?:\*\*([\s\S]*?)(?=\*\*(?:FUNCTIONAL|BACKGROUND|TEXT)|$)/i);
+        console.log('Brand section found:', !!brandSection);
+        if (brandSection && brandSection[1]) {
+          console.log('Brand section content:', brandSection[1].substring(0, 200));
+          var brandLines = brandSection[1].split('\n');
+          brandLines.forEach(function(line) {
+            var hexMatch = line.match(/#([0-9a-fA-F]{3,6})/);
+            var percentMatch = line.match(/(\d+)(?:-(\d+))?%/);
+            var nameMatch = line.match(/([A-Za-z\/\s]+)\s*-\s*BRAND/i) || line.match(/^[•\-*]\s*([^#:-]+)/);
+
+            if (hexMatch) {
+              var percentage = percentMatch ?
+                (percentMatch[2] ? (parseInt(percentMatch[1]) + parseInt(percentMatch[2])) / 2 : parseInt(percentMatch[1])) :
+                0;
+
+              var brandColor = {
+                hex: '#' + hexMatch[1],
+                name: nameMatch ? nameMatch[1].trim() : 'Brand Color',
+                percentage: percentage,
+                role: 'brand',
+                source: 'ai'
+              };
+
+              insights.brandColors.push(brandColor);
+              insights.colors.push(brandColor);
+
+              if (!insights.primaryColor || percentage > (insights.primaryColor.percentage || 0)) {
+                insights.primaryColor = brandColor;
+                brandColor.role = 'primary';
+              }
+            }
+          });
+        }
+
+        // ===== PARSE FUNCTIONAL COLORS SECTION =====
+        // Fixed: Pattern now matches **FUNCTIONAL COLORS:** (colon before final asterisks)
+        var functionalSection = rawAIResponse.match(/\*\*FUNCTIONAL COLORS?:\*\*([\s\S]*?)(?=\*\*(?:BACKGROUND|TEXT|BRAND)|$)/i);
+        if (functionalSection && functionalSection[1]) {
+          var funcLines = functionalSection[1].split('\n');
+          funcLines.forEach(function(line) {
+            var hexMatch = line.match(/#([0-9a-fA-F]{3,6})/);
+            var nameMatch = line.match(/([A-Za-z\/\s]+)\s*-\s*FUNCTIONAL/i) || line.match(/^[•\-*]\s*([^#:-]+)/);
+
+            if (hexMatch) {
+              var funcColor = {
+                hex: '#' + hexMatch[1],
+                name: nameMatch ? nameMatch[1].trim() : 'Functional',
+                role: 'functional',
+                source: 'ai'
+              };
+
+              insights.functionalColors.push(funcColor);
+              insights.colors.push(funcColor);
+
+              var matchingButton = insights.buttons.find(function(btn) {
+                return btn.background && btn.background.toLowerCase() === funcColor.hex.toLowerCase();
+              });
+              if (matchingButton && matchingButton.type === 'primary-cta') {
+                insights.ctaColor = funcColor;
+                funcColor.role = 'cta';
+              }
+            }
+          });
+        }
+
+        // ===== EXTRACT CORNER RADIUS FROM BUTTONS =====
+        if (insights.buttons.length > 0) {
+          var primaryButton = insights.buttons.find(function(btn) { return btn.type === 'primary-cta'; }) || insights.buttons[0];
+          if (primaryButton && primaryButton.cornerRadius) {
+            insights.cornerRadius = primaryButton.cornerRadius;
+          }
+        }
+
+        // ===== PARSE BRAND ATMOSPHERE SECTION =====
+        // Fixed: Pattern now matches **BRAND ATMOSPHERE:** (colon before final asterisks)
+        var atmosphereSection = rawAIResponse.match(/\*\*BRAND ATMOSPHERE:\*\*([\s\S]*?)(?=\*\*[A-Z]|$)/i);
+        if (atmosphereSection && atmosphereSection[1]) {
+          insights.brandAtmosphere = atmosphereSection[1].trim();
+        }
+
+        // ===== PARSE APPLICATION INSIGHTS SECTION =====
+        var applicationSection = rawAIResponse.match(/\*\*APPLICATION INSIGHTS:\*\*([\s\S]*?)(?=\*\*[A-Z]|$)/i);
+        if (applicationSection && applicationSection[1]) {
+          insights.applicationInsights = applicationSection[1].trim();
+        }
+
+        // ===== PARSE GRADIENTS SECTION =====
+        var gradientsSection = rawAIResponse.match(/\*\*GRADIENTS?:\*\*([\s\S]*?)(?=\*\*[A-Z]|$)/i);
+        if (gradientsSection && gradientsSection[1]) {
+          var gradientLines = gradientsSection[1].split('\n');
+          gradientLines.forEach(function(line) {
+            // Match linear-gradient patterns
+            var gradientMatch = line.match(/linear-gradient\(([^)]+)\)/i);
+            if (gradientMatch) {
+              var usageMatch = line.match(/([^:]+):/);
+              insights.gradients.push({
+                gradient: 'linear-gradient(' + gradientMatch[1] + ')',
+                usage: usageMatch ? usageMatch[1].trim() : 'Unknown',
+                raw: line.trim()
+              });
+            }
+          });
+        }
+
+        // Also extract gradients from anywhere in the response (fallback)
+        var allGradientMatches = rawAIResponse.match(/linear-gradient\([^)]+\)/gi);
+        if (allGradientMatches && insights.gradients.length === 0) {
+          allGradientMatches.forEach(function(match) {
+            if (!insights.gradients.some(function(g) { return g.gradient === match; })) {
+              insights.gradients.push({
+                gradient: match,
+                usage: 'Detected',
+                raw: match
+              });
+            }
+          });
+        }
+
+        return insights;
+
+      } catch (error) {
+        console.error('Error parsing AI insights:', error);
+        return { colors: [], buttons: [], brandColors: [], functionalColors: [] };
+      }
+    }
+
+    function generatePreview() {
+      var previewSection = document.getElementById('previewSection');
+      var previewGrid = document.getElementById('componentPreview');
+      var usageGuidance = document.getElementById('usageGuidance');
+
+      previewSection.style.display = 'block';
+      previewGrid.innerHTML = '';
+      usageGuidance.innerHTML = '';
+
+      // Get colors
+      var primaryColor = aiColorInsights.brandColors[0];
+      var ctaColor = aiColorInsights.ctaColor || aiColorInsights.functionalColors.find(function(c) { return c.role === 'cta'; });
+      var backgroundColor = aiColorInsights.colors.find(function(c) { return c.role === 'background'; });
+      var textColor = aiColorInsights.colors.find(function(c) { return c.role === 'text'; });
+
+      // Get detected button
+      var detectedButton = aiColorInsights.buttons.length > 0
+        ? aiColorInsights.buttons.find(function(btn) { return btn.type === 'primary-cta'; }) || aiColorInsights.buttons[0]
+        : null;
+
+      // Show usage guidance
+      if (primaryColor && ctaColor) {
+        var guidanceHTML = '<div class="info-box"><strong>💡 Button Usage Guidance:</strong><br>';
+        guidanceHTML += '<div style="margin-top: 8px; font-size: 13px; line-height: 1.6;">';
+        guidanceHTML += '<strong>Primary CTA:</strong> ' + (ctaColor ? ctaColor.hex : '#000') + ' background, white text (high contrast)<br>';
+        guidanceHTML += '<strong>Secondary:</strong> ' + (primaryColor ? primaryColor.hex : '#000') + ' background, white text (brand color)<br>';
+        guidanceHTML += '<strong>Tertiary:</strong> ' + (backgroundColor ? backgroundColor.hex : '#fff') + ' background, ' + (textColor ? textColor.hex : '#000') + ' text (subtle)<br>';
+        guidanceHTML += '<strong>Ghost:</strong> Transparent background, ' + (primaryColor ? primaryColor.hex : '#000') + ' text + border';
+        guidanceHTML += '</div></div>';
+        usageGuidance.innerHTML = guidanceHTML;
+      }
+
+      // Create button preview
+      var btnBg = detectedButton && detectedButton.background ? detectedButton.background :
+                  (ctaColor ? ctaColor.hex : (primaryColor ? primaryColor.hex : '#000'));
+      var btnText = detectedButton && detectedButton.textColor ? detectedButton.textColor : '#ffffff';
+      var btnRadius = detectedButton && detectedButton.cornerRadius ? detectedButton.cornerRadius + 'px' : '6px';
+
+      var buttonCard = document.createElement('div');
+      buttonCard.className = 'preview-card';
+      buttonCard.innerHTML =
+        '<div class="preview-title">Primary Button</div>' +
+        '<div class="preview-visual">' +
+          '<span class="preview-component" style="background: ' + btnBg + '; color: ' + btnText + '; border-radius: ' + btnRadius + '; padding: 12px 24px; display: inline-block;">Button</span>' +
+        '</div>' +
+        '<div style="margin-top: 12px; font-size: 11px; color: #64748b;">' +
+          'Background: ' + btnBg + '<br>' +
+          'Text: ' + btnText + '<br>' +
+          'Radius: ' + btnRadius +
+        '</div>';
+      previewGrid.appendChild(buttonCard);
+
+      // Secondary button
+      if (primaryColor) {
+        var secondaryCard = document.createElement('div');
+        secondaryCard.className = 'preview-card';
+        secondaryCard.innerHTML =
+          '<div class="preview-title">Secondary Button</div>' +
+          '<div class="preview-visual">' +
+            '<span class="preview-component" style="background: ' + primaryColor.hex + '; color: white; border-radius: ' + btnRadius + '; padding: 12px 24px; display: inline-block;">Button</span>' +
+          '</div>' +
+          '<div style="margin-top: 12px; font-size: 11px; color: #64748b;">' +
+            'Background: ' + primaryColor.hex + '<br>' +
+            'Text: #ffffff<br>' +
+            'Radius: ' + btnRadius +
+          '</div>';
+        previewGrid.appendChild(secondaryCard);
+      }
+
+      // Tertiary button
+      if (backgroundColor && textColor) {
+        var tertiaryCard = document.createElement('div');
+        tertiaryCard.className = 'preview-card';
+        tertiaryCard.innerHTML =
+          '<div class="preview-title">Tertiary Button</div>' +
+          '<div class="preview-visual">' +
+            '<span class="preview-component" style="background: ' + backgroundColor.hex + '; color: ' + textColor.hex + '; border: 1px solid ' + textColor.hex + '; border-radius: ' + btnRadius + '; padding: 12px 24px; display: inline-block;">Button</span>' +
+          '</div>' +
+          '<div style="margin-top: 12px; font-size: 11px; color: #64748b;">' +
+            'Background: ' + backgroundColor.hex + '<br>' +
+            'Text: ' + textColor.hex + '<br>' +
+            'Radius: ' + btnRadius +
+          '</div>';
+        previewGrid.appendChild(tertiaryCard);
+      }
+    }
+
+    function showStatus(type, message) {
+      var box = document.getElementById('statusBox');
+      box.className = 'status-box ' + type;
+      box.textContent = message;
+      box.style.display = 'block';
+    }
+
+    // Export functions
+    function exportToFigma() {
+      if (!aiColorInsights) {
+        alert('Please analyze a design first before exporting');
+        return;
+      }
+
+      // Create export-ready JSON
+      var exportData = {
+        version: '1.0',
+        timestamp: new Date().toISOString(),
+        designSystem: {
+          colors: aiColorInsights.colors || [],
+          brandColors: aiColorInsights.brandColors || [],
+          functionalColors: aiColorInsights.functionalColors || [],
+          ctaColor: aiColorInsights.ctaColor || null,
+          gradients: aiColorInsights.gradients || [],
+          buttons: aiColorInsights.buttons || [],
+          cornerRadius: aiColorInsights.cornerRadius || 8,
+          spacing: aiColorInsights.spacing || { base: 8, scale: [8, 16, 24, 32, 40, 48, 64, 80] },
+          typography: aiColorInsights.typography || {},
+          applicationInsights: aiColorInsights.applicationInsights || ''
+        }
+      };
+
+      // Display in modal
+      document.getElementById('exportJSON').textContent = JSON.stringify(exportData, null, 2);
+      document.getElementById('exportModal').style.display = 'block';
+    }
+
+    function closeExportModal() {
+      document.getElementById('exportModal').style.display = 'none';
+      document.getElementById('exportStatus').style.display = 'none';
+    }
+
+    function copyExportToClipboard() {
+      var jsonText = document.getElementById('exportJSON').textContent;
+      navigator.clipboard.writeText(jsonText).then(function() {
+        var status = document.getElementById('exportStatus');
+        status.style.display = 'block';
+        status.style.background = '#d1fae5';
+        status.style.color = '#065f46';
+        status.textContent = '✅ Copied to clipboard! Now open your Figma plugin and paste it.';
+
+        setTimeout(function() {
+          status.style.display = 'none';
+        }, 3000);
+      }).catch(function(err) {
+        var status = document.getElementById('exportStatus');
+        status.style.display = 'block';
+        status.style.background = '#fee2e2';
+        status.style.color = '#991b1b';
+        status.textContent = '❌ Failed to copy: ' + err.message;
+      });
+    }
+
+    function downloadExportJSON() {
+      var jsonText = document.getElementById('exportJSON').textContent;
+      var blob = new Blob([jsonText], { type: 'application/json' });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url;
+      a.download = 'design-system-' + Date.now() + '.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      var status = document.getElementById('exportStatus');
+      status.style.display = 'block';
+      status.style.background = '#dbeafe';
+      status.style.color = '#1e40af';
+      status.textContent = '💾 Downloaded! Open the JSON file and copy its contents to the Figma plugin.';
+
+      setTimeout(function() {
+        status.style.display = 'none';
+      }, 3000);
+    }
+
+    function renderVisualApplicationInsights(insights) {
+      var container = document.getElementById('applicationInsightsContent');
+      var html = '';
+
+      // Get colors for visual swatches
+      var primaryColor = insights.brandColors[0];
+      var ctaColor = insights.ctaColor || insights.functionalColors.find(c => c.role === 'cta');
+      var backgroundColor = insights.colors.find(c => c.hex === '#f6f5f1' || c.hex === '#ffffff');
+      var textColor = insights.colors.find(c => c.hex === '#1d1d1d' || c.hex === '#4a4a4a');
+
+      // Color swatch helper
+      function colorSwatch(hex, size) {
+        return '<span style="display: inline-block; width: ' + (size || '24px') + '; height: ' + (size || '24px') + '; background: ' + hex + '; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); vertical-align: middle; margin: 0 4px;"></span>';
+      }
+
+      // a) Color Application Strategy
+      html += '<div style="background: white; border-radius: 8px; padding: 20px; margin-bottom: 16px; border-left: 4px solid #48c6ef;">';
+      html += '<h3 style="margin: 0 0 16px 0; color: #0f172a; font-size: 16px;">📊 Color Application Strategy</h3>';
+      html += '<div style="display: grid; gap: 12px;">';
+
+      // Primary surfaces
+      html += '<div style="display: flex; align-items: start; gap: 12px;">';
+      html += colorSwatch(backgroundColor ? backgroundColor.hex : '#ffffff', '40px');
+      html += '<div style="flex: 1;">';
+      html += '<div style="font-weight: 600; color: #1e293b; margin-bottom: 4px;">Primary Surfaces <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500;">60-70%</span></div>';
+      html += '<div style="color: #64748b; font-size: 13px;">Use ' + (backgroundColor ? backgroundColor.hex : '#ffffff') + ' for main app background, cards, and content areas</div>';
+      html += '</div></div>';
+
+      // Brand moments
+      if (primaryColor) {
+        html += '<div style="display: flex; align-items: start; gap: 12px;">';
+        html += colorSwatch(primaryColor.hex, '40px');
+        html += '<div style="flex: 1;">';
+        html += '<div style="font-weight: 600; color: #1e293b; margin-bottom: 4px;">Brand Moments <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500;">20-30%</span></div>';
+        html += '<div style="color: #64748b; font-size: 13px;">Apply ' + primaryColor.hex + ' to hero sections, feature highlights, and success states</div>';
+        html += '</div></div>';
+      }
+
+      // Action colors
+      if (ctaColor) {
+        html += '<div style="display: flex; align-items: start; gap: 12px;">';
+        html += colorSwatch(ctaColor.hex, '40px');
+        html += '<div style="flex: 1;">';
+        html += '<div style="font-weight: 600; color: #1e293b; margin-bottom: 4px;">Action Colors <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500;">5-10%</span></div>';
+        html += '<div style="color: #64748b; font-size: 13px;">Reserve ' + ctaColor.hex + ' for primary CTAs only - max 1-2 per screen for impact</div>';
+        html += '</div></div>';
+      }
+
+      // Text hierarchy
+      if (textColor) {
+        html += '<div style="display: flex; align-items: start; gap: 12px;">';
+        html += colorSwatch(textColor.hex, '40px');
+        html += '<div style="flex: 1;">';
+        html += '<div style="font-weight: 600; color: #1e293b; margin-bottom: 4px;">Text Hierarchy <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500;">~5%</span></div>';
+        html += '<div style="color: #64748b; font-size: 13px;">Use #1d1d1d for headings, #4a4a4a for body, lighter shades for captions</div>';
+        html += '</div></div>';
+      }
+
+      html += '</div></div>';
+
+      // b) Button Application Guide
+      html += '<div style="background: white; border-radius: 8px; padding: 20px; margin-bottom: 16px; border-left: 4px solid #6f86d6;">';
+      html += '<h3 style="margin: 0 0 16px 0; color: #0f172a; font-size: 16px;">🎨 Button Application Guide</h3>';
+
+      // Primary CTA
+      if (ctaColor) {
+        html += '<div style="margin-bottom: 16px;">';
+        html += '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">';
+        html += '<span style="background: ' + ctaColor.hex + '; color: white; padding: 8px 16px; border-radius: 24px; font-size: 12px; font-weight: 500;">Primary CTA</span>';
+        html += '<span style="color: #64748b; font-size: 12px;">Use 1-2 times per screen</span>';
+        html += '</div>';
+        html += '<div style="color: #64748b; font-size: 13px; line-height: 1.6;">';
+        html += '• Main conversion actions: signup, purchase, start trial<br>';
+        html += '• Examples: Landing hero → "Get Started" | Dashboard → "Create New"';
+        html += '</div></div>';
+      }
+
+      // Secondary
+      if (primaryColor) {
+        html += '<div style="margin-bottom: 16px;">';
+        html += '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">';
+        html += '<span style="background: ' + primaryColor.hex + '; color: white; padding: 8px 16px; border-radius: 24px; font-size: 12px; font-weight: 500;">Secondary</span>';
+        html += '<span style="color: #64748b; font-size: 12px;">Supporting actions</span>';
+        html += '</div>';
+        html += '<div style="color: #64748b; font-size: 13px; line-height: 1.6;">';
+        html += '• Learn more, view details, explore features<br>';
+        html += '• Examples: Feature cards → "Explore" | Product pages → "View Details"';
+        html += '</div></div>';
+      }
+
+      // Tertiary
+      if (backgroundColor) {
+        html += '<div style="margin-bottom: 16px;">';
+        html += '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">';
+        html += '<span style="background: ' + backgroundColor.hex + '; color: #1d1d1d; padding: 8px 16px; border-radius: 24px; font-size: 12px; font-weight: 500; border: 1px solid #e2e8f0;">Tertiary</span>';
+        html += '<span style="color: #64748b; font-size: 12px;">Low-priority</span>';
+        html += '</div>';
+        html += '<div style="color: #64748b; font-size: 13px; line-height: 1.6;">';
+        html += '• Cancel, skip, go back<br>';
+        html += '• Examples: Forms → "Cancel" | Modals → "Skip"';
+        html += '</div></div>';
+      }
+
+      html += '</div>';
+
+      // c) Component Composition - WITH VISUAL EXAMPLES
+      html += '<div style="background: white; border-radius: 8px; padding: 20px; margin-bottom: 16px; border-left: 4px solid #48c6ef;">';
+      html += '<h3 style="margin: 0 0 16px 0; color: #0f172a; font-size: 16px;">🏗️ Component Composition</h3>';
+
+      var btnRadius = insights.cornerRadius || 24;
+      var brandHex = primaryColor ? primaryColor.hex : '#4ecdc4';
+      var bgHex = backgroundColor ? backgroundColor.hex : '#ffffff';
+      var ctaHex = ctaColor ? ctaColor.hex : '#000000';
+
+      // Card example
+      html += '<div style="margin-bottom: 20px;">';
+      html += '<div style="font-weight: 600; color: #1e293b; margin-bottom: 8px;">Card Component</div>';
+      html += '<div style="background: ' + bgHex + '; border-radius: 12px; padding: 20px; border-left: 3px solid ' + brandHex + '; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">';
+      html += '<div style="font-size: 14px; font-weight: 600; color: #1e293b; margin-bottom: 8px;">Feature Title</div>';
+      html += '<div style="font-size: 13px; color: #64748b; margin-bottom: 12px;">Description text goes here. Notice the ' + brandHex + ' left border accent.</div>';
+      html += '<span style="background: ' + brandHex + '; color: white; padding: 6px 12px; border-radius: ' + btnRadius + 'px; font-size: 12px; font-weight: 500; display: inline-block;">Learn More</span>';
+      html += '</div>';
+      html += '<div style="color: #64748b; font-size: 12px; margin-top: 8px;">💡 12px radius, white bg, 3px ' + brandHex + ' left border</div>';
+      html += '</div>';
+
+      // Form example
+      html += '<div style="margin-bottom: 20px;">';
+      html += '<div style="font-weight: 600; color: #1e293b; margin-bottom: 8px;">Form Input</div>';
+      html += '<input type="text" placeholder="Enter your email" style="width: 100%; max-width: 400px; height: 48px; padding: 0 16px; border: 1px solid #e2e8f0; border-radius: ' + btnRadius + 'px; font-size: 14px; background: ' + bgHex + ';" />';
+      html += '<div style="color: #64748b; font-size: 12px; margin-top: 8px;">💡 48px height, ' + btnRadius + 'px radius (matches buttons)</div>';
+      html += '</div>';
+
+      // Navigation example
+      html += '<div style="margin-bottom: 20px;">';
+      html += '<div style="font-weight: 600; color: #1e293b; margin-bottom: 8px;">Navigation</div>';
+      html += '<div style="display: flex; gap: 8px; flex-wrap: wrap;">';
+      html += '<span style="background: transparent; color: #64748b; padding: 8px 16px; border-radius: ' + btnRadius + 'px; font-size: 13px; border: 1px solid transparent; cursor: pointer;">Home</span>';
+      html += '<span style="background: ' + brandHex + '; color: white; padding: 8px 16px; border-radius: ' + btnRadius + 'px; font-size: 13px; font-weight: 500; cursor: pointer;">Features (Active)</span>';
+      html += '<span style="background: transparent; color: #64748b; padding: 8px 16px; border-radius: ' + btnRadius + 'px; font-size: 13px; border: 1px solid transparent; cursor: pointer;">Pricing</span>';
+      html += '<span style="background: transparent; color: #64748b; padding: 8px 16px; border-radius: ' + btnRadius + 'px; font-size: 13px; border: 1px solid transparent; cursor: pointer;">About</span>';
+      html += '</div>';
+      html += '<div style="color: #64748b; font-size: 12px; margin-top: 8px;">💡 Ghost buttons for menu, ' + brandHex + ' background for active state</div>';
+      html += '</div>';
+
+      html += '</div>';
+
+      // d) Visual Rhythm & Spacing - WITH VISUAL EXAMPLES
+      html += '<div style="background: white; border-radius: 8px; padding: 20px; border-left: 4px solid #6f86d6;">';
+      html += '<h3 style="margin: 0 0 16px 0; color: #0f172a; font-size: 16px;">✨ Visual Rhythm & Spacing</h3>';
+
+      // Spacing scale reference
+      html += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-bottom: 24px;">';
+      html += '<div style="background: #f8fafc; padding: 12px; border-radius: 6px; text-align: center;">';
+      html += '<div style="font-size: 24px; font-weight: 700; color: #0f172a;">80px</div>';
+      html += '<div style="font-size: 11px; color: #64748b;">Between sections</div>';
+      html += '</div>';
+      html += '<div style="background: #f8fafc; padding: 12px; border-radius: 6px; text-align: center;">';
+      html += '<div style="font-size: 24px; font-weight: 700; color: #0f172a;">40px</div>';
+      html += '<div style="font-size: 11px; color: #64748b;">Within sections</div>';
+      html += '</div>';
+      html += '<div style="background: #f8fafc; padding: 12px; border-radius: 6px; text-align: center;">';
+      html += '<div style="font-size: 24px; font-weight: 700; color: #0f172a;">24px</div>';
+      html += '<div style="font-size: 11px; color: #64748b;">Related elements</div>';
+      html += '</div>';
+      html += '<div style="background: #f8fafc; padding: 12px; border-radius: 6px; text-align: center;">';
+      html += '<div style="font-size: 24px; font-weight: 700; color: #0f172a;">16px</div>';
+      html += '<div style="font-size: 11px; color: #64748b;">Within components</div>';
+      html += '</div>';
+      html += '</div>';
+
+      // Visual spacing example - Page Layout
+      html += '<div style="font-weight: 600; color: #1e293b; margin-bottom: 12px;">Page Layout Example</div>';
+      html += '<div style="background: #f8fafc; border-radius: 8px; padding: 16px; position: relative;">';
+
+      // Hero section
+      html += '<div style="background: linear-gradient(135deg, ' + brandHex + ' 0%, ' + (primaryColor && primaryColor.name.includes('Light') ? primaryColor.hex : brandHex) + ' 100%); border-radius: 8px; padding: 32px; margin-bottom: 80px; position: relative;">';
+      html += '<div style="position: absolute; right: 8px; top: 8px; background: rgba(0,0,0,0.6); color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px;">Hero Section</div>';
+      html += '<div style="font-size: 20px; font-weight: 700; color: white; margin-bottom: 12px;">Main Heading (48px)</div>';
+      html += '<div style="font-size: 12px; color: rgba(255,255,255,0.9); margin-bottom: 16px;">Supporting text goes here</div>';
+      html += '<span style="background: ' + ctaHex + '; color: white; padding: 8px 16px; border-radius: ' + btnRadius + 'px; font-size: 12px; font-weight: 500; display: inline-block;">Primary CTA</span>';
+      html += '<div style="position: absolute; left: -40px; top: 100%; width: 2px; height: 80px; background: repeating-linear-gradient(0deg, #ef4444, #ef4444 4px, transparent 4px, transparent 8px); margin-top: 8px;"></div>';
+      html += '<div style="position: absolute; left: -80px; top: calc(100% + 48px); background: #ef4444; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; white-space: nowrap;">80px</div>';
+      html += '</div>';
+
+      // Content section
+      html += '<div style="background: white; border-radius: 8px; padding: 24px; margin-bottom: 80px; border: 1px solid #e2e8f0; position: relative;">';
+      html += '<div style="position: absolute; right: 8px; top: 8px; background: rgba(0,0,0,0.6); color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px;">Content Section</div>';
+      html += '<div style="font-size: 14px; font-weight: 600; color: #1e293b; margin-bottom: 40px;">Section Title</div>';
+      html += '<div style="position: absolute; left: 24px; top: 50px; width: 2px; height: 40px; background: repeating-linear-gradient(0deg, #3b82f6, #3b82f6 4px, transparent 4px, transparent 8px);"></div>';
+      html += '<div style="position: absolute; left: -60px; top: 68px; background: #3b82f6; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px;">40px</div>';
+
+      // Card grid within section
+      html += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">';
+      html += '<div style="background: ' + bgHex + '; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; position: relative;">';
+      html += '<div style="font-size: 12px; font-weight: 600; color: #1e293b; margin-bottom: 16px;">Card Title</div>';
+      html += '<div style="position: absolute; left: 16px; top: 30px; width: 2px; height: 16px; background: repeating-linear-gradient(0deg, #10b981, #10b981 4px, transparent 4px, transparent 8px);"></div>';
+      html += '<div style="position: absolute; left: -60px; top: 36px; background: #10b981; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px;">16px</div>';
+      html += '<div style="font-size: 11px; color: #64748b;">Card content</div>';
+      html += '</div>';
+      html += '<div style="background: ' + bgHex + '; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0;">';
+      html += '<div style="font-size: 12px; font-weight: 600; color: #1e293b; margin-bottom: 16px;">Card Title</div>';
+      html += '<div style="font-size: 11px; color: #64748b;">Card content</div>';
+      html += '</div>';
+      html += '</div>';
+      html += '<div style="position: absolute; left: 50%; top: calc(50% + 40px); width: 24px; height: 2px; background: repeating-linear-gradient(90deg, #f59e0b, #f59e0b 4px, transparent 4px, transparent 8px); transform: translateX(-12px);"></div>';
+      html += '<div style="position: absolute; left: 50%; top: calc(50% + 50px); background: #f59e0b; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; transform: translateX(-15px);">24px</div>';
+      html += '</div>';
+
+      html += '<div style="position: absolute; left: -40px; top: calc(100% - 80px); width: 2px; height: 80px; background: repeating-linear-gradient(0deg, #ef4444, #ef4444 4px, transparent 4px, transparent 8px);"></div>';
+      html += '<div style="position: absolute; left: -80px; bottom: -40px; background: #ef4444; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; white-space: nowrap;">80px</div>';
+
+      // Footer section
+      html += '<div style="background: #f1f5f9; border-radius: 8px; padding: 20px; text-align: center; position: relative;">';
+      html += '<div style="position: absolute; right: 8px; top: 8px; background: rgba(0,0,0,0.6); color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px;">Footer</div>';
+      html += '<div style="font-size: 11px; color: #64748b;">Footer content</div>';
+      html += '</div>';
+
+      html += '</div>';
+
+      html += '<div style="color: #64748b; font-size: 12px; margin-top: 12px; line-height: 1.6;">';
+      html += '💡 Notice how spacing creates visual hierarchy: Large gaps (80px) separate major sections, medium gaps (40px) organize content within sections, smaller gaps (24px, 16px) group related items.';
+      html += '</div>';
+
+      html += '</div>';
+
+      container.innerHTML = html;
+    }
+
+    // Generate a comprehensive SaaS dashboard template showing all components in use
+    function generateSaaSTemplate(insights) {
+      var container = document.getElementById('saasTemplateContainer');
+      if (!container) return;
+
+      var primaryColor = insights.brandColors[0];
+      var ctaColor = insights.ctaColor || insights.functionalColors.find(c => c.role === 'cta');
+      var backgroundColor = insights.colors.find(c => c.hex === '#f6f5f1' || c.hex === '#ffffff');
+      var btnRadius = insights.cornerRadius || 24;
+      var brandHex = primaryColor ? primaryColor.hex : '#4ecdc4';
+      var bgHex = backgroundColor ? backgroundColor.hex : '#ffffff';
+      var ctaHex = ctaColor ? ctaColor.hex : '#000000';
+
+      // Get detected gradients (prefer hero/background gradients)
+      var heroGradient = null;
+      if (insights.gradients && insights.gradients.length > 0) {
+        var heroBg = insights.gradients.find(g => g.usage && g.usage.toLowerCase().includes('hero'));
+        var backgroundGradient = insights.gradients.find(g => g.usage && g.usage.toLowerCase().includes('background'));
+        heroGradient = heroBg || backgroundGradient || insights.gradients[0];
+      }
+
+      var html = '';
+
+      // Full SaaS Dashboard Layout
+      html += '<div style="background: #f8fafc; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0;">';
+
+      // Top Navigation Bar
+      html += '<div style="background: white; padding: 16px 24px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">';
+      html += '<div style="display: flex; align-items: center; gap: 24px;">';
+      html += '<div style="font-weight: 700; font-size: 16px; color: #1e293b;">Dashboard</div>';
+      html += '<div style="display: flex; gap: 8px;">';
+      html += '<span style="padding: 6px 12px; border-radius: ' + btnRadius + 'px; color: ' + brandHex + '; font-size: 13px; font-weight: 500; background: rgba(78, 205, 196, 0.1);">Overview</span>';
+      html += '<span style="padding: 6px 12px; border-radius: ' + btnRadius + 'px; color: #64748b; font-size: 13px;">Analytics</span>';
+      html += '<span style="padding: 6px 12px; border-radius: ' + btnRadius + 'px; color: #64748b; font-size: 13px;">Projects</span>';
+      html += '<span style="padding: 6px 12px; border-radius: ' + btnRadius + 'px; color: #64748b; font-size: 13px;">Team</span>';
+      html += '</div></div>';
+      html += '<div style="display: flex; gap: 12px; align-items: center;">';
+      html += '<span style="background: ' + ctaHex + '; color: white; padding: 8px 16px; border-radius: ' + btnRadius + 'px; font-size: 13px; font-weight: 500; cursor: pointer;">New Project</span>';
+      html += '<div style="width: 32px; height: 32px; border-radius: 50%; background: ' + brandHex + '; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 12px;">JD</div>';
+      html += '</div></div>';
+
+      // Hero Section with Stats - Use detected gradient or create one from brand color
+      var heroBackground = heroGradient
+        ? heroGradient.gradient
+        : 'linear-gradient(135deg, ' + brandHex + ' 0%, ' + brandHex + 'dd 100%)';
+      html += '<div style="background: ' + heroBackground + '; padding: 48px 24px; color: white;">';
+      html += '<div style="max-width: 1200px; margin: 0 auto;">';
+      html += '<div style="font-size: 32px; font-weight: 700; margin-bottom: 8px;">Welcome back, John!</div>';
+      html += '<div style="font-size: 14px; opacity: 0.9; margin-bottom: 32px;">Here\'s what\'s happening with your projects today.</div>';
+
+      // Stats Grid
+      html += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">';
+      html += '<div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 12px; padding: 20px;">';
+      html += '<div style="font-size: 13px; opacity: 0.9; margin-bottom: 8px;">Total Projects</div>';
+      html += '<div style="font-size: 28px; font-weight: 700;">24</div>';
+      html += '<div style="font-size: 12px; opacity: 0.8; margin-top: 4px;">+12% from last month</div>';
+      html += '</div>';
+      html += '<div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 12px; padding: 20px;">';
+      html += '<div style="font-size: 13px; opacity: 0.9; margin-bottom: 8px;">Active Users</div>';
+      html += '<div style="font-size: 28px; font-weight: 700;">1,429</div>';
+      html += '<div style="font-size: 12px; opacity: 0.8; margin-top: 4px;">+5% from last week</div>';
+      html += '</div>';
+      html += '<div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 12px; padding: 20px;">';
+      html += '<div style="font-size: 13px; opacity: 0.9; margin-bottom: 8px;">Revenue</div>';
+      html += '<div style="font-size: 28px; font-weight: 700;">$12,450</div>';
+      html += '<div style="font-size: 12px; opacity: 0.8; margin-top: 4px;">+23% from last month</div>';
+      html += '</div>';
+      html += '</div></div></div>';
+
+      // Main Content Area
+      html += '<div style="padding: 40px 24px; max-width: 1200px; margin: 0 auto;">';
+
+      // Section: Recent Projects
+      html += '<div style="margin-bottom: 40px;">';
+      html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">';
+      html += '<h2 style="font-size: 20px; font-weight: 700; color: #1e293b; margin: 0;">Recent Projects</h2>';
+      html += '<span style="color: ' + brandHex + '; font-size: 13px; font-weight: 500; cursor: pointer;">View all →</span>';
+      html += '</div>';
+
+      // Project Cards Grid
+      html += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">';
+
+      // Card 1
+      html += '<div style="background: white; border-radius: 12px; padding: 20px; border-left: 3px solid ' + brandHex + '; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">';
+      html += '<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">';
+      html += '<div style="font-size: 15px; font-weight: 600; color: #1e293b;">Website Redesign</div>';
+      html += '<span style="background: rgba(34, 197, 94, 0.1); color: #16a34a; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;">Active</span>';
+      html += '</div>';
+      html += '<div style="color: #64748b; font-size: 13px; line-height: 1.6; margin-bottom: 16px;">Redesigning the entire marketing website with new brand guidelines.</div>';
+      html += '<div style="display: flex; gap: 8px; margin-bottom: 16px;">';
+      html += '<span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 11px; color: #64748b;">Design</span>';
+      html += '<span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 11px; color: #64748b;">Marketing</span>';
+      html += '</div>';
+      html += '<div style="display: flex; justify-content: space-between; align-items: center;">';
+      html += '<div style="font-size: 12px; color: #64748b;">Due: Dec 15, 2024</div>';
+      html += '<span style="background: ' + brandHex + '; color: white; padding: 6px 14px; border-radius: ' + btnRadius + 'px; font-size: 12px; font-weight: 500; cursor: pointer;">View</span>';
+      html += '</div></div>';
+
+      // Card 2
+      html += '<div style="background: white; border-radius: 12px; padding: 20px; border-left: 3px solid ' + brandHex + '; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">';
+      html += '<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">';
+      html += '<div style="font-size: 15px; font-weight: 600; color: #1e293b;">Mobile App v2.0</div>';
+      html += '<span style="background: rgba(251, 191, 36, 0.1); color: #d97706; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;">In Review</span>';
+      html += '</div>';
+      html += '<div style="color: #64748b; font-size: 13px; line-height: 1.6; margin-bottom: 16px;">Building the next generation mobile experience for our users.</div>';
+      html += '<div style="display: flex; gap: 8px; margin-bottom: 16px;">';
+      html += '<span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 11px; color: #64748b;">Development</span>';
+      html += '<span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 11px; color: #64748b;">iOS</span>';
+      html += '</div>';
+      html += '<div style="display: flex; justify-content: space-between; align-items: center;">';
+      html += '<div style="font-size: 12px; color: #64748b;">Due: Jan 10, 2025</div>';
+      html += '<span style="background: ' + brandHex + '; color: white; padding: 6px 14px; border-radius: ' + btnRadius + 'px; font-size: 12px; font-weight: 500; cursor: pointer;">View</span>';
+      html += '</div></div>';
+
+      // Card 3
+      html += '<div style="background: white; border-radius: 12px; padding: 20px; border-left: 3px solid ' + brandHex + '; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">';
+      html += '<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">';
+      html += '<div style="font-size: 15px; font-weight: 600; color: #1e293b;">API Integration</div>';
+      html += '<span style="background: rgba(34, 197, 94, 0.1); color: #16a34a; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;">Active</span>';
+      html += '</div>';
+      html += '<div style="color: #64748b; font-size: 13px; line-height: 1.6; margin-bottom: 16px;">Integrating third-party APIs for enhanced functionality.</div>';
+      html += '<div style="display: flex; gap: 8px; margin-bottom: 16px;">';
+      html += '<span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 11px; color: #64748b;">Backend</span>';
+      html += '<span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 11px; color: #64748b;">API</span>';
+      html += '</div>';
+      html += '<div style="display: flex; justify-content: space-between; align-items: center;">';
+      html += '<div style="font-size: 12px; color: #64748b;">Due: Dec 20, 2024</div>';
+      html += '<span style="background: ' + brandHex + '; color: white; padding: 6px 14px; border-radius: ' + btnRadius + 'px; font-size: 12px; font-weight: 500; cursor: pointer;">View</span>';
+      html += '</div></div>';
+
+      html += '</div></div>';
+
+      // Section: Quick Actions
+      html += '<div style="margin-bottom: 40px;">';
+      html += '<h2 style="font-size: 20px; font-weight: 700; color: #1e293b; margin: 0 0 20px 0;">Quick Actions</h2>';
+      html += '<div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">';
+      html += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">';
+      html += '<button style="background: ' + ctaHex + '; color: white; padding: 12px 20px; border-radius: ' + btnRadius + 'px; font-size: 13px; font-weight: 500; border: none; cursor: pointer;">Create Project</button>';
+      html += '<button style="background: ' + brandHex + '; color: white; padding: 12px 20px; border-radius: ' + btnRadius + 'px; font-size: 13px; font-weight: 500; border: none; cursor: pointer;">Invite Team Member</button>';
+      html += '<button style="background: ' + bgHex + '; color: #1e293b; padding: 12px 20px; border-radius: ' + btnRadius + 'px; font-size: 13px; font-weight: 500; border: 1px solid #e2e8f0; cursor: pointer;">Export Data</button>';
+      html += '<button style="background: transparent; color: #64748b; padding: 12px 20px; border-radius: ' + btnRadius + 'px; font-size: 13px; font-weight: 500; border: 1px solid #e2e8f0; cursor: pointer;">Settings</button>';
+      html += '</div></div></div>';
+
+      // Section: Team Activity
+      html += '<div>';
+      html += '<h2 style="font-size: 20px; font-weight: 700; color: #1e293b; margin: 0 0 20px 0;">Team Activity</h2>';
+      html += '<div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">';
+
+      // Activity items
+      html += '<div style="display: flex; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid #f1f5f9;">';
+      html += '<div style="width: 40px; height: 40px; border-radius: 50%; background: ' + brandHex + '; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; flex-shrink: 0;">SA</div>';
+      html += '<div style="flex: 1;">';
+      html += '<div style="font-size: 14px; color: #1e293b; margin-bottom: 4px;"><strong>Sarah Anderson</strong> completed <span style="color: ' + brandHex + ';">Website Redesign - Phase 1</span></div>';
+      html += '<div style="font-size: 12px; color: #94a3b8;">2 hours ago</div>';
+      html += '</div></div>';
+
+      html += '<div style="display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid #f1f5f9;">';
+      html += '<div style="width: 40px; height: 40px; border-radius: 50%; background: ' + brandHex + '; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; flex-shrink: 0;">MJ</div>';
+      html += '<div style="flex: 1;">';
+      html += '<div style="font-size: 14px; color: #1e293b; margin-bottom: 4px;"><strong>Michael Johnson</strong> added a comment on <span style="color: ' + brandHex + ';">API Integration</span></div>';
+      html += '<div style="font-size: 12px; color: #94a3b8;">5 hours ago</div>';
+      html += '</div></div>';
+
+      html += '<div style="display: flex; gap: 16px; padding-top: 16px;">';
+      html += '<div style="width: 40px; height: 40px; border-radius: 50%; background: ' + brandHex + '; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; flex-shrink: 0;">EC</div>';
+      html += '<div style="flex: 1;">';
+      html += '<div style="font-size: 14px; color: #1e293b; margin-bottom: 4px;"><strong>Emily Chen</strong> created a new project <span style="color: ' + brandHex + ';">Q1 Marketing Campaign</span></div>';
+      html += '<div style="font-size: 12px; color: #94a3b8;">Yesterday</div>';
+      html += '</div></div>';
+
+      html += '</div></div>';
+
+      html += '</div></div>';
+
+      container.innerHTML = html;
+    }
+
+    function testWithMockData() {
+      // Simulate what Claude would return for the biology website
+      var mockAIResponse = `**BUTTONS:**
+
+Hero CTA Button:
+- Location: Center of hero section, overlaid on plant background
+- Background: #000000 (solid black)
+- Text color: #ffffff (white)
+- Border: 1px solid #ffffff (white outline)
+- Corner radius: 24px (pill-shaped)
+- Height: 48px
+- Padding: 16px horizontal × 12px vertical
+- Button type: Primary CTA
+
+Top Navigation Button:
+- Location: Top right corner "Get in touch"
+- Background: #000000 (black)
+- Text color: #ffffff
+- Corner radius: 24px
+- Height: 40px
+- Button type: Secondary
+
+**BRAND COLORS:**
+
+- #4ecdc4 - BRAND - 65% coverage - Used in: Teal/green gradient backgrounds in hero section and feature cards, creates natural/scientific atmosphere
+- #95e1d3 - BRAND - 15% coverage - Light teal accent color used in gradient overlays
+
+**FUNCTIONAL COLORS:**
+
+- #000000 - FUNCTIONAL - 3% coverage - Black CTA buttons for high-contrast actions
+
+**BACKGROUND:**
+
+- #f6f5f1 - BACKGROUND - 25% coverage - Beige/cream page background, neutral warm tone
+- #ffffff - BACKGROUND - 10% coverage - White content areas and cards
+
+**TEXT:**
+
+- #1d1d1d - TEXT - 8% coverage - Dark gray for body text and descriptions
+- #4a4a4a - TEXT - 5% coverage - Medium gray for secondary text
+
+**BRAND ATMOSPHERE:**
+
+Emotions: Natural, scientific, trustworthy, biology-focused, fresh, organic
+
+Visual Techniques: Teal/green gradients overlaid on nature photography (microscopic plant cells), creates connection to biology/life sciences. High-contrast black CTAs stand out against softer brand colors.
+
+Software UI Application:
+- App background: Use white (#ffffff) or light beige (#f6f5f1) for main canvas
+- CTAs: Black (#000000) background with white text for maximum contrast and urgency
+- Brand accents: Teal gradients (#4ecdc4) for headers, hero sections, feature highlights
+- Secondary actions: Teal (#4ecdc4) background with white text for brand-aligned buttons
+- Tertiary actions: White/beige background with dark text for subtle actions
+
+Button Style Recommendations:
+- Primary CTA: Black bg + white text + 24px radius (pill-shaped) - for main conversion actions
+- Secondary: Teal (#4ecdc4) bg + white text + 24px radius - for brand-aligned actions
+- Tertiary: Beige (#f6f5f1) bg + dark text (#1d1d1d) + 1px border + 24px radius - for subtle actions
+- Ghost: Transparent bg + teal (#4ecdc4) text/border + 24px radius - for less prominent options
+
+**APPLICATION INSIGHTS:**
+
+a) Color Application Strategy:
+   - Primary surfaces: Use white (#ffffff) or light beige (#f6f5f1) for main app background
+   - Brand moments: Apply teal gradient (#4ecdc4 → #95e1d3) to hero sections, feature highlights, and success states
+   - Action colors: Reserve black (#000000) exclusively for primary CTAs - max 1-2 per screen for maximum impact
+   - Text hierarchy: Use #1d1d1d for headings, #4a4a4a for body text, lighter shades for captions
+
+b) Button Application Guide:
+   - Primary CTA: Main conversion actions only - signup, purchase, start trial
+     Style: Black (#000000) bg + white text + 24px radius
+     Examples: Landing hero → Black "Get Started" | Dashboard → Black "Create New"
+
+   - Secondary: Supporting actions - learn more, view details, explore features
+     Style: Teal (#4ecdc4) bg + white text + 24px radius
+     Examples: Feature cards → Teal "Explore" | Product pages → Teal "View Details"
+
+   - Tertiary: Low-priority actions - cancel, skip, go back
+     Style: Beige (#f6f5f1) bg + dark text (#1d1d1d) + 1px border + 24px radius
+     Examples: Forms → Beige "Cancel" | Modals → Beige "Skip"
+
+   - Ghost: Navigation, tabs, footer links
+     Style: Transparent bg + teal (#4ecdc4) text/border + 24px radius
+     Examples: Navigation menu items | Footer social links
+
+c) Component Composition:
+   - Cards: Corner radius 12px, white (#ffffff) background, add 2px teal (#4ecdc4) left border as brand accent
+   - Forms: Input height 48px (matches button height), 24px corner radius, light beige (#f6f5f1) background
+   - Navigation: Use ghost buttons for menu items, apply teal (#4ecdc4) background for active state with 4px bottom border
+   - Feature sections: Alternate white (#ffffff) and light teal tint (#f0faf9) backgrounds for visual rhythm
+
+d) Visual Rhythm:
+   - Spacing: 80px vertical spacing between major sections, 40px within sections, 24px between related elements, 16px within components
+   - Recreate natural mood: Apply subtle teal gradient overlays (#4ecdc4 to #95e1d3) to header backgrounds, use nature imagery with 60% opacity overlay
+   - Weight balance: Heavy hero section with large heading (48px) + prominent black CTA, lighter content sections with 16px body text + smaller secondary actions`;
+
+      // Parse the mock response
+      aiColorInsights = parseAIColorInsights(mockAIResponse);
+
+      // Display Application Insights (user-facing with visuals)
+      if (aiColorInsights.applicationInsights) {
+        document.getElementById('applicationInsightsSection').style.display = 'block';
+        renderVisualApplicationInsights(aiColorInsights);
+      }
+
+      // Generate preview
+      generatePreview();
+
+      // Generate SaaS template example
+      document.getElementById('saasTemplateSection').style.display = 'block';
+      generateSaaSTemplate(aiColorInsights);
+
+      // Display debug sections (collapsed by default)
+      document.getElementById('parsedDataSection').style.display = 'block';
+      document.getElementById('parsedDataText').textContent = JSON.stringify(aiColorInsights, null, 2);
+
+      document.getElementById('aiResponseSection').style.display = 'block';
+      document.getElementById('aiResponseText').textContent = mockAIResponse;
+
+      showStatus('success', '✅ Mock data loaded! Scroll down to see "How to Apply These Components" and "Reference Design"');
+    }
+  </script>
+</body>
+</html>

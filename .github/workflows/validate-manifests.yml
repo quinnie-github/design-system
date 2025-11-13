@@ -1,0 +1,26 @@
+name: Validate Plugin Manifests
+
+on:
+  pull_request:
+    paths:
+      - 'figma-plugin/**'
+      - 'scripts/validate-manifests.js'
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+      
+      - name: Validate Manifests
+        run: node scripts/validate-manifests.js
+

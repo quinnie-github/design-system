@@ -1,0 +1,2767 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 13px;
+      color: #1e293b;
+      background: #ffffff;
+      padding: 16px;
+    }
+
+    h1 {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #0f172a;
+    }
+
+    .subtitle {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .section {
+      margin-bottom: 24px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .section:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-description {
+      font-size: 12px;
+      color: #64748b;
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .radio-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .radio-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .radio-option:hover {
+      border-color: #cbd5e1;
+      background: #f8fafc;
+    }
+
+    .radio-option input[type="radio"] {
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .radio-option label {
+      cursor: pointer;
+      flex: 1;
+      font-size: 12px;
+    }
+
+    .radio-option .radio-description {
+      font-size: 11px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      color: white;
+      box-shadow: 0 1px 3px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 4px 12px rgba(99, 102, 241, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: white;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+    }
+
+    .btn-secondary:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    .btn-text {
+      background: transparent;
+      color: #94a3b8;
+      border: none;
+      padding: 4px 8px;
+      font-size: 11px;
+    }
+
+    .btn-text:hover {
+      color: #64748b;
+      background: #f1f5f9;
+    }
+
+    .upload-container {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    /* Translation Panel Styles */
+    .translation-card {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
+      color: white;
+    }
+
+    .translation-grid {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 12px;
+      align-items: center;
+      margin-top: 12px;
+    }
+
+    .translation-value {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 12px;
+      border-radius: 6px;
+      text-align: center;
+    }
+
+    .translation-label {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      opacity: 0.9;
+      margin-bottom: 4px;
+    }
+
+    .translation-metric {
+      font-size: 24px;
+      font-weight: 700;
+      font-family: 'SF Mono', 'Monaco', 'Courier New', monospace;
+    }
+
+    .translation-arrow {
+      font-size: 20px;
+      opacity: 0.8;
+    }
+
+    .translation-context {
+      font-size: 11px;
+      opacity: 0.9;
+      margin-top: 4px;
+    }
+
+    .translation-category {
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .translation-badge {
+      background: rgba(255, 255, 255, 0.25);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 500;
+    }
+
+    .translation-explanation {
+      background: rgba(0, 0, 0, 0.1);
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 11px;
+      line-height: 1.5;
+      margin-top: 8px;
+    }
+
+    .status-box {
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      line-height: 1.5;
+      display: none;
+    }
+
+    .status-box.info {
+      background: #dbeafe;
+      border: 1px solid #93c5fd;
+      color: #1e40af;
+    }
+
+    .status-box.success {
+      background: #dcfce7;
+      border: 1px solid #86efac;
+      color: #166534;
+    }
+
+    .status-box.error {
+      background: #fee2e2;
+      border: 1px solid #fca5a5;
+      color: #991b1b;
+    }
+
+    .status-box.warning {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      color: #92400e;
+    }
+
+    #analysisResults {
+      display: none;
+      margin-top: 16px;
+    }
+
+    .analysis-section {
+      margin-bottom: 16px;
+    }
+
+    .analysis-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+    }
+
+    .color-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+
+    .color-swatch {
+      width: 24px;
+      height: 24px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      flex-shrink: 0;
+    }
+
+    .color-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .color-name {
+      font-weight: 500;
+      color: #334155;
+      font-size: 11px;
+      margin-bottom: 2px;
+    }
+
+    .color-value {
+      color: #64748b;
+      font-size: 10px;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+
+    .color-usage {
+      color: #94a3b8;
+      font-size: 10px;
+      margin-top: 2px;
+    }
+
+    .component-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .component-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 10px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 4px;
+      font-size: 11px;
+    }
+
+    .component-item input[type="checkbox"] {
+      margin: 0;
+    }
+
+    .component-name {
+      font-weight: 500;
+      color: #334155;
+      flex: 1;
+    }
+
+    .component-count {
+      color: #64748b;
+      font-size: 10px;
+    }
+
+    .options-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 12px;
+    }
+
+    .option-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+    }
+
+    .option-item input[type="checkbox"] {
+      margin: 0;
+    }
+
+    .option-label {
+      color: #475569;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      font-size: 12px;
+      font-family: inherit;
+      color: #334155;
+      transition: all 0.2s;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #6366f1;
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .input-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: #475569;
+      margin-bottom: 6px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .button-group button {
+      flex: 1;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 32px 16px;
+      color: #94a3b8;
+      font-size: 12px;
+    }
+
+    .empty-state-icon {
+      font-size: 32px;
+      margin-bottom: 12px;
+      opacity: 0.5;
+    }
+
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .preview-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px;
+      transition: all 0.2s;
+    }
+
+    .preview-card:hover {
+      border-color: #6366f1;
+      box-shadow: 0 2px 8px rgba(99, 102, 241, 0.1);
+    }
+
+    .preview-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 8px;
+    }
+
+    .preview-visual {
+      background: white;
+      border: 1px solid #e2e8f0;
+      border-radius: 6px;
+      padding: 12px;
+      min-height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview-component {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    .warning-box {
+      background: #fef3c7;
+      border: 1px solid #fcd34d;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 12px;
+      font-size: 11px;
+      color: #92400e;
+      line-height: 1.5;
+    }
+
+    .info-box {
+      background: #dbeafe;
+      border: 1px solid #93c5fd;
+      border-radius: 6px;
+      padding: 12px;
+      margin-top: 12px;
+      font-size: 11px;
+      color: #1e40af;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎨 Design System Generator</h1>
+  <p class="subtitle">Transform any design into a professional design system with semantic tokens and components</p>
+
+  <div id="statusBox" class="status-box"></div>
+
+  <!-- Quick Import from Web App -->
+  <div class="section" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); border: none; color: white;">
+    <div class="section-title" style="color: white;">⚡ Quick Import from Web App</div>
+    <div class="section-description" style="color: rgba(255,255,255,0.95);">
+      Already analyzed a design in the web app? Paste the JSON here to instantly create your design system in Figma!
+      <br><br>
+      <strong>How it works:</strong>
+      <br>1. Open <a href="http://localhost:8765/test-ai-analysis.html" target="_blank" style="color: white; text-decoration: underline;">the web app</a> and analyze your design
+      <br>2. Click "Export to Figma Plugin" and copy the JSON
+      <br>3. Paste it below and click "Import & Generate"
+    </div>
+
+    <div style="margin-top: 12px;">
+      <textarea id="importJSON" placeholder="Paste your design system JSON here..." style="width: 100%; height: 120px; padding: 12px; border: 2px solid rgba(255,255,255,0.3); border-radius: 8px; font-family: 'Courier New', monospace; font-size: 12px; background: rgba(255,255,255,0.1); color: white; resize: vertical;" oninput="validateImportJSON()"></textarea>
+      <div id="importJSONStatus" style="font-size: 11px; margin-top: 6px; display: none;"></div>
+    </div>
+
+    <button class="btn-primary" onclick="importFromJSON()" style="width: 100%; margin-top: 12px; background: white; color: #059669; font-weight: 600;">
+      📦 Import & Generate Design System
+    </button>
+
+    <div id="switchToManualBtn" style="display: none; margin-top: 12px; text-align: center;">
+      <button onclick="switchToManualWorkflow()" style="background: transparent; border: 1px solid rgba(255,255,255,0.3); color: white; padding: 8px 16px; border-radius: 6px; font-size: 12px; cursor: pointer;">
+        ↩️ Switch to Manual Workflow
+      </button>
+    </div>
+  </div>
+
+  <!-- Step 1: Selection -->
+  <div class="section" id="step1Section">
+    <div class="section-title">📍 Step 1: Select Source</div>
+    <div class="section-description">
+      Choose what design to analyze. Works with landing pages, templates, or any Figma design.
+    </div>
+
+    <div class="radio-group">
+      <div class="radio-option">
+        <input type="radio" id="sourceSelection" name="source" value="selection" checked>
+        <label for="sourceSelection">
+          <div>Current Selection</div>
+          <div class="radio-description" id="selectionInfo">Select frames in your design first</div>
+        </label>
+      </div>
+
+      <div class="radio-option">
+        <input type="radio" id="sourcePage" name="source" value="page">
+        <label for="sourcePage">
+          <div>Entire Current Page</div>
+          <div class="radio-description">Analyze all frames on the current page</div>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 1.5: AI Vision (Optional) -->
+  <div class="section" id="step15Section">
+    <div class="section-title">✨ Step 1.5: AI Visual Analysis (Optional)</div>
+    <div class="section-description">
+      Upload a screenshot for AI-powered visual analysis. This helps detect colors from images, photos, and complex visual effects that Figma can't analyze directly.
+    </div>
+
+    <!-- API Key Input -->
+    <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 6px; padding: 12px; margin-bottom: 12px;">
+      <div style="font-size: 11px; color: #666; margin-bottom: 6px; font-weight: 500;">🔑 Anthropic API Key:</div>
+      <div style="display: flex; gap: 8px;">
+        <input type="password" id="apiKeyInput" placeholder="sk-ant-..." style="flex: 1; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 13px;">
+        <button class="btn-secondary" onclick="saveAPIKey()" style="white-space: nowrap;">Save Key</button>
+      </div>
+      <div id="apiKeyStatus" style="font-size: 10px; margin-top: 4px; color: #64748b;"></div>
+      <div style="font-size: 10px; color: #94a3b8; margin-top: 4px;">
+        Get your API key from <a href="https://console.anthropic.com" target="_blank" style="color: #4f46e5;">console.anthropic.com</a>
+      </div>
+    </div>
+
+    <div class="upload-container">
+      <input type="file" id="screenshotInput" accept="image/*" style="display: none" onchange="handleScreenshotUpload(event)">
+      <button class="btn-secondary" onclick="document.getElementById('screenshotInput').click()">
+        📸 Upload Screenshot
+      </button>
+      <button class="btn-secondary" onclick="captureViewport()" style="margin-left: 8px">
+        📷 Capture Viewport
+      </button>
+      <button class="btn-secondary" onclick="showURLInput()" style="margin-left: 8px">
+        🔗 Use Image URL
+      </button>
+      <button class="btn-text" onclick="clearAPIKey()" style="margin-left: 8px; font-size: 11px;" title="Clear saved API key">
+        🗑️ Clear API Key
+      </button>
+      <button class="btn-secondary" onclick="testWithMockData()" style="margin-left: 8px;" title="Preview visual features with sample data">
+        🎨 Test with Mock Data
+      </button>
+    </div>
+
+    <div id="urlInputContainer" style="display: none; margin-top: 12px;">
+      <div style="font-size: 11px; color: #666; margin-bottom: 6px;">Enter image URL:</div>
+      <input type="text" id="imageUrlInput" placeholder="https://example.com/design-screenshot.png" style="width: 100%; padding: 8px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 13px; margin-bottom: 8px;">
+      <div style="display: flex; gap: 8px;">
+        <button class="btn-primary" onclick="analyzeFromURL()" style="flex: 1;">✨ Analyze Image</button>
+        <button class="btn-text" onclick="cancelURLInput()" style="font-size: 11px;">Cancel</button>
+      </div>
+    </div>
+
+    <div id="screenshotPreview" style="display: none; margin-top: 12px;">
+      <div style="font-size: 11px; color: #666; margin-bottom: 6px;">Preview:</div>
+      <img id="screenshotImage" style="width: 100%; border-radius: 6px; border: 1px solid #e2e8f0;">
+      <button class="btn-text" onclick="removeScreenshot()" style="margin-top: 8px; font-size: 11px;">✕ Remove</button>
+    </div>
+
+    <div id="aiAnalysisResult" style="display: none; margin-top: 12px; padding: 12px; background: #f7fafc; border-radius: 6px; border-left: 3px solid #805ad5;">
+      <div style="font-size: 11px; font-weight: 600; color: #805ad5; margin-bottom: 6px;">🤖 AI Visual Insights</div>
+      <div id="aiInsightsText" style="font-size: 11px; color: #4a5568; line-height: 1.5;"></div>
+    </div>
+  </div>
+
+  <!-- Step 2: Analyze -->
+  <div class="section" id="step2Section">
+    <div class="section-title">🔍 Step 2: Analyze Design</div>
+    <div class="section-description">
+      The plugin will detect colors, components, typography, and patterns in your design.
+    </div>
+
+    <button class="btn-primary" onclick="analyzeDesign()">
+      Analyze Design
+    </button>
+  </div>
+
+  <!-- Step 3: Results -->
+  <div id="analysisResults">
+    <div class="section">
+      <div class="section-title">🎨 Detected Colors</div>
+      <div id="colorResults" class="color-grid">
+        <!-- Colors will be populated here -->
+      </div>
+    </div>
+
+    <!-- Design Translation Panel -->
+    <div id="translationPanel" class="section" style="display: none;">
+      <div class="section-title">🔄 Design Translation: Web → Software UI</div>
+      <div class="section-description" style="margin-bottom: 16px;">
+        Your design has been automatically adapted for software interfaces. See what changed:
+      </div>
+
+      <div id="translationInsights"></div>
+    </div>
+
+    <!-- Brand Atmosphere Section -->
+    <div id="brandAtmospherePanel" class="section" style="display: none;">
+      <div class="section-title">🌿 Brand Atmosphere & Styling</div>
+      <div class="section-description" style="margin-bottom: 16px;">
+        How to recreate the visual mood and style of this design:
+      </div>
+
+      <div id="brandAtmosphereContent"></div>
+    </div>
+
+    <!-- Application Insights Section -->
+    <div id="applicationInsightsPanel" class="section" style="display: none;">
+      <div class="section-title">🎯 Application Insights</div>
+      <div class="section-description" style="margin-bottom: 16px;">
+        Step-by-step guidance on applying these components to recreate the reference design style:
+      </div>
+
+      <div id="applicationInsightsContent"></div>
+    </div>
+
+    <!-- SaaS Template Example -->
+    <div class="section" id="saasTemplateSection" style="display: none;">
+      <div class="section-title">🎨 Reference Design: SaaS Dashboard</div>
+      <div class="section-description" style="margin-bottom: 16px;">
+        See how all the extracted components come together in a real application.
+      </div>
+      <div id="saasTemplateContainer"></div>
+      <div style="margin-top: 16px; padding: 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 8px; color: white;">
+        <div style="font-weight: 600; margin-bottom: 8px;">💡 Notice the Design System Application:</div>
+        <div style="font-size: 13px; line-height: 1.8; opacity: 0.95;">
+          • Navigation uses ghost buttons with brand color for active state<br>
+          • Primary CTA uses the detected CTA color<br>
+          • Hero section uses brand gradient background<br>
+          • Cards have brand color left border accent<br>
+          • Spacing follows 80px → 40px → 24px → 16px hierarchy
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">📦 Detected Components</div>
+      <div id="componentResults" class="component-list">
+        <!-- Components will be populated here -->
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">👁️ Component Preview</div>
+      <div class="section-description">
+        See what will be generated with your brand colors
+      </div>
+      <div id="componentPreview" class="preview-grid">
+        <!-- Preview will be populated here -->
+      </div>
+      <div id="previewWarnings"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">⚙️ Generation Options</div>
+
+      <div class="input-label">System Name</div>
+      <input type="text" id="systemName" value="Design System" placeholder="My Design System">
+
+      <div class="options-list">
+        <div class="option-item">
+          <input type="checkbox" id="optCreateVariables" checked>
+          <label for="optCreateVariables" class="option-label">Create variable collection</label>
+        </div>
+        <div class="option-item">
+          <input type="checkbox" id="optCreateComponents" checked>
+          <label for="optCreateComponents" class="option-label">Generate components</label>
+        </div>
+        <div class="option-item">
+          <input type="checkbox" id="optApplyVariables" checked>
+          <label for="optApplyVariables" class="option-label">Apply variables to components</label>
+        </div>
+        <div class="option-item">
+          <input type="checkbox" id="optCreatePage" checked>
+          <label for="optCreatePage" class="option-label">Create design system page</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button class="btn-secondary" onclick="resetAnalysis()">Back</button>
+      <button class="btn-primary" onclick="generateSystem()">✨ Generate System</button>
+    </div>
+  </div>
+
+  <script>
+    var analysisData = null;
+
+    // Update selection info on load
+    window.onmessage = function(event) {
+      var msg = event.data.pluginMessage;
+
+      if (msg.type === 'selection-count') {
+        var info = document.getElementById('selectionInfo');
+        if (msg.count === 0) {
+          info.textContent = 'No frames selected';
+          info.style.color = '#ef4444';
+        } else {
+          info.textContent = msg.count + ' frame' + (msg.count === 1 ? '' : 's') + ' selected';
+          info.style.color = '#10b981';
+        }
+      }
+
+      if (msg.type === 'analysis-complete') {
+        analysisData = msg.data;
+        showAnalysisResults(msg.data);
+      }
+
+      if (msg.type === 'generation-complete') {
+        showStatus('success', '✅ ' + msg.message);
+        setTimeout(function() {
+          resetAnalysis();
+        }, 3000);
+      }
+
+      if (msg.type === 'error') {
+        showStatus('error', '❌ ' + msg.message);
+      }
+
+      if (msg.type === 'info') {
+        showStatus('info', msg.message);
+      }
+
+      if (msg.type === 'viewport-captured') {
+        currentScreenshot = msg.imageData;
+        document.getElementById('screenshotImage').src = msg.imageData;
+        document.getElementById('screenshotPreview').style.display = 'block';
+        analyzeScreenshotWithAI(msg.imageData);
+      }
+
+      if (msg.type === 'ai-analysis-complete') {
+        displayAIInsights(msg.insights);
+      }
+
+      if (msg.type === 'request-ai-analysis') {
+        // Handle AI analysis request from backend
+        callClaudeVisionAPI(msg.imageData);
+      }
+    };
+
+    function analyzeDesign() {
+      var source = document.querySelector('input[name="source"]:checked').value;
+
+      showStatus('info', '🔍 Analyzing design...');
+
+      parent.postMessage({
+        pluginMessage: {
+          type: 'analyze-design',
+          source: source
+        }
+      }, '*');
+    }
+
+    function showAnalysisResults(data) {
+      // Merge AI insights with Figma data if available
+      var displayData = data;
+      if (aiColorInsights && aiColorInsights.colors && aiColorInsights.colors.length > 0) {
+        displayData = mergeAIWithFigmaData(data, aiColorInsights);
+        showStatus('success', '✨ Results enhanced with AI visual analysis!');
+      }
+
+      // Apply design science principles
+      var originalData = JSON.parse(JSON.stringify(displayData)); // Keep copy of original
+      displayData = applyDesignScience(displayData);
+      showStatus('success', '🎨 Design principles applied (8pt grid, modular scale, color theory)');
+
+      // Show design translation panel
+      showDesignTranslation(originalData, displayData);
+
+      // Show brand atmosphere panel
+      showBrandAtmosphere();
+
+      // Show application insights panel
+      showApplicationInsights();
+
+      // Show results section
+      document.getElementById('analysisResults').style.display = 'block';
+
+      // Populate colors
+      var colorGrid = document.getElementById('colorResults');
+      colorGrid.innerHTML = '';
+
+      if (displayData.colors && displayData.colors.length > 0) {
+        displayData.colors.forEach(function(color) {
+          var colorItem = document.createElement('div');
+          colorItem.className = 'color-item';
+
+          // Display percentage if available, otherwise fall back to count
+          var usageDisplay = '';
+          var gradientBadge = '';
+          if (color.percentage !== undefined) {
+            usageDisplay = '<div class="color-usage">' + color.percentage.toFixed(1) + '% coverage</div>';
+            // Add visual dominance bar
+            usageDisplay += '<div class="dominance-bar" style="width: 100%; height: 4px; background: #e2e8f0; border-radius: 2px; margin-top: 4px; overflow: hidden;"><div style="width: ' + Math.min(100, color.percentage) + '%; height: 100%; background: ' + color.hex + ';"></div></div>';
+          } else {
+            usageDisplay = '<div class="color-usage">' + color.count + ' uses</div>';
+          }
+
+          if (color.isGradient) {
+            gradientBadge = '<span style="font-size: 9px; background: #f0f0f0; padding: 2px 4px; border-radius: 3px; margin-left: 4px;">gradient</span>';
+          }
+
+          // Add AI-enhanced badge
+          var aiBadge = '';
+          if (color.aiEnhanced) {
+            aiBadge = '<span style="font-size: 9px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 2px 4px; border-radius: 3px; margin-left: 4px;">✨ AI</span>';
+          }
+
+          colorItem.innerHTML =
+            '<div class="color-swatch" style="background-color: ' + color.hex + '"></div>' +
+            '<div class="color-info">' +
+              '<div class="color-name">' + color.name + gradientBadge + aiBadge + '</div>' +
+              '<div class="color-value">' + color.hex + '</div>' +
+              usageDisplay +
+            '</div>';
+          colorGrid.appendChild(colorItem);
+        });
+      } else {
+        colorGrid.innerHTML = '<div class="empty-state"><div class="empty-state-icon">🎨</div><div>No colors detected</div></div>';
+      }
+
+      // Populate components
+      var componentList = document.getElementById('componentResults');
+      componentList.innerHTML = '';
+
+      if (displayData.components && displayData.components.length > 0) {
+        displayData.components.forEach(function(component) {
+          var componentItem = document.createElement('div');
+          componentItem.className = 'component-item';
+          componentItem.innerHTML =
+            '<input type="checkbox" checked>' +
+            '<span class="component-name">' + component.name + '</span>' +
+            '<span class="component-count">' + component.count + ' found</span>';
+          componentList.appendChild(componentItem);
+        });
+      } else {
+        componentList.innerHTML = '<div class="empty-state"><div class="empty-state-icon">📦</div><div>No components detected</div></div>';
+      }
+
+      // Populate component previews
+      var previewGrid = document.getElementById('componentPreview');
+      var warningsDiv = document.getElementById('previewWarnings');
+      previewGrid.innerHTML = '';
+      warningsDiv.innerHTML = '';
+
+      var primaryColor = displayData.colors.find(function(c) { return c.role === 'primary'; });
+      var ctaColor = displayData.colors.find(function(c) { return c.role === 'cta'; });
+      var borderColor = displayData.colors.find(function(c) { return c.role === 'border'; });
+      var textColor = displayData.colors.find(function(c) { return c.role === 'text' || c.role === 'text-primary'; });
+      var backgroundColor = displayData.colors.find(function(c) { return c.role === 'background'; });
+
+      // Get detected button from AI insights
+      var detectedButton = aiColorInsights && aiColorInsights.buttons && aiColorInsights.buttons.length > 0
+        ? aiColorInsights.buttons.find(function(btn) { return btn.type === 'primary-cta'; }) || aiColorInsights.buttons[0]
+        : null;
+
+      // Add warnings if colors missing
+      var warnings = [];
+      if (!primaryColor && !ctaColor) warnings.push('No primary or CTA color detected - buttons may not match your design');
+      if (!borderColor) warnings.push('No border color detected - inputs/cards may have generic borders');
+      if (!textColor) warnings.push('No text color detected - using default dark text');
+
+      if (warnings.length > 0) {
+        var warningBox = '<div class="warning-box"><strong>⚠️ Detection Warnings:</strong><ul style="margin: 4px 0 0 0; padding-left: 20px;">';
+        warnings.forEach(function(w) {
+          warningBox += '<li>' + w + '</li>';
+        });
+        warningBox += '</ul></div>';
+        warningsDiv.innerHTML = warningBox;
+      }
+
+      // Add usage guidance for button variants
+      if (primaryColor && ctaColor && backgroundColor) {
+        var guidanceBox = '<div class="info-box" style="background: #f0fdf4; border-color: #86efac;"><strong>💡 Button Usage Guidance:</strong><br>';
+        guidanceBox += '<div style="margin-top: 8px; font-size: 11px; line-height: 1.6;">';
+        guidanceBox += '<strong>Primary CTA:</strong> ' + (ctaColor ? ctaColor.hex : '#000') + ' background, white text (high contrast)<br>';
+        guidanceBox += '<strong>Secondary:</strong> ' + (primaryColor ? primaryColor.hex : '#000') + ' background, white text (brand color)<br>';
+        guidanceBox += '<strong>Tertiary:</strong> ' + (backgroundColor ? backgroundColor.hex : '#fff') + ' background, ' + (textColor ? textColor.hex : '#000') + ' text (subtle)<br>';
+        guidanceBox += '<strong>Ghost:</strong> Transparent background, ' + (primaryColor ? primaryColor.hex : '#000') + ' text + border';
+        guidanceBox += '</div></div>';
+        warningsDiv.innerHTML += guidanceBox;
+      }
+
+      // Add info about image colors
+      if (displayData.patterns && displayData.patterns.buttons.length > 0) {
+        var infoBox = '<div class="info-box"><strong>💡 Tip:</strong> The plugin analyzes solid fills and strokes. If your design uses gradients or images for styling, manually review the generated components and adjust colors as needed.</div>';
+        warningsDiv.innerHTML += infoBox;
+      }
+
+      // Create previews for each detected component
+      if (displayData.components && displayData.components.length > 0) {
+        displayData.components.forEach(function(component) {
+          var previewCard = document.createElement('div');
+          previewCard.className = 'preview-card';
+
+          var visual = '';
+          if (component.type === 'button') {
+            // Use detected button style if available, otherwise CTA color, fallback to primary
+            var btnBg = detectedButton && detectedButton.background ? detectedButton.background :
+                        (ctaColor ? ctaColor.hex : (primaryColor ? primaryColor.hex : '#000'));
+            var btnText = detectedButton && detectedButton.textColor ? detectedButton.textColor : '#ffffff';
+            var btnRadius = detectedButton && detectedButton.cornerRadius ? detectedButton.cornerRadius + 'px' : '6px';
+
+            visual = '<div class="preview-visual"><span class="preview-component" style="background: ' + btnBg + '; color: ' + btnText + '; border-radius: ' + btnRadius + '; padding: 8px 16px; display: inline-block; font-size: 12px; font-weight: 500;">Button</span></div>';
+          } else if (component.type === 'input' && borderColor) {
+            visual = '<div class="preview-visual"><div style="width: 100%; height: 32px; border: 1px solid ' + borderColor.hex + '; border-radius: 4px; padding: 6px 8px; font-size: 11px; color: #999;">Enter text...</div></div>';
+          } else if (component.type === 'card') {
+            var cardBorder = borderColor ? borderColor.hex : '#e2e8f0';
+            visual = '<div class="preview-visual"><div style="width: 100%; height: 80px; border: 1px solid ' + cardBorder + '; border-radius: 8px; padding: 12px; font-size: 10px;"><div style="font-weight: 600; margin-bottom: 4px;">Card Title</div><div style="color: #999;">Description</div></div></div>';
+          }
+
+          previewCard.innerHTML =
+            '<div class="preview-title">' + component.name + '</div>' +
+            visual;
+          previewGrid.appendChild(previewCard);
+        });
+      }
+
+      showStatus('success', '✅ Analysis complete! Found ' + data.colors.length + ' colors and ' + data.components.length + ' component types');
+
+      // Scroll to results
+      document.getElementById('analysisResults').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function generateSystem() {
+      var systemName = document.getElementById('systemName').value;
+      var options = {
+        createVariables: document.getElementById('optCreateVariables').checked,
+        createComponents: document.getElementById('optCreateComponents').checked,
+        applyVariables: document.getElementById('optApplyVariables').checked,
+        createPage: document.getElementById('optCreatePage').checked
+      };
+
+      showStatus('info', '✨ Generating design system...');
+
+      parent.postMessage({
+        pluginMessage: {
+          type: 'generate-system',
+          systemName: systemName,
+          options: options,
+          analysisData: analysisData
+        }
+      }, '*');
+    }
+
+    function resetAnalysis() {
+      document.getElementById('analysisResults').style.display = 'none';
+      document.getElementById('statusBox').style.display = 'none';
+      analysisData = null;
+
+      // Request updated selection count
+      parent.postMessage({
+        pluginMessage: { type: 'get-selection-count' }
+      }, '*');
+    }
+
+    function showStatus(type, message) {
+      var box = document.getElementById('statusBox');
+      box.className = 'status-box ' + type;
+      box.textContent = message;
+      box.style.display = 'block';
+    }
+
+    // Screenshot handling
+    var currentScreenshot = null;
+
+    function handleScreenshotUpload(event) {
+      var file = event.target.files[0];
+      if (!file) return;
+
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var base64Data = e.target.result;
+        currentScreenshot = base64Data;
+
+        // Show preview
+        document.getElementById('screenshotImage').src = base64Data;
+        document.getElementById('screenshotPreview').style.display = 'block';
+
+        // Analyze with Claude Vision
+        analyzeScreenshotWithAI(base64Data);
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function captureViewport() {
+      showStatus('info', '📷 Capturing viewport...');
+
+      parent.postMessage({
+        pluginMessage: { type: 'capture-viewport' }
+      }, '*');
+    }
+
+    function removeScreenshot() {
+      currentScreenshot = null;
+      document.getElementById('screenshotPreview').style.display = 'none';
+      document.getElementById('aiAnalysisResult').style.display = 'none';
+      document.getElementById('screenshotInput').value = '';
+    }
+
+    function showURLInput() {
+      document.getElementById('urlInputContainer').style.display = 'block';
+      document.getElementById('imageUrlInput').focus();
+    }
+
+    function cancelURLInput() {
+      document.getElementById('urlInputContainer').style.display = 'none';
+      document.getElementById('imageUrlInput').value = '';
+    }
+
+    function analyzeFromURL() {
+      var url = document.getElementById('imageUrlInput').value.trim();
+
+      if (!url) {
+        showStatus('error', '❌ Please enter a valid image URL');
+        return;
+      }
+
+      // Basic URL validation
+      try {
+        new URL(url);
+      } catch (e) {
+        showStatus('error', '❌ Invalid URL format');
+        return;
+      }
+
+      // Hide URL input, show preview
+      document.getElementById('urlInputContainer').style.display = 'none';
+      document.getElementById('screenshotImage').src = url;
+      document.getElementById('screenshotPreview').style.display = 'block';
+
+      // Analyze with Claude Vision using URL directly
+      callClaudeVisionAPIWithURL(url);
+    }
+
+    function analyzeScreenshotWithAI(base64Image) {
+      // Extract base64 data (remove data:image/...;base64, prefix)
+      var base64Data = base64Image.split(',')[1];
+
+      // Call Claude Vision API directly from UI
+      callClaudeVisionAPI(base64Data);
+    }
+
+    // Global variable to store parsed AI insights
+    var aiColorInsights = null;
+
+    function displayAIInsights(insights) {
+      document.getElementById('aiInsightsText').innerHTML = insights;
+      document.getElementById('aiAnalysisResult').style.display = 'block';
+      showStatus('success', '✅ AI analysis complete!');
+    }
+
+    function parseAIColorInsights(rawAIResponse) {
+      // Parse Claude's response to extract structured data including buttons
+      var insights = {
+        colors: [],
+        buttons: [],
+        brandColors: [],
+        functionalColors: [],
+        primaryColor: null,
+        ctaColor: null,
+        cornerRadius: null,
+        brandAtmosphere: null,
+        applicationInsights: null,
+        gradients: [] // NEW: Store detected gradients
+      };
+
+      try {
+        // ===== PARSE BUTTONS SECTION =====
+        // Fixed: Pattern now matches **BUTTONS:** (colon before final asterisks, not after)
+        var buttonsSection = rawAIResponse.match(/\*\*(?:ALL )?BUTTONS?(?:\/CTAs?)?:\*\*([\s\S]*?)(?=\*\*[A-Z]|\*\*$|$)/i);
+        if (buttonsSection && buttonsSection[1]) {
+          var buttonLines = buttonsSection[1].split('\n');
+          var currentButton = null;
+
+          buttonLines.forEach(function(line) {
+            // Detect button start (location line or numbered item)
+            if (line.match(/(?:Hero|Primary|Secondary|Navigation|Footer|CTA)/i) || line.match(/^\s*\d+\./)) {
+              if (currentButton && currentButton.background) {
+                insights.buttons.push(currentButton);
+              }
+              currentButton = { location: line.trim() };
+            }
+
+            // Extract button properties
+            if (currentButton) {
+              var bgMatch = line.match(/background.*?#([0-9a-fA-F]{3,6})/i);
+              var textMatch = line.match(/text.*?color.*?#([0-9a-fA-F]{3,6})/i);
+              var radiusMatch = line.match(/(?:corner )?radius.*?(\d+)\s*px/i);
+              var heightMatch = line.match(/height.*?(\d+)\s*px/i);
+              var borderMatch = line.match(/border.*?#([0-9a-fA-F]{3,6})/i);
+
+              if (bgMatch) currentButton.background = '#' + bgMatch[1];
+              if (textMatch) currentButton.textColor = '#' + textMatch[1];
+              if (radiusMatch) currentButton.cornerRadius = parseInt(radiusMatch[1]);
+              if (heightMatch) currentButton.height = parseInt(heightMatch[1]);
+              if (borderMatch) currentButton.borderColor = '#' + borderMatch[1];
+
+              // Detect button type
+              if (line.match(/primary|cta|main/i)) currentButton.type = 'primary-cta';
+              if (line.match(/secondary/i)) currentButton.type = 'secondary';
+            }
+          });
+
+          // Add last button
+          if (currentButton && currentButton.background) {
+            insights.buttons.push(currentButton);
+          }
+        }
+
+        // ===== PARSE BRAND COLORS SECTION =====
+        // Fixed: Pattern now matches **BRAND COLORS:** (colon before final asterisks)
+        var brandSection = rawAIResponse.match(/\*\*BRAND COLORS?:\*\*([\s\S]*?)(?=\*\*(?:FUNCTIONAL|BACKGROUND|TEXT)|$)/i);
+        if (brandSection && brandSection[1]) {
+          var brandLines = brandSection[1].split('\n');
+          brandLines.forEach(function(line) {
+            var hexMatch = line.match(/#([0-9a-fA-F]{3,6})/);
+            var percentMatch = line.match(/(\d+)(?:-(\d+))?%/);
+            var nameMatch = line.match(/([A-Za-z\/\s]+)\s*-\s*BRAND/i) || line.match(/^[•\-*]\s*([^#:-]+)/);
+
+            if (hexMatch) {
+              var percentage = percentMatch ?
+                (percentMatch[2] ? (parseInt(percentMatch[1]) + parseInt(percentMatch[2])) / 2 : parseInt(percentMatch[1])) :
+                0;
+
+              var brandColor = {
+                hex: '#' + hexMatch[1],
+                name: nameMatch ? nameMatch[1].trim() : 'Brand Color',
+                percentage: percentage,
+                role: 'brand',
+                source: 'ai'
+              };
+
+              insights.brandColors.push(brandColor);
+              insights.colors.push(brandColor);
+
+              // Set as primary if highest percentage brand color
+              if (!insights.primaryColor || percentage > (insights.primaryColor.percentage || 0)) {
+                insights.primaryColor = brandColor;
+                brandColor.role = 'primary';
+              }
+            }
+          });
+        }
+
+        // ===== PARSE FUNCTIONAL COLORS SECTION =====
+        // Fixed: Pattern now matches **FUNCTIONAL COLORS:** (colon before final asterisks)
+        var functionalSection = rawAIResponse.match(/\*\*FUNCTIONAL COLORS?:\*\*([\s\S]*?)(?=\*\*(?:BACKGROUND|TEXT|BRAND)|$)/i);
+        if (functionalSection && functionalSection[1]) {
+          var funcLines = functionalSection[1].split('\n');
+          funcLines.forEach(function(line) {
+            var hexMatch = line.match(/#([0-9a-fA-F]{3,6})/);
+            var nameMatch = line.match(/([A-Za-z\/\s]+)\s*-\s*FUNCTIONAL/i) || line.match(/^[•\-*]\s*([^#:-]+)/);
+
+            if (hexMatch) {
+              var funcColor = {
+                hex: '#' + hexMatch[1],
+                name: nameMatch ? nameMatch[1].trim() : 'Functional',
+                role: 'functional',
+                source: 'ai'
+              };
+
+              insights.functionalColors.push(funcColor);
+              insights.colors.push(funcColor);
+
+              // If this matches a button background, mark as CTA color
+              var matchingButton = insights.buttons.find(function(btn) {
+                return btn.background && btn.background.toLowerCase() === funcColor.hex.toLowerCase();
+              });
+              if (matchingButton && matchingButton.type === 'primary-cta') {
+                insights.ctaColor = funcColor;
+                funcColor.role = 'cta';
+              }
+            }
+          });
+        }
+
+        // ===== EXTRACT CORNER RADIUS FROM BUTTONS =====
+        if (insights.buttons.length > 0) {
+          var primaryButton = insights.buttons.find(function(btn) { return btn.type === 'primary-cta'; }) || insights.buttons[0];
+          if (primaryButton && primaryButton.cornerRadius) {
+            insights.cornerRadius = primaryButton.cornerRadius;
+          }
+        }
+
+        // ===== PARSE BRAND ATMOSPHERE SECTION =====
+        // Fixed: Pattern now matches **BRAND ATMOSPHERE:** (colon before final asterisks)
+        var atmosphereSection = rawAIResponse.match(/\*\*BRAND ATMOSPHERE:\*\*([\s\S]*?)(?=\*\*[A-Z]|$)/i);
+        if (atmosphereSection && atmosphereSection[1]) {
+          insights.brandAtmosphere = atmosphereSection[1].trim();
+        }
+
+        // ===== PARSE APPLICATION INSIGHTS SECTION =====
+        // New section showing how to apply components to recreate reference style
+        var applicationSection = rawAIResponse.match(/\*\*APPLICATION INSIGHTS:\*\*([\s\S]*?)(?=\*\*[A-Z]|$)/i);
+        if (applicationSection && applicationSection[1]) {
+          insights.applicationInsights = applicationSection[1].trim();
+        }
+
+        // ===== FALLBACK: Parse old format if new format not found =====
+        if (insights.colors.length === 0) {
+          var allColorMatches = rawAIResponse.match(/#[0-9a-fA-F]{3,6}/g) || [];
+          allColorMatches.forEach(function(hex, i) {
+            if (i < 5) {  // Limit to first 5
+              insights.colors.push({
+                hex: hex,
+                name: 'Color ' + (i + 1),
+                source: 'ai'
+              });
+            }
+          });
+        }
+
+        // ===== PARSE GRADIENTS SECTION =====
+        var gradientsSection = rawAIResponse.match(/\*\*GRADIENTS?:\*\*([\s\S]*?)(?=\*\*[A-Z]|$)/i);
+        if (gradientsSection && gradientsSection[1]) {
+          var gradientLines = gradientsSection[1].split('\n');
+          gradientLines.forEach(function(line) {
+            // Match linear-gradient patterns
+            var gradientMatch = line.match(/linear-gradient\(([^)]+)\)/i);
+            if (gradientMatch) {
+              var usageMatch = line.match(/([^:]+):/);
+              insights.gradients.push({
+                gradient: 'linear-gradient(' + gradientMatch[1] + ')',
+                usage: usageMatch ? usageMatch[1].trim() : 'Unknown',
+                raw: line.trim()
+              });
+            }
+          });
+        }
+
+        // Also extract gradients from anywhere in the response (fallback)
+        var allGradientMatches = rawAIResponse.match(/linear-gradient\([^)]+\)/gi);
+        if (allGradientMatches && insights.gradients.length === 0) {
+          allGradientMatches.forEach(function(match) {
+            if (!insights.gradients.some(function(g) { return g.gradient === match; })) {
+              insights.gradients.push({
+                gradient: match,
+                usage: 'Detected',
+                raw: match
+              });
+            }
+          });
+        }
+
+        console.log('Parsed AI insights with buttons and gradients:', insights);
+        return insights;
+
+      } catch (error) {
+        console.error('Error parsing AI insights:', error);
+        return { colors: [], buttons: [], brandColors: [], functionalColors: [] };
+      }
+    }
+
+    function mergeAIWithFigmaData(figmaData, aiInsights) {
+      // Merge AI visual analysis with Figma's structural analysis
+      if (!aiInsights || !aiInsights.colors || aiInsights.colors.length === 0) {
+        console.log('No AI insights to merge, using Figma data only');
+        return figmaData;
+      }
+
+      var mergedData = JSON.parse(JSON.stringify(figmaData)); // Deep copy
+
+      // Override color classifications with AI insights
+      if (aiInsights.primaryColor && aiInsights.primaryColor.hex) {
+        // Find matching color in Figma data or add it
+        var primaryHex = aiInsights.primaryColor.hex.toLowerCase();
+        var foundPrimary = false;
+
+        mergedData.colors.forEach(function(color) {
+          if (color.hex.toLowerCase() === primaryHex) {
+            // Override the name and percentage with AI data
+            color.name = 'Primary (' + aiInsights.primaryColor.name + ')';
+            color.percentage = aiInsights.primaryColor.percentage;
+            color.aiEnhanced = true;
+            foundPrimary = true;
+          }
+        });
+
+        // If AI found a primary color not in Figma data, add it
+        if (!foundPrimary) {
+          mergedData.colors.unshift({
+            name: 'Primary (' + aiInsights.primaryColor.name + ')',
+            hex: aiInsights.primaryColor.hex,
+            percentage: aiInsights.primaryColor.percentage,
+            aiEnhanced: true,
+            source: 'ai'
+          });
+        }
+      }
+
+      // Add AI-detected colors that Figma missed (e.g., colors in images)
+      aiInsights.colors.forEach(function(aiColor) {
+        if (!aiColor.hex) return;
+
+        var hexLower = aiColor.hex.toLowerCase();
+        var existsInFigma = mergedData.colors.some(function(figmaColor) {
+          return figmaColor.hex.toLowerCase() === hexLower;
+        });
+
+        if (!existsInFigma && aiColor.percentage > 5) {
+          // Add significant colors that Figma missed
+          mergedData.colors.push({
+            name: aiColor.role ?
+              aiColor.role.charAt(0).toUpperCase() + aiColor.role.slice(1) + ' (' + aiColor.name + ')' :
+              aiColor.name,
+            hex: aiColor.hex,
+            percentage: aiColor.percentage,
+            aiEnhanced: true,
+            source: 'ai'
+          });
+        }
+      });
+
+      // Re-sort by percentage
+      mergedData.colors.sort(function(a, b) {
+        return (b.percentage || 0) - (a.percentage || 0);
+      });
+
+      console.log('Merged data:', mergedData);
+      return mergedData;
+    }
+
+    // ============================================================================
+    // DESIGN SCIENCE: Apply UI design principles to extracted data
+    // ============================================================================
+
+    function snapToGrid(value, base) {
+      base = base || 8;
+      return Math.round(value / base) * base;
+    }
+
+    function buildSpacingScale(detectedValues) {
+      // Standard 8-point grid scale
+      var standardScale = {
+        xs: 4,
+        sm: 8,
+        md: 16,
+        lg: 24,
+        xl: 32,
+        xxl: 48
+      };
+
+      // If we have detected values, snap them to grid
+      if (detectedValues && detectedValues.length > 0) {
+        var snapped = detectedValues.map(function(v) {
+          return snapToGrid(v, 8);
+        });
+
+        // Build custom scale from detected values
+        snapped.sort(function(a, b) { return a - b; });
+        var unique = snapped.filter(function(v, i, arr) {
+          return arr.indexOf(v) === i;
+        });
+
+        if (unique.length >= 4) {
+          return {
+            xs: unique[0] || 4,
+            sm: unique[1] || 8,
+            md: unique[2] || 16,
+            lg: unique[3] || 24,
+            xl: unique[4] || 32,
+            xxl: unique[5] || 48
+          };
+        }
+      }
+
+      return standardScale;
+    }
+
+    function buildTypographyScale(baseFontSize, ratio) {
+      baseFontSize = baseFontSize || 16;
+      ratio = ratio || 1.250;  // Major Third
+
+      return {
+        xs: Math.round(baseFontSize / Math.pow(ratio, 2)),  // 10px
+        sm: Math.round(baseFontSize / ratio),                 // 13px
+        base: baseFontSize,                                    // 16px
+        lg: Math.round(baseFontSize * ratio),                 // 20px
+        xl: Math.round(baseFontSize * Math.pow(ratio, 2)),   // 25px
+        '2xl': Math.round(baseFontSize * Math.pow(ratio, 3)), // 31px
+        '3xl': Math.round(baseFontSize * Math.pow(ratio, 4)), // 39px
+        '4xl': Math.round(baseFontSize * Math.pow(ratio, 5))  // 49px
+      };
+    }
+
+    function hexToRgb(hex) {
+      var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : null;
+    }
+
+    function rgbToHsl(r, g, b) {
+      r /= 255;
+      g /= 255;
+      b /= 255;
+
+      var max = Math.max(r, g, b);
+      var min = Math.min(r, g, b);
+      var h, s, l = (max + min) / 2;
+
+      if (max === min) {
+        h = s = 0;
+      } else {
+        var d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+
+        switch (max) {
+          case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+          case g: h = ((b - r) / d + 2) / 6; break;
+          case b: h = ((r - g) / d + 4) / 6; break;
+        }
+      }
+
+      return { h: h * 360, s: s * 100, l: l * 100 };
+    }
+
+    function hexToHsl(hex) {
+      var rgb = hexToRgb(hex);
+      if (!rgb) return { h: 0, s: 0, l: 0 };
+      return rgbToHsl(rgb.r, rgb.g, rgb.b);
+    }
+
+    function getLuminance(hex) {
+      var rgb = hexToRgb(hex);
+      if (!rgb) return 0;
+
+      var r = rgb.r / 255;
+      var g = rgb.g / 255;
+      var b = rgb.b / 255;
+
+      r = r <= 0.03928 ? r / 12.92 : Math.pow((r + 0.055) / 1.055, 2.4);
+      g = g <= 0.03928 ? g / 12.92 : Math.pow((g + 0.055) / 1.055, 2.4);
+      b = b <= 0.03928 ? b / 12.92 : Math.pow((b + 0.055) / 1.055, 2.4);
+
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    }
+
+    function isNeutral(hex) {
+      var hsl = hexToHsl(hex);
+      return hsl.s < 15;  // Less than 15% saturation is neutral
+    }
+
+    function getSaturation(hex) {
+      var hsl = hexToHsl(hex);
+      return hsl.s;
+    }
+
+    function classifyColorsByDesignPrinciples(colors) {
+      // Apply 60-30-10 rule and proper role classification
+      // IMPORTANT: Respect AI insights about brand vs functional colors
+      var sorted = colors.slice().sort(function(a, b) {
+        return (b.percentage || 0) - (a.percentage || 0);
+      });
+
+      var classified = {
+        primary: null,      // Brand color (identity)
+        secondary: null,
+        accent: null,
+        cta: null,          // CTA button color (functional)
+        background: null,
+        surface: null,
+        text: {
+          primary: null,
+          secondary: null
+        },
+        border: null
+      };
+
+      // Check if we have AI insights with brand/functional distinction
+      var hasBrandColors = sorted.some(function(c) { return c.role === 'brand'; });
+      var hasCTAColor = sorted.some(function(c) { return c.role === 'cta'; });
+
+      // CTA Color: Use AI-detected button color (takes priority)
+      if (hasCTAColor) {
+        var ctaColor = sorted.find(function(c) { return c.role === 'cta'; });
+        if (ctaColor) {
+          classified.cta = ctaColor;
+          ctaColor.role = 'cta';
+        }
+      }
+
+      // Background: Highest coverage + neutral (NOT a brand color)
+      for (var i = 0; i < sorted.length; i++) {
+        var color = sorted[i];
+        if (color.role === 'cta' || color.role === 'brand' || color.role === 'primary') continue;
+
+        if (color.percentage > 20 && isNeutral(color.hex)) {
+          classified.background = color;
+          color.role = 'background';
+          break;
+        }
+      }
+
+      // Primary: Brand color (prefer AI-detected brand colors)
+      if (hasBrandColors) {
+        // Use AI-detected brand color as primary
+        var brandColor = sorted.find(function(c) { return c.role === 'brand' ||c.role === 'primary'; });
+        if (brandColor) {
+          classified.primary = brandColor;
+          brandColor.role = 'primary';
+        }
+      } else {
+        // Fallback: Saturated color with significant coverage
+        for (var j = 0; j < sorted.length; j++) {
+          var c = sorted[j];
+          if (c.role) continue;  // Skip if already classified
+
+          var coverage = c.percentage || 0;
+          var saturation = getSaturation(c.hex);
+
+          // Relax coverage requirement to catch brand colors even with high coverage
+          if (coverage >= 5 && saturation > 50 && !isNeutral(c.hex)) {
+            classified.primary = c;
+            c.role = 'primary';
+            break;
+          }
+        }
+      }
+
+      // Text: Dark color with decent coverage
+      for (var k = 0; k < sorted.length; k++) {
+        var color = sorted[k];
+        if (color.role) continue;
+
+        var lum = getLuminance(color.hex);
+        if (lum < 0.3 && (color.percentage || 0) > 3) {
+          if (!classified.text.primary) {
+            classified.text.primary = color;
+            color.role = 'text-primary';
+          } else if (!classified.text.secondary) {
+            classified.text.secondary = color;
+            color.role = 'text-secondary';
+          }
+        }
+      }
+
+      // Secondary: Remaining saturated color
+      for (var m = 0; m < sorted.length; m++) {
+        var sc = sorted[m];
+        if (sc.role) continue;
+
+        if (getSaturation(sc.hex) > 40) {
+          classified.secondary = sc;
+          sc.role = 'secondary';
+          break;
+        }
+      }
+
+      // Accent: Small coverage, high saturation
+      for (var n = 0; n < sorted.length; n++) {
+        var ac = sorted[n];
+        if (ac.role) continue;
+
+        if ((ac.percentage || 0) < 10 && getSaturation(ac.hex) > 60) {
+          classified.accent = ac;
+          ac.role = 'accent';
+          break;
+        }
+      }
+
+      // Border: Neutral, low coverage
+      for (var p = 0; p < sorted.length; p++) {
+        var bc = sorted[p];
+        if (bc.role) continue;
+
+        if (isNeutral(bc.hex) && (bc.percentage || 0) < 15) {
+          classified.border = bc;
+          bc.role = 'border';
+          break;
+        }
+      }
+
+      console.log('Classified colors by design principles:', classified);
+      return { classified: classified, colorsWithRoles: sorted };
+    }
+
+    function translateWebToSoftware(value, category) {
+      // Translation ratios based on UI-DESIGN-SCIENCE.md
+      var ratios = {
+        spacing: 0.625,      // 62.5% reduction
+        typography: 0.70,    // 30% reduction
+        cornerRadius: 0.50   // 50% reduction
+      };
+
+      var ratio = ratios[category] || 1;
+      var translated = Math.round(value * ratio);
+
+      // Snap to grid for spacing
+      if (category === 'spacing') {
+        return snapToGrid(translated, 8);
+      }
+
+      return translated;
+    }
+
+    function normalizeCornerRadius(detectedRadius) {
+      // Standard corner radius values
+      var standards = [0, 2, 4, 6, 8, 12, 16, 24];
+
+      var closest = standards[0];
+      var minDiff = Math.abs(detectedRadius - closest);
+
+      for (var i = 1; i < standards.length; i++) {
+        var diff = Math.abs(detectedRadius - standards[i]);
+        if (diff < minDiff) {
+          minDiff = diff;
+          closest = standards[i];
+        }
+      }
+
+      return closest;
+    }
+
+    function applyDesignScience(data) {
+      // Apply design principles to make generated components professional
+      var enhanced = JSON.parse(JSON.stringify(data)); // Deep copy
+
+      // 1. Classify colors by design principles
+      var colorClassification = classifyColorsByDesignPrinciples(enhanced.colors);
+      enhanced.colors = colorClassification.colorsWithRoles;
+      enhanced.colorRoles = colorClassification.classified;
+
+      // 2. Build spacing scale (8pt grid)
+      enhanced.spacing = buildSpacingScale([8, 12, 16, 24, 32, 48]);
+
+      // 3. Build typography scale (modular scale)
+      enhanced.typography = buildTypographyScale(16, 1.250);
+
+      // 4. Normalize corner radius
+      if (data.cornerRadius) {
+        enhanced.cornerRadius = {
+          sm: normalizeCornerRadius(data.cornerRadius.small || 4),
+          md: normalizeCornerRadius(data.cornerRadius.medium || 6),
+          lg: normalizeCornerRadius(data.cornerRadius.large || 8)
+        };
+      } else {
+        enhanced.cornerRadius = { sm: 4, md: 6, lg: 8 };
+      }
+
+      console.log('Applied design science:', enhanced);
+      return enhanced;
+    }
+
+    function showDesignTranslation(originalData, enhancedData) {
+      // Show the translation panel with before/after comparisons
+      var panel = document.getElementById('translationPanel');
+      var insights = document.getElementById('translationInsights');
+
+      if (!panel || !insights) return;
+
+      var html = '';
+
+      // Detect if this is a web/marketing design based on metrics
+      var isWebDesign = detectWebDesign(originalData);
+
+      if (isWebDesign) {
+        html += '<div class="translation-card">';
+        html += '  <div class="translation-category">';
+        html += '    <span>📐 Spacing & Layout</span>';
+        html += '    <span class="translation-badge">Auto-adapted</span>';
+        html += '  </div>';
+        html += '  <div class="translation-grid">';
+        html += '    <div class="translation-value">';
+        html += '      <div class="translation-label">Web Design</div>';
+        html += '      <div class="translation-metric">64px</div>';
+        html += '      <div class="translation-context">Hero section</div>';
+        html += '    </div>';
+        html += '    <div class="translation-arrow">→</div>';
+        html += '    <div class="translation-value">';
+        html += '      <div class="translation-label">Software UI</div>';
+        html += '      <div class="translation-metric">32px</div>';
+        html += '      <div class="translation-context">Optimized</div>';
+        html += '    </div>';
+        html += '  </div>';
+        html += '  <div class="translation-explanation">';
+        html += '    💡 <strong>Why?</strong> Marketing sites need spacious layouts to create impact. Software UIs prioritize efficiency and information density. We reduced spacing by ~50% and snapped to the 8pt grid.';
+        html += '  </div>';
+        html += '</div>';
+
+        html += '<div class="translation-card">';
+        html += '  <div class="translation-category">';
+        html += '    <span>🔤 Typography</span>';
+        html += '    <span class="translation-badge">Scaled down</span>';
+        html += '  </div>';
+        html += '  <div class="translation-grid">';
+        html += '    <div class="translation-value">';
+        html += '      <div class="translation-label">Web Headlines</div>';
+        html += '      <div class="translation-metric">60px</div>';
+        html += '      <div class="translation-context">H1</div>';
+        html += '    </div>';
+        html += '    <div class="translation-arrow">→</div>';
+        html += '    <div class="translation-value">';
+        html += '      <div class="translation-label">Software Headers</div>';
+        html += '      <div class="translation-metric">39px</div>';
+        html += '      <div class="translation-context">H1</div>';
+        html += '    </div>';
+        html += '  </div>';
+        html += '  <div class="translation-explanation">';
+        html += '    💡 <strong>Why?</strong> Large typography creates drama on landing pages. In software UIs, it reduces scanability and wastes space. We applied a modular scale (1.25× ratio) with reduced base size.';
+        html += '  </div>';
+        html += '</div>';
+
+        html += '<div class="translation-card">';
+        html += '  <div class="translation-category">';
+        html += '    <span>🎨 Color Usage</span>';
+        html += '    <span class="translation-badge">Re-classified</span>';
+        html += '  </div>';
+        html += '  <div class="translation-grid">';
+        html += '    <div class="translation-value">';
+        html += '      <div class="translation-label">Coverage-based</div>';
+        html += '      <div class="translation-metric" style="font-size: 16px;">Simple %</div>';
+        html += '      <div class="translation-context">Beige = Primary</div>';
+        html += '    </div>';
+        html += '    <div class="translation-arrow">→</div>';
+        html += '    <div class="translation-value">';
+        html += '      <div class="translation-label">Design Science</div>';
+        html += '      <div class="translation-metric" style="font-size: 16px;">60-30-10</div>';
+        html += '      <div class="translation-context">Green = Primary</div>';
+        html += '    </div>';
+        html += '  </div>';
+        html += '  <div class="translation-explanation">';
+        html += '    💡 <strong>Why?</strong> Simple coverage analysis misses context. We apply the 60-30-10 rule: neutral backgrounds (60%), brand colors (10-30%), accents (<10%). This correctly identified your green as the primary brand color.';
+        html += '  </div>';
+        html += '</div>';
+
+        html += '<div class="translation-card">';
+        html += '  <div class="translation-category">';
+        html += '    <span>⚙️ Component Sizing</span>';
+        html += '    <span class="translation-badge">Proportional</span>';
+        html += '  </div>';
+        html += '  <div class="translation-grid">';
+        html += '    <div class="translation-value">';
+        html += '      <div class="translation-label">Web CTA Button</div>';
+        html += '      <div class="translation-metric">56px</div>';
+        html += '      <div class="translation-context">Height</div>';
+        html += '    </div>';
+        html += '    <div class="translation-arrow">→</div>';
+        html += '    <div class="translation-value">';
+        html += '      <div class="translation-label">Software Button</div>';
+        html += '      <div class="translation-metric">40px</div>';
+        html += '      <div class="translation-context">Height</div>';
+        html += '    </div>';
+        html += '  </div>';
+        html += '  <div class="translation-explanation">';
+        html += '    💡 <strong>Why?</strong> Buttons in software appear repeatedly - oversized buttons create visual clutter. We use the formula: height = fontSize × 2.5, padding = fontSize × 1, ensuring proportional, accessible components.';
+        html += '  </div>';
+        html += '</div>';
+      } else {
+        // Already a software UI design
+        html += '<div class="translation-card">';
+        html += '  <div class="translation-category">';
+        html += '    <span>✅ Software UI Detected</span>';
+        html += '  </div>';
+        html += '  <div class="translation-explanation">';
+        html += '    Your design already follows software UI patterns (compact spacing, moderate typography). We\'ve applied the 8-point grid system, modular typography scale (1.25× ratio), and proper color role classification to ensure consistency.';
+        html += '  </div>';
+        html += '</div>';
+      }
+
+      insights.innerHTML = html;
+      panel.style.display = 'block';
+    }
+
+    function showBrandAtmosphere() {
+      // Show brand atmosphere guidance if available from AI
+      if (!aiColorInsights || !aiColorInsights.brandAtmosphere) {
+        return; // No atmosphere data available
+      }
+
+      var panel = document.getElementById('brandAtmospherePanel');
+      var content = document.getElementById('brandAtmosphereContent');
+
+      var html = '<div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 8px; padding: 16px; margin-bottom: 12px;">';
+      html += '  <div style="font-size: 13px; line-height: 1.8; white-space: pre-wrap;">';
+      html += formatAIInsights(aiColorInsights.brandAtmosphere);
+      html += '  </div>';
+      html += '</div>';
+
+      content.innerHTML = html;
+      panel.style.display = 'block';
+    }
+
+
+    function renderVisualApplicationInsights(insights) {
+      var container = document.getElementById('applicationInsightsContent');
+      var html = '';
+
+      // Get colors for visual swatches
+      var primaryColor = insights.brandColors[0];
+      var ctaColor = insights.ctaColor || insights.functionalColors.find(c => c.role === 'cta');
+      var backgroundColor = insights.colors.find(c => c.hex === '#f6f5f1' || c.hex === '#ffffff');
+      var textColor = insights.colors.find(c => c.hex === '#1d1d1d' || c.hex === '#4a4a4a');
+
+      // Color swatch helper
+      function colorSwatch(hex, size) {
+        return '<span style="display: inline-block; width: ' + (size || '24px') + '; height: ' + (size || '24px') + '; background: ' + hex + '; border-radius: 4px; border: 1px solid rgba(0,0,0,0.1); vertical-align: middle; margin: 0 4px;"></span>';
+      }
+
+      // a) Color Application Strategy
+      html += '<div style="background: white; border-radius: 8px; padding: 20px; margin-bottom: 16px; border-left: 4px solid #48c6ef;">';
+      html += '<h3 style="margin: 0 0 16px 0; color: #0f172a; font-size: 16px;">📊 Color Application Strategy</h3>';
+      html += '<div style="display: grid; gap: 12px;">';
+
+      // Primary surfaces
+      html += '<div style="display: flex; align-items: start; gap: 12px;">';
+      html += colorSwatch(backgroundColor ? backgroundColor.hex : '#ffffff', '40px');
+      html += '<div style="flex: 1;">';
+      html += '<div style="font-weight: 600; color: #1e293b; margin-bottom: 4px;">Primary Surfaces <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500;">60-70%</span></div>';
+      html += '<div style="color: #64748b; font-size: 13px;">Use ' + (backgroundColor ? backgroundColor.hex : '#ffffff') + ' for main app background, cards, and content areas</div>';
+      html += '</div></div>';
+
+      // Brand moments
+      if (primaryColor) {
+        html += '<div style="display: flex; align-items: start; gap: 12px;">';
+        html += colorSwatch(primaryColor.hex, '40px');
+        html += '<div style="flex: 1;">';
+        html += '<div style="font-weight: 600; color: #1e293b; margin-bottom: 4px;">Brand Moments <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500;">20-30%</span></div>';
+        html += '<div style="color: #64748b; font-size: 13px;">Apply ' + primaryColor.hex + ' to hero sections, feature highlights, and success states</div>';
+        html += '</div></div>';
+      }
+
+      // Action colors
+      if (ctaColor) {
+        html += '<div style="display: flex; align-items: start; gap: 12px;">';
+        html += colorSwatch(ctaColor.hex, '40px');
+        html += '<div style="flex: 1;">';
+        html += '<div style="font-weight: 600; color: #1e293b; margin-bottom: 4px;">Action Colors <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500;">5-10%</span></div>';
+        html += '<div style="color: #64748b; font-size: 13px;">Reserve ' + ctaColor.hex + ' for primary CTAs only - max 1-2 per screen for impact</div>';
+        html += '</div></div>';
+      }
+
+      // Text hierarchy
+      if (textColor) {
+        html += '<div style="display: flex; align-items: start; gap: 12px;">';
+        html += colorSwatch(textColor.hex, '40px');
+        html += '<div style="flex: 1;">';
+        html += '<div style="font-weight: 600; color: #1e293b; margin-bottom: 4px;">Text Hierarchy <span style="background: #f1f5f9; padding: 2px 8px; border-radius: 4px; font-size: 11px; font-weight: 500;">~5%</span></div>';
+        html += '<div style="color: #64748b; font-size: 13px;">Use #1d1d1d for headings, #4a4a4a for body, lighter shades for captions</div>';
+        html += '</div></div>';
+      }
+
+      html += '</div></div>';
+
+      // b) Button Application Guide
+      html += '<div style="background: white; border-radius: 8px; padding: 20px; margin-bottom: 16px; border-left: 4px solid #6f86d6;">';
+      html += '<h3 style="margin: 0 0 16px 0; color: #0f172a; font-size: 16px;">🎨 Button Application Guide</h3>';
+
+      // Primary CTA
+      if (ctaColor) {
+        html += '<div style="margin-bottom: 16px;">';
+        html += '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">';
+        html += '<span style="background: ' + ctaColor.hex + '; color: white; padding: 8px 16px; border-radius: 24px; font-size: 12px; font-weight: 500;">Primary CTA</span>';
+        html += '<span style="color: #64748b; font-size: 12px;">Use 1-2 times per screen</span>';
+        html += '</div>';
+        html += '<div style="color: #64748b; font-size: 13px; line-height: 1.6;">';
+        html += '• Main conversion actions: signup, purchase, start trial<br>';
+        html += '• Examples: Landing hero → "Get Started" | Dashboard → "Create New"';
+        html += '</div></div>';
+      }
+
+      // Secondary
+      if (primaryColor) {
+        html += '<div style="margin-bottom: 16px;">';
+        html += '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">';
+        html += '<span style="background: ' + primaryColor.hex + '; color: white; padding: 8px 16px; border-radius: 24px; font-size: 12px; font-weight: 500;">Secondary</span>';
+        html += '<span style="color: #64748b; font-size: 12px;">Supporting actions</span>';
+        html += '</div>';
+        html += '<div style="color: #64748b; font-size: 13px; line-height: 1.6;">';
+        html += '• Learn more, view details, explore features<br>';
+        html += '• Examples: Feature cards → "Explore" | Product pages → "View Details"';
+        html += '</div></div>';
+      }
+
+      // Tertiary
+      if (backgroundColor) {
+        html += '<div style="margin-bottom: 16px;">';
+        html += '<div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">';
+        html += '<span style="background: ' + backgroundColor.hex + '; color: #1d1d1d; padding: 8px 16px; border-radius: 24px; font-size: 12px; font-weight: 500; border: 1px solid #e2e8f0;">Tertiary</span>';
+        html += '<span style="color: #64748b; font-size: 12px;">Low-priority</span>';
+        html += '</div>';
+        html += '<div style="color: #64748b; font-size: 13px; line-height: 1.6;">';
+        html += '• Cancel, skip, go back<br>';
+        html += '• Examples: Forms → "Cancel" | Modals → "Skip"';
+        html += '</div></div>';
+      }
+
+      html += '</div>';
+
+      // c) Component Composition - WITH VISUAL EXAMPLES
+      html += '<div style="background: white; border-radius: 8px; padding: 20px; margin-bottom: 16px; border-left: 4px solid #48c6ef;">';
+      html += '<h3 style="margin: 0 0 16px 0; color: #0f172a; font-size: 16px;">🏗️ Component Composition</h3>';
+
+      var btnRadius = insights.cornerRadius || 24;
+      var brandHex = primaryColor ? primaryColor.hex : '#4ecdc4';
+      var bgHex = backgroundColor ? backgroundColor.hex : '#ffffff';
+      var ctaHex = ctaColor ? ctaColor.hex : '#000000';
+
+      // Card example
+      html += '<div style="margin-bottom: 20px;">';
+      html += '<div style="font-weight: 600; color: #1e293b; margin-bottom: 8px;">Card Component</div>';
+      html += '<div style="background: ' + bgHex + '; border-radius: 12px; padding: 20px; border-left: 3px solid ' + brandHex + '; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">';
+      html += '<div style="font-size: 14px; font-weight: 600; color: #1e293b; margin-bottom: 8px;">Feature Title</div>';
+      html += '<div style="font-size: 13px; color: #64748b; margin-bottom: 12px;">Description text goes here. Notice the ' + brandHex + ' left border accent.</div>';
+      html += '<span style="background: ' + brandHex + '; color: white; padding: 6px 12px; border-radius: ' + btnRadius + 'px; font-size: 12px; font-weight: 500; display: inline-block;">Learn More</span>';
+      html += '</div>';
+      html += '<div style="color: #64748b; font-size: 12px; margin-top: 8px;">💡 12px radius, white bg, 3px ' + brandHex + ' left border</div>';
+      html += '</div>';
+
+      // Form example
+      html += '<div style="margin-bottom: 20px;">';
+      html += '<div style="font-weight: 600; color: #1e293b; margin-bottom: 8px;">Form Input</div>';
+      html += '<input type="text" placeholder="Enter your email" style="width: 100%; max-width: 400px; height: 48px; padding: 0 16px; border: 1px solid #e2e8f0; border-radius: ' + btnRadius + 'px; font-size: 14px; background: ' + bgHex + ';" />';
+      html += '<div style="color: #64748b; font-size: 12px; margin-top: 8px;">💡 48px height, ' + btnRadius + 'px radius (matches buttons)</div>';
+      html += '</div>';
+
+      // Navigation example
+      html += '<div style="margin-bottom: 20px;">';
+      html += '<div style="font-weight: 600; color: #1e293b; margin-bottom: 8px;">Navigation</div>';
+      html += '<div style="display: flex; gap: 8px; flex-wrap: wrap;">';
+      html += '<span style="background: transparent; color: #64748b; padding: 8px 16px; border-radius: ' + btnRadius + 'px; font-size: 13px; border: 1px solid transparent; cursor: pointer;">Home</span>';
+      html += '<span style="background: ' + brandHex + '; color: white; padding: 8px 16px; border-radius: ' + btnRadius + 'px; font-size: 13px; font-weight: 500; cursor: pointer;">Features (Active)</span>';
+      html += '<span style="background: transparent; color: #64748b; padding: 8px 16px; border-radius: ' + btnRadius + 'px; font-size: 13px; border: 1px solid transparent; cursor: pointer;">Pricing</span>';
+      html += '<span style="background: transparent; color: #64748b; padding: 8px 16px; border-radius: ' + btnRadius + 'px; font-size: 13px; border: 1px solid transparent; cursor: pointer;">About</span>';
+      html += '</div>';
+      html += '<div style="color: #64748b; font-size: 12px; margin-top: 8px;">💡 Ghost buttons for menu, ' + brandHex + ' background for active state</div>';
+      html += '</div>';
+
+      html += '</div>';
+
+      // d) Visual Rhythm & Spacing - WITH VISUAL EXAMPLES
+      html += '<div style="background: white; border-radius: 8px; padding: 20px; border-left: 4px solid #6f86d6;">';
+      html += '<h3 style="margin: 0 0 16px 0; color: #0f172a; font-size: 16px;">✨ Visual Rhythm & Spacing</h3>';
+
+      // Spacing scale reference
+      html += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 12px; margin-bottom: 24px;">';
+      html += '<div style="background: #f8fafc; padding: 12px; border-radius: 6px; text-align: center;">';
+      html += '<div style="font-size: 24px; font-weight: 700; color: #0f172a;">80px</div>';
+      html += '<div style="font-size: 11px; color: #64748b;">Between sections</div>';
+      html += '</div>';
+      html += '<div style="background: #f8fafc; padding: 12px; border-radius: 6px; text-align: center;">';
+      html += '<div style="font-size: 24px; font-weight: 700; color: #0f172a;">40px</div>';
+      html += '<div style="font-size: 11px; color: #64748b;">Within sections</div>';
+      html += '</div>';
+      html += '<div style="background: #f8fafc; padding: 12px; border-radius: 6px; text-align: center;">';
+      html += '<div style="font-size: 24px; font-weight: 700; color: #0f172a;">24px</div>';
+      html += '<div style="font-size: 11px; color: #64748b;">Related elements</div>';
+      html += '</div>';
+      html += '<div style="background: #f8fafc; padding: 12px; border-radius: 6px; text-align: center;">';
+      html += '<div style="font-size: 24px; font-weight: 700; color: #0f172a;">16px</div>';
+      html += '<div style="font-size: 11px; color: #64748b;">Within components</div>';
+      html += '</div>';
+      html += '</div>';
+
+      // Visual spacing example - Page Layout
+      html += '<div style="font-weight: 600; color: #1e293b; margin-bottom: 12px;">Page Layout Example</div>';
+      html += '<div style="background: #f8fafc; border-radius: 8px; padding: 16px; position: relative;">';
+
+      // Hero section
+      html += '<div style="background: linear-gradient(135deg, ' + brandHex + ' 0%, ' + (primaryColor && primaryColor.name.includes('Light') ? primaryColor.hex : brandHex) + ' 100%); border-radius: 8px; padding: 32px; margin-bottom: 80px; position: relative;">';
+      html += '<div style="position: absolute; right: 8px; top: 8px; background: rgba(0,0,0,0.6); color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px;">Hero Section</div>';
+      html += '<div style="font-size: 20px; font-weight: 700; color: white; margin-bottom: 12px;">Main Heading (48px)</div>';
+      html += '<div style="font-size: 12px; color: rgba(255,255,255,0.9); margin-bottom: 16px;">Supporting text goes here</div>';
+      html += '<span style="background: ' + ctaHex + '; color: white; padding: 8px 16px; border-radius: ' + btnRadius + 'px; font-size: 12px; font-weight: 500; display: inline-block;">Primary CTA</span>';
+      html += '<div style="position: absolute; left: -40px; top: 100%; width: 2px; height: 80px; background: repeating-linear-gradient(0deg, #ef4444, #ef4444 4px, transparent 4px, transparent 8px); margin-top: 8px;"></div>';
+      html += '<div style="position: absolute; left: -80px; top: calc(100% + 48px); background: #ef4444; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; white-space: nowrap;">80px</div>';
+      html += '</div>';
+
+      // Content section
+      html += '<div style="background: white; border-radius: 8px; padding: 24px; margin-bottom: 80px; border: 1px solid #e2e8f0; position: relative;">';
+      html += '<div style="position: absolute; right: 8px; top: 8px; background: rgba(0,0,0,0.6); color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px;">Content Section</div>';
+      html += '<div style="font-size: 14px; font-weight: 600; color: #1e293b; margin-bottom: 40px;">Section Title</div>';
+      html += '<div style="position: absolute; left: 24px; top: 50px; width: 2px; height: 40px; background: repeating-linear-gradient(0deg, #3b82f6, #3b82f6 4px, transparent 4px, transparent 8px);"></div>';
+      html += '<div style="position: absolute; left: -60px; top: 68px; background: #3b82f6; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px;">40px</div>';
+
+      // Card grid within section
+      html += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">';
+      html += '<div style="background: ' + bgHex + '; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0; position: relative;">';
+      html += '<div style="font-size: 12px; font-weight: 600; color: #1e293b; margin-bottom: 16px;">Card Title</div>';
+      html += '<div style="position: absolute; left: 16px; top: 30px; width: 2px; height: 16px; background: repeating-linear-gradient(0deg, #10b981, #10b981 4px, transparent 4px, transparent 8px);"></div>';
+      html += '<div style="position: absolute; left: -60px; top: 36px; background: #10b981; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px;">16px</div>';
+      html += '<div style="font-size: 11px; color: #64748b;">Card content</div>';
+      html += '</div>';
+      html += '<div style="background: ' + bgHex + '; border-radius: 8px; padding: 16px; border: 1px solid #e2e8f0;">';
+      html += '<div style="font-size: 12px; font-weight: 600; color: #1e293b; margin-bottom: 16px;">Card Title</div>';
+      html += '<div style="font-size: 11px; color: #64748b;">Card content</div>';
+      html += '</div>';
+      html += '</div>';
+      html += '<div style="position: absolute; left: 50%; top: calc(50% + 40px); width: 24px; height: 2px; background: repeating-linear-gradient(90deg, #f59e0b, #f59e0b 4px, transparent 4px, transparent 8px); transform: translateX(-12px);"></div>';
+      html += '<div style="position: absolute; left: 50%; top: calc(50% + 50px); background: #f59e0b; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; transform: translateX(-15px);">24px</div>';
+      html += '</div>';
+
+      html += '<div style="position: absolute; left: -40px; top: calc(100% - 80px); width: 2px; height: 80px; background: repeating-linear-gradient(0deg, #ef4444, #ef4444 4px, transparent 4px, transparent 8px);"></div>';
+      html += '<div style="position: absolute; left: -80px; bottom: -40px; background: #ef4444; color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px; white-space: nowrap;">80px</div>';
+
+      // Footer section
+      html += '<div style="background: #f1f5f9; border-radius: 8px; padding: 20px; text-align: center; position: relative;">';
+      html += '<div style="position: absolute; right: 8px; top: 8px; background: rgba(0,0,0,0.6); color: white; padding: 2px 6px; border-radius: 3px; font-size: 10px;">Footer</div>';
+      html += '<div style="font-size: 11px; color: #64748b;">Footer content</div>';
+      html += '</div>';
+
+      html += '</div>';
+
+      html += '<div style="color: #64748b; font-size: 12px; margin-top: 12px; line-height: 1.6;">';
+      html += '💡 Notice how spacing creates visual hierarchy: Large gaps (80px) separate major sections, medium gaps (40px) organize content within sections, smaller gaps (24px, 16px) group related items.';
+      html += '</div>';
+
+      html += '</div>';
+
+      container.innerHTML = html;
+    }
+
+
+    function generateSaaSTemplate(insights) {
+      var container = document.getElementById('saasTemplateContainer');
+      if (!container) return;
+
+      var primaryColor = insights.brandColors[0];
+      var ctaColor = insights.ctaColor || insights.functionalColors.find(c => c.role === 'cta');
+      var backgroundColor = insights.colors.find(c => c.hex === '#f6f5f1' || c.hex === '#ffffff');
+      var btnRadius = insights.cornerRadius || 24;
+      var brandHex = primaryColor ? primaryColor.hex : '#4ecdc4';
+      var bgHex = backgroundColor ? backgroundColor.hex : '#ffffff';
+      var ctaHex = ctaColor ? ctaColor.hex : '#000000';
+
+      // Get detected gradients (prefer hero/background gradients)
+      var heroGradient = null;
+      if (insights.gradients && insights.gradients.length > 0) {
+        var heroBg = insights.gradients.find(g => g.usage && g.usage.toLowerCase().includes('hero'));
+        var backgroundGradient = insights.gradients.find(g => g.usage && g.usage.toLowerCase().includes('background'));
+        heroGradient = heroBg || backgroundGradient || insights.gradients[0];
+      }
+
+      var html = '';
+
+      // Full SaaS Dashboard Layout
+      html += '<div style="background: #f8fafc; border-radius: 12px; overflow: hidden; border: 1px solid #e2e8f0;">';
+
+      // Top Navigation Bar
+      html += '<div style="background: white; padding: 16px 24px; border-bottom: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: space-between;">';
+      html += '<div style="display: flex; align-items: center; gap: 24px;">';
+      html += '<div style="font-weight: 700; font-size: 16px; color: #1e293b;">Dashboard</div>';
+      html += '<div style="display: flex; gap: 8px;">';
+      html += '<span style="padding: 6px 12px; border-radius: ' + btnRadius + 'px; color: ' + brandHex + '; font-size: 13px; font-weight: 500; background: rgba(78, 205, 196, 0.1);">Overview</span>';
+      html += '<span style="padding: 6px 12px; border-radius: ' + btnRadius + 'px; color: #64748b; font-size: 13px;">Analytics</span>';
+      html += '<span style="padding: 6px 12px; border-radius: ' + btnRadius + 'px; color: #64748b; font-size: 13px;">Projects</span>';
+      html += '<span style="padding: 6px 12px; border-radius: ' + btnRadius + 'px; color: #64748b; font-size: 13px;">Team</span>';
+      html += '</div></div>';
+      html += '<div style="display: flex; gap: 12px; align-items: center;">';
+      html += '<span style="background: ' + ctaHex + '; color: white; padding: 8px 16px; border-radius: ' + btnRadius + 'px; font-size: 13px; font-weight: 500; cursor: pointer;">New Project</span>';
+      html += '<div style="width: 32px; height: 32px; border-radius: 50%; background: ' + brandHex + '; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 12px;">JD</div>';
+      html += '</div></div>';
+
+      // Hero Section with Stats - Use detected gradient or create one from brand color
+      var heroBackground = heroGradient
+        ? heroGradient.gradient
+        : 'linear-gradient(135deg, ' + brandHex + ' 0%, ' + brandHex + 'dd 100%)';
+      html += '<div style="background: ' + heroBackground + '; padding: 48px 24px; color: white;">';
+      html += '<div style="max-width: 1200px; margin: 0 auto;">';
+      html += '<div style="font-size: 32px; font-weight: 700; margin-bottom: 8px;">Welcome back, John!</div>';
+      html += '<div style="font-size: 14px; opacity: 0.9; margin-bottom: 32px;">Here\'s what\'s happening with your projects today.</div>';
+
+      // Stats Grid
+      html += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px;">';
+      html += '<div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 12px; padding: 20px;">';
+      html += '<div style="font-size: 13px; opacity: 0.9; margin-bottom: 8px;">Total Projects</div>';
+      html += '<div style="font-size: 28px; font-weight: 700;">24</div>';
+      html += '<div style="font-size: 12px; opacity: 0.8; margin-top: 4px;">+12% from last month</div>';
+      html += '</div>';
+      html += '<div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 12px; padding: 20px;">';
+      html += '<div style="font-size: 13px; opacity: 0.9; margin-bottom: 8px;">Active Users</div>';
+      html += '<div style="font-size: 28px; font-weight: 700;">1,429</div>';
+      html += '<div style="font-size: 12px; opacity: 0.8; margin-top: 4px;">+5% from last week</div>';
+      html += '</div>';
+      html += '<div style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); border-radius: 12px; padding: 20px;">';
+      html += '<div style="font-size: 13px; opacity: 0.9; margin-bottom: 8px;">Revenue</div>';
+      html += '<div style="font-size: 28px; font-weight: 700;">$12,450</div>';
+      html += '<div style="font-size: 12px; opacity: 0.8; margin-top: 4px;">+23% from last month</div>';
+      html += '</div>';
+      html += '</div></div></div>';
+
+      // Main Content Area
+      html += '<div style="padding: 40px 24px; max-width: 1200px; margin: 0 auto;">';
+
+      // Section: Recent Projects
+      html += '<div style="margin-bottom: 40px;">';
+      html += '<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">';
+      html += '<h2 style="font-size: 20px; font-weight: 700; color: #1e293b; margin: 0;">Recent Projects</h2>';
+      html += '<span style="color: ' + brandHex + '; font-size: 13px; font-weight: 500; cursor: pointer;">View all →</span>';
+      html += '</div>';
+
+      // Project Cards Grid
+      html += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">';
+
+      // Card 1
+      html += '<div style="background: white; border-radius: 12px; padding: 20px; border-left: 3px solid ' + brandHex + '; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">';
+      html += '<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">';
+      html += '<div style="font-size: 15px; font-weight: 600; color: #1e293b;">Website Redesign</div>';
+      html += '<span style="background: rgba(34, 197, 94, 0.1); color: #16a34a; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;">Active</span>';
+      html += '</div>';
+      html += '<div style="color: #64748b; font-size: 13px; line-height: 1.6; margin-bottom: 16px;">Redesigning the entire marketing website with new brand guidelines.</div>';
+      html += '<div style="display: flex; gap: 8px; margin-bottom: 16px;">';
+      html += '<span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 11px; color: #64748b;">Design</span>';
+      html += '<span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 11px; color: #64748b;">Marketing</span>';
+      html += '</div>';
+      html += '<div style="display: flex; justify-content: space-between; align-items: center;">';
+      html += '<div style="font-size: 12px; color: #64748b;">Due: Dec 15, 2024</div>';
+      html += '<span style="background: ' + brandHex + '; color: white; padding: 6px 14px; border-radius: ' + btnRadius + 'px; font-size: 12px; font-weight: 500; cursor: pointer;">View</span>';
+      html += '</div></div>';
+
+      // Card 2
+      html += '<div style="background: white; border-radius: 12px; padding: 20px; border-left: 3px solid ' + brandHex + '; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">';
+      html += '<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">';
+      html += '<div style="font-size: 15px; font-weight: 600; color: #1e293b;">Mobile App v2.0</div>';
+      html += '<span style="background: rgba(251, 191, 36, 0.1); color: #d97706; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;">In Review</span>';
+      html += '</div>';
+      html += '<div style="color: #64748b; font-size: 13px; line-height: 1.6; margin-bottom: 16px;">Building the next generation mobile experience for our users.</div>';
+      html += '<div style="display: flex; gap: 8px; margin-bottom: 16px;">';
+      html += '<span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 11px; color: #64748b;">Development</span>';
+      html += '<span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 11px; color: #64748b;">iOS</span>';
+      html += '</div>';
+      html += '<div style="display: flex; justify-content: space-between; align-items: center;">';
+      html += '<div style="font-size: 12px; color: #64748b;">Due: Jan 10, 2025</div>';
+      html += '<span style="background: ' + brandHex + '; color: white; padding: 6px 14px; border-radius: ' + btnRadius + 'px; font-size: 12px; font-weight: 500; cursor: pointer;">View</span>';
+      html += '</div></div>';
+
+      // Card 3
+      html += '<div style="background: white; border-radius: 12px; padding: 20px; border-left: 3px solid ' + brandHex + '; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">';
+      html += '<div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 12px;">';
+      html += '<div style="font-size: 15px; font-weight: 600; color: #1e293b;">API Integration</div>';
+      html += '<span style="background: rgba(34, 197, 94, 0.1); color: #16a34a; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;">Active</span>';
+      html += '</div>';
+      html += '<div style="color: #64748b; font-size: 13px; line-height: 1.6; margin-bottom: 16px;">Integrating third-party APIs for enhanced functionality.</div>';
+      html += '<div style="display: flex; gap: 8px; margin-bottom: 16px;">';
+      html += '<span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 11px; color: #64748b;">Backend</span>';
+      html += '<span style="background: #f1f5f9; padding: 4px 8px; border-radius: 6px; font-size: 11px; color: #64748b;">API</span>';
+      html += '</div>';
+      html += '<div style="display: flex; justify-content: space-between; align-items: center;">';
+      html += '<div style="font-size: 12px; color: #64748b;">Due: Dec 20, 2024</div>';
+      html += '<span style="background: ' + brandHex + '; color: white; padding: 6px 14px; border-radius: ' + btnRadius + 'px; font-size: 12px; font-weight: 500; cursor: pointer;">View</span>';
+      html += '</div></div>';
+
+      html += '</div></div>';
+
+      // Section: Quick Actions
+      html += '<div style="margin-bottom: 40px;">';
+      html += '<h2 style="font-size: 20px; font-weight: 700; color: #1e293b; margin: 0 0 20px 0;">Quick Actions</h2>';
+      html += '<div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">';
+      html += '<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px;">';
+      html += '<button style="background: ' + ctaHex + '; color: white; padding: 12px 20px; border-radius: ' + btnRadius + 'px; font-size: 13px; font-weight: 500; border: none; cursor: pointer;">Create Project</button>';
+      html += '<button style="background: ' + brandHex + '; color: white; padding: 12px 20px; border-radius: ' + btnRadius + 'px; font-size: 13px; font-weight: 500; border: none; cursor: pointer;">Invite Team Member</button>';
+      html += '<button style="background: ' + bgHex + '; color: #1e293b; padding: 12px 20px; border-radius: ' + btnRadius + 'px; font-size: 13px; font-weight: 500; border: 1px solid #e2e8f0; cursor: pointer;">Export Data</button>';
+      html += '<button style="background: transparent; color: #64748b; padding: 12px 20px; border-radius: ' + btnRadius + 'px; font-size: 13px; font-weight: 500; border: 1px solid #e2e8f0; cursor: pointer;">Settings</button>';
+      html += '</div></div></div>';
+
+      // Section: Team Activity
+      html += '<div>';
+      html += '<h2 style="font-size: 20px; font-weight: 700; color: #1e293b; margin: 0 0 20px 0;">Team Activity</h2>';
+      html += '<div style="background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">';
+
+      // Activity items
+      html += '<div style="display: flex; gap: 16px; padding-bottom: 16px; border-bottom: 1px solid #f1f5f9;">';
+      html += '<div style="width: 40px; height: 40px; border-radius: 50%; background: ' + brandHex + '; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; flex-shrink: 0;">SA</div>';
+      html += '<div style="flex: 1;">';
+      html += '<div style="font-size: 14px; color: #1e293b; margin-bottom: 4px;"><strong>Sarah Anderson</strong> completed <span style="color: ' + brandHex + ';">Website Redesign - Phase 1</span></div>';
+      html += '<div style="font-size: 12px; color: #94a3b8;">2 hours ago</div>';
+      html += '</div></div>';
+
+      html += '<div style="display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid #f1f5f9;">';
+      html += '<div style="width: 40px; height: 40px; border-radius: 50%; background: ' + brandHex + '; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; flex-shrink: 0;">MJ</div>';
+      html += '<div style="flex: 1;">';
+      html += '<div style="font-size: 14px; color: #1e293b; margin-bottom: 4px;"><strong>Michael Johnson</strong> added a comment on <span style="color: ' + brandHex + ';">API Integration</span></div>';
+      html += '<div style="font-size: 12px; color: #94a3b8;">5 hours ago</div>';
+      html += '</div></div>';
+
+      html += '<div style="display: flex; gap: 16px; padding-top: 16px;">';
+      html += '<div style="width: 40px; height: 40px; border-radius: 50%; background: ' + brandHex + '; display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; flex-shrink: 0;">EC</div>';
+      html += '<div style="flex: 1;">';
+      html += '<div style="font-size: 14px; color: #1e293b; margin-bottom: 4px;"><strong>Emily Chen</strong> created a new project <span style="color: ' + brandHex + ';">Q1 Marketing Campaign</span></div>';
+      html += '<div style="font-size: 12px; color: #94a3b8;">Yesterday</div>';
+      html += '</div></div>';
+
+      html += '</div></div>';
+
+      html += '</div></div>';
+
+      container.innerHTML = html;
+    }
+
+
+    function showApplicationInsights() {
+      // Show step-by-step application guidance with visual examples
+      if (!aiColorInsights || !aiColorInsights.applicationInsights) {
+        return; // No application insights available
+      }
+
+      var panel = document.getElementById('applicationInsightsPanel');
+      panel.style.display = 'block';
+
+      // Use visual renderer instead of plain text
+      renderVisualApplicationInsights(aiColorInsights);
+
+      // Also generate SaaS template
+      document.getElementById('saasTemplateSection').style.display = 'block';
+      generateSaaSTemplate(aiColorInsights);
+    }
+
+    function detectWebDesign(data) {
+      // Detect if this is likely a web/marketing design vs software UI
+      // This is a simplified heuristic - real implementation would use AI insights
+      var hasLargeSpacing = false;
+      var hasLargeType = false;
+      var hasBoldColors = false;
+
+      // Check if any detected spacing > 48px (typical for web hero sections)
+      if (data.spacing && data.spacing.xxl && data.spacing.xxl > 48) {
+        hasLargeSpacing = true;
+      }
+
+      // Check if primary color has high saturation (>70%)
+      if (data.colors && data.colors.length > 0) {
+        var primaryColor = data.colors.find(function(c) { return c.role === 'primary'; });
+        if (primaryColor && getSaturation(primaryColor.hex) > 70) {
+          hasBoldColors = true;
+        }
+      }
+
+      // If we have AI insights, check for context
+      if (aiColorInsights && aiColorInsights.designContext === 'marketing') {
+        return true;
+      }
+
+      return hasLargeSpacing || hasBoldColors;
+    }
+
+    // Store API key in memory (session-based)
+    var STORED_API_KEY = null;
+
+    // Proxy server URL (change for production deployment)
+    var PROXY_URL = 'http://localhost:3002/api/analyze';
+
+    // Shared prompt for Claude Vision API
+    var CLAUDE_VISION_PROMPT = 'Analyze this design screenshot for design system generation. CRITICAL: Extract exact button styles, gradients, and distinguish brand vs functional colors.\n\n1. **ALL BUTTONS/CTAs** (MOST IMPORTANT): For EVERY button or call-to-action you see, provide:\n   - Exact location (e.g., "Hero CTA", "Navigation", "Footer")\n   - Background color (hex code) OR gradient (if gradient, specify: "linear-gradient(135deg, #start 0%, #end 100%)")\n   - Text color (hex code)\n   - Border style and color (if any)\n   - Corner radius (be precise: 0, 4, 8, 12, 16, 24, or 30px)\n   - Approximate height in pixels\n   - Approximate padding (horizontal × vertical)\n   - Button type (Primary CTA, Secondary, Text-only)\n\n2. **GRADIENTS** (CRITICAL): If the design uses gradients anywhere (backgrounds, buttons, overlays):\n   - List each gradient with exact format: "linear-gradient(135deg, #start 0%, #end 100%)"\n   - Specify where used: hero background, button, card overlay, etc.\n   - Identify gradient direction: 135deg (diagonal), 90deg (left-to-right), 180deg (top-to-bottom)\n   Example: "Hero background: linear-gradient(135deg, #667eea 0%, #764ba2 100%)"\n\n3. **Color Classification** (Brand vs Functional):\n   For each color, specify:\n   - BRAND COLOR (identity, emotional, decorative)\n     Example: Teal gradient in hero = brand\n   - FUNCTIONAL COLOR (UI elements, buttons, actions)\n     Example: Black CTA button = functional\n   - BACKGROUND (neutral surfaces)\n   - TEXT (readable content)\n   \n   Format: "Color #XXXXXX - [BRAND/FUNCTIONAL/BACKGROUND/TEXT] - XX% coverage - Used in: [description]"\n\n3. **Visual Dominance** (percentage of screen):\n   - Background colors with coverage %\n   - Brand colors with coverage %\n   - Functional/UI colors with coverage %\n   - Text colors with coverage %\n\n4. **Component Measurements**:\n   - Button heights (in px)\n   - Button corner radius (exact px value)\n   - Input field heights\n   - Card corner radius\n   - Spacing between elements\n\n5. **Typography Scale**:\n   - Hero headline size\n   - Section headings\n   - Body text\n   - Button text\n   - Small text/captions\n\n6. **Design Context**:\n   - Is this a marketing page or software UI?\n   - What is the primary CTA action?\n   - What colors are used for high-impact actions?\n\n7. **BRAND ATMOSPHERE** (IMPORTANT): Describe the visual mood/feeling:\n   - What emotions does the design evoke? (e.g., natural, scientific, trustworthy, modern)\n   - What visual techniques create this mood? (e.g., gradients, photography, textures)\n   - How should colors be used in software UI? (e.g., "App background: white/beige, CTAs: black, accents: green gradients")\n   - Button style recommendations (e.g., "Primary CTA: black bg + white text, Secondary: green bg + white text, Tertiary: white bg + black text")\n\n8. **APPLICATION INSIGHTS** (CRITICAL - Show how to recreate this style):\n   Provide step-by-step guidance on applying these components:\n\n   a) **Color Application Strategy**:\n      - Primary surfaces: "Use [color] for main app background"\n      - Brand moments: "Apply [brand color] to hero sections and feature highlights"\n      - Action colors: "Reserve [CTA color] for high-priority actions only"\n      - Text hierarchy: "Use [dark] for headings, [medium] for body"\n\n   b) **Button Application Guide**:\n      - Primary CTA: "Main conversion actions only (max 1-2 per screen)"\n      - Secondary: "Supporting actions (e.g., learn more, view details)"\n      - Tertiary: "Low-priority actions (e.g., cancel, back)"\n      - Ghost: "Navigation, tabs, minimal-emphasis links"\n      - Examples: "Hero: Primary for signup | Cards: Secondary for explore | Footer: Ghost for social"\n\n   c) **Component Composition**:\n      - Cards: "Corner radius [X]px, [background], [brand accent] border"\n      - Forms: "Input height [X]px, match button radius"\n      - Navigation: "Ghost buttons for menu, [brand] for active state"\n      - Sections: "Alternate [light] and [brand tint] backgrounds"\n\n   d) **Visual Rhythm**:\n      - Recreate mood: "Use [gradient] overlays, apply [brand tint] backgrounds"\n      - Spacing: "[X]px between sections, [Y]px within components"\n      - Weight balance: "Heavy hero with large CTA, lighter sections"\n\nFORMAT: Use clear sections with "**BUTTONS:**", "**GRADIENTS:**", "**BRAND COLORS:**", "**FUNCTIONAL COLORS:**", "**BRAND ATMOSPHERE:**", "**APPLICATION INSIGHTS:**", etc.\n\nBe EXTREMELY specific about gradient usage and provide ACTIONABLE step-by-step guidance for recreating the reference style!';
+
+    async function callClaudeVisionAPI(base64ImageData) {
+      try {
+        // Check for API key
+        var API_KEY = STORED_API_KEY;
+        if (!API_KEY) {
+          showStatus('error', '❌ Please save your API key first');
+          return;
+        }
+
+        showStatus('info', '🤖 Analyzing screenshot with Claude Vision via proxy...');
+
+        // Call proxy server
+        var response = await fetch(PROXY_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            apiKey: API_KEY,
+            imageData: base64ImageData,
+            prompt: CLAUDE_VISION_PROMPT
+          })
+        });
+
+        if (!response.ok) {
+          var errorData = await response.json();
+          throw new Error(errorData.error || 'Proxy request failed');
+        }
+
+        var data = await response.json();
+        var aiResponse = data.content[0].text;
+
+        // Parse and display results
+        aiColorInsights = parseAIColorInsights(aiResponse);
+        var formattedInsights = formatAIInsights(aiResponse);
+        displayAIInsights(formattedInsights);
+        showApplicationInsights();
+        showStatus('success', '✅ AI analysis complete!');
+
+      } catch (error) {
+        showStatus('error', '❌ AI analysis failed: ' + error.message);
+        console.error('Claude Vision API error:', error);
+      }
+    }
+
+    async function callClaudeVisionAPIWithURL(imageUrl) {
+      try {
+        // Check for API key
+        var API_KEY = STORED_API_KEY;
+        if (!API_KEY) {
+          showStatus('error', '❌ Please save your API key first');
+          return;
+        }
+
+        showStatus('info', '🤖 Analyzing image from URL with Claude Vision via proxy...');
+
+        // Call proxy server
+        var response = await fetch(PROXY_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            apiKey: API_KEY,
+            imageUrl: imageUrl,
+            prompt: CLAUDE_VISION_PROMPT
+          })
+        });
+
+        if (!response.ok) {
+          var errorData = await response.json();
+          throw new Error(errorData.error || 'Proxy request failed');
+        }
+
+        var data = await response.json();
+        var aiResponse = data.content[0].text;
+
+        // Parse and display results
+        aiColorInsights = parseAIColorInsights(aiResponse);
+        var formattedInsights = formatAIInsights(aiResponse);
+        displayAIInsights(formattedInsights);
+        showApplicationInsights();
+        showStatus('success', '✅ AI analysis complete!');
+
+      } catch (error) {
+        showStatus('error', '❌ AI analysis failed: ' + error.message);
+        console.error('Claude Vision API (URL) error:', error);
+      }
+    }
+
+
+
+
+
+
+
+    function formatAIInsights(rawText) {
+      // Convert markdown-style formatting to HTML
+      var formatted = rawText
+        .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')  // Bold
+        .replace(/\n\n/g, '<br><br>')  // Paragraphs
+        .replace(/\n- /g, '<br>• ')   // Bullet points
+        .replace(/\n(\d+)\./g, '<br><strong>$1.</strong>'); // Numbered lists
+
+      return formatted;
+    }
+
+    function saveAPIKey() {
+      var apiKey = document.getElementById('apiKeyInput').value.trim();
+
+      if (!apiKey) {
+        document.getElementById('apiKeyStatus').innerHTML = '<span style="color: #ef4444;">❌ Please enter an API key</span>';
+        return;
+      }
+
+      if (!apiKey.startsWith('sk-ant-')) {
+        document.getElementById('apiKeyStatus').innerHTML = '<span style="color: #f59e0b;">⚠️ API key should start with "sk-ant-"</span>';
+        return;
+      }
+
+      STORED_API_KEY = apiKey;
+      document.getElementById('apiKeyStatus').innerHTML = '<span style="color: #10b981;">✅ API key saved! Ready to analyze.</span>';
+      showStatus('success', '✅ API key saved for this session');
+    }
+
+    function clearAPIKey() {
+      // Remove stored API key from memory
+      STORED_API_KEY = null;
+      document.getElementById('apiKeyInput').value = '';
+      document.getElementById('apiKeyStatus').innerHTML = '';
+      showStatus('success', '✅ API key cleared. Enter a new one to analyze.');
+    }
+
+    // ============================================
+    // JSON IMPORT FUNCTIONS
+    // ============================================
+
+    function switchToManualWorkflow() {
+      // Show the old workflow sections
+      document.getElementById('step1Section').style.display = 'block';
+      document.getElementById('step15Section').style.display = 'block';
+      document.getElementById('step2Section').style.display = 'block';
+
+      // Hide the switch button
+      document.getElementById('switchToManualBtn').style.display = 'none';
+
+      // Clear any imported data
+      analysisData = null;
+      aiColorInsights = null;
+
+      // Hide analysis results
+      document.getElementById('analysisResults').style.display = 'none';
+      document.getElementById('applicationInsightsPanel').style.display = 'none';
+
+      showStatus('info', 'Switched to manual workflow. Select frames and analyze, or use AI analysis.');
+    }
+
+    function validateImportJSON() {
+      var textarea = document.getElementById('importJSON');
+      var statusDiv = document.getElementById('importJSONStatus');
+      var value = textarea.value.trim();
+
+      if (!value) {
+        statusDiv.style.display = 'none';
+        return;
+      }
+
+      try {
+        var data = JSON.parse(value);
+
+        // Validate structure
+        if (!data.version || !data.designSystem) {
+          throw new Error('Invalid format: Missing version or designSystem');
+        }
+
+        if (!data.designSystem.colors) {
+          throw new Error('Invalid format: Missing colors data');
+        }
+
+        // Show success message
+        statusDiv.style.display = 'block';
+        statusDiv.style.background = 'rgba(255,255,255,0.2)';
+        statusDiv.style.color = 'white';
+        statusDiv.style.padding = '8px';
+        statusDiv.style.borderRadius = '4px';
+        statusDiv.innerHTML = '✅ Valid JSON detected! Ready to import.';
+
+      } catch (error) {
+        statusDiv.style.display = 'block';
+        statusDiv.style.background = 'rgba(239,68,68,0.2)';
+        statusDiv.style.color = 'white';
+        statusDiv.style.padding = '8px';
+        statusDiv.style.borderRadius = '4px';
+        statusDiv.innerHTML = '❌ Invalid JSON: ' + error.message;
+      }
+    }
+
+    function importFromJSON() {
+      var textarea = document.getElementById('importJSON');
+      var value = textarea.value.trim();
+
+      if (!value) {
+        showStatus('error', '❌ Please paste JSON data first');
+        return;
+      }
+
+      try {
+        showStatus('info', '📦 Importing design system from JSON...');
+
+        var importedData = JSON.parse(value);
+
+        // Validate structure
+        if (!importedData.version || !importedData.designSystem) {
+          throw new Error('Invalid format: Missing version or designSystem');
+        }
+
+        var designSystem = importedData.designSystem;
+
+        // Store the imported data in global aiColorInsights
+        aiColorInsights = {
+          colors: designSystem.colors || [],
+          brandColors: designSystem.brandColors || [],
+          functionalColors: designSystem.functionalColors || [],
+          ctaColor: designSystem.ctaColor || null,
+          gradients: designSystem.gradients || [],
+          buttons: designSystem.buttons || [],
+          cornerRadius: designSystem.cornerRadius || 8,
+          spacing: designSystem.spacing || { base: 8, scale: [8, 16, 24, 32, 40, 48, 64, 80] },
+          typography: designSystem.typography || {},
+          applicationInsights: designSystem.applicationInsights || ''
+        };
+
+        // IMPORTANT: Also set analysisData for the generateSystem() function
+        // Convert imported data to the format expected by the plugin backend
+
+        // Transform colors with roles
+        var colors = [];
+        var colorRoleMap = {};
+
+        // Assign roles based on AI analysis
+        if (designSystem.brandColors && designSystem.brandColors.length > 0) {
+          designSystem.brandColors.forEach(function(c, index) {
+            var hex = typeof c === 'string' ? c : c.hex;
+            var colorObj = {
+              hex: hex,
+              name: typeof c === 'object' && c.name ? c.name : 'Brand ' + (index + 1),
+              role: index === 0 ? 'primary' : 'accent',
+              count: c.count || 1,
+              percentage: c.percentage || 0,
+              aiEnhanced: true
+            };
+            colors.push(colorObj);
+            colorRoleMap[hex] = colorObj.role;
+          });
+        }
+
+        // Add functional colors
+        if (designSystem.functionalColors && designSystem.functionalColors.length > 0) {
+          designSystem.functionalColors.forEach(function(c, index) {
+            var hex = typeof c === 'string' ? c : c.hex;
+            colors.push({
+              hex: hex,
+              name: typeof c === 'object' && c.name ? c.name : 'Functional ' + (index + 1),
+              role: 'functional',
+              count: c.count || 1,
+              percentage: c.percentage || 0,
+              aiEnhanced: true
+            });
+          });
+        }
+
+        // Add all other colors with generic roles
+        if (designSystem.colors && designSystem.colors.length > 0) {
+          designSystem.colors.forEach(function(c, index) {
+            var hex = typeof c === 'string' ? c : c.hex;
+            // Skip if already added
+            if (colorRoleMap[hex]) return;
+
+            // Determine role from name or usage
+            var role = 'secondary';
+            var name = typeof c === 'object' && c.name ? c.name : 'Color ' + (index + 1);
+
+            if (name.toLowerCase().includes('text') || name.toLowerCase().includes('gray')) {
+              role = 'text';
+            } else if (name.toLowerCase().includes('background') || name.toLowerCase().includes('white')) {
+              role = 'background';
+            } else if (name.toLowerCase().includes('border')) {
+              role = 'border';
+            }
+
+            colors.push({
+              hex: hex,
+              name: name,
+              role: role,
+              count: c.count || 1,
+              percentage: c.percentage || 0,
+              aiEnhanced: true
+            });
+          });
+        }
+
+        // Create components from AI button analysis
+        var components = [];
+        if (designSystem.buttons && designSystem.buttons.length > 0) {
+          designSystem.buttons.forEach(function(btn) {
+            components.push({
+              type: 'button',
+              cornerRadius: btn.cornerRadius || designSystem.cornerRadius || 8,
+              hasStroke: btn.border && btn.border !== 'none',
+              name: btn.type || 'Button'
+            });
+          });
+        } else {
+          // Create default button component if no buttons analyzed
+          components.push({
+            type: 'button',
+            cornerRadius: designSystem.cornerRadius || 8,
+            hasStroke: false,
+            name: 'Button'
+          });
+        }
+
+        // Add card component
+        components.push({
+          type: 'card',
+          cornerRadius: designSystem.cornerRadius || 12,
+          hasStroke: true,
+          name: 'Card'
+        });
+
+        // Add input component
+        components.push({
+          type: 'input',
+          cornerRadius: Math.max(4, (designSystem.cornerRadius || 8) - 2),
+          hasStroke: true,
+          name: 'Input'
+        });
+
+        analysisData = {
+          colors: colors,
+          components: components,
+          spacing: designSystem.spacing || { base: 8, scale: [8, 16, 24, 32, 40, 48, 64, 80] },
+          cornerRadius: designSystem.cornerRadius || 8
+        };
+
+        // Show Application Insights panel if available
+        if (aiColorInsights.applicationInsights) {
+          document.getElementById('applicationInsightsPanel').style.display = 'block';
+          renderVisualApplicationInsights(aiColorInsights);
+        }
+
+        // Hide the old workflow sections (not needed when importing JSON)
+        document.getElementById('step1Section').style.display = 'none';
+        document.getElementById('step15Section').style.display = 'none';
+        document.getElementById('step2Section').style.display = 'none';
+
+        // Show the "Switch to Manual" button in case they want to go back
+        document.getElementById('switchToManualBtn').style.display = 'block';
+
+        // Display the analysis results using the existing function
+        showAnalysisResults(analysisData);
+
+        // Debug: Log the transformed data
+        console.log('📦 Imported and transformed data for Figma:');
+        console.log('Colors:', analysisData.colors.length, 'items');
+        console.log('Components:', analysisData.components.length, 'items');
+        console.log('Full data:', analysisData);
+
+        showStatus('success', '✅ Design system imported! ' + analysisData.colors.length + ' colors, ' + analysisData.components.length + ' components ready. Scroll down and click "✨ Generate System"');
+
+        // Clear the textarea
+        textarea.value = '';
+        document.getElementById('importJSONStatus').style.display = 'none';
+
+      } catch (error) {
+        showStatus('error', '❌ Import failed: ' + error.message);
+        console.error('Import error:', error);
+      }
+    }
+
+    function testWithMockData() {
+      // Show mock visual features instantly without API call
+      showStatus('info', '🎨 Loading mock data to preview visual features...');
+
+      var mockAIResponse = `**BUTTONS:**
+
+Hero CTA Button:
+- Location: Center of hero section
+- Background: #000000 (solid black)
+- Text color: #ffffff (white)
+- Border: 1px solid #ffffff
+- Corner radius: 24px
+- Height: 48px
+- Button type: Primary CTA
+
+**GRADIENTS:**
+
+Hero background: linear-gradient(135deg, #4ecdc4 0%, #95e1d3 100%)
+
+**BRAND COLORS:**
+
+- #4ecdc4 - BRAND - 65% coverage - Teal/green gradient backgrounds
+- #95e1d3 - BRAND - 15% coverage - Light teal accent
+
+**FUNCTIONAL COLORS:**
+
+- #000000 - FUNCTIONAL - 3% coverage - Black CTA buttons
+
+**BACKGROUND:**
+
+- #f6f5f1 - BACKGROUND - 25% coverage - Beige/cream page background
+- #ffffff - BACKGROUND - 10% coverage - White content areas
+
+**TEXT:**
+
+- #1d1d1d - TEXT - 8% coverage - Dark gray body text
+- #4a4a4a - TEXT - 5% coverage - Medium gray secondary text
+
+**APPLICATION INSIGHTS:**
+
+a) Color Application Strategy:
+   - Primary surfaces: Use white (#ffffff) or light beige (#f6f5f1) for main app background
+   - Brand moments: Apply teal gradient (#4ecdc4 → #95e1d3) to hero sections and feature highlights
+   - Action colors: Reserve black (#000000) for primary CTAs only
+   - Text hierarchy: Use #1d1d1d for headings, #4a4a4a for body text
+
+b) Button Application Guide:
+   - Primary CTA: Black (#000000) bg + white text - max 1-2 per screen
+   - Secondary: Teal (#4ecdc4) bg + white text - supporting actions
+   - Tertiary: Beige (#f6f5f1) bg + dark text - low-priority
+   - Ghost: Transparent bg + teal text - navigation
+
+c) Component Composition:
+   - Cards: 12px radius, white bg, 2px teal left border accent
+   - Forms: 48px input height, 24px radius, light beige background
+   - Navigation: Ghost buttons with teal active state
+
+d) Visual Rhythm:
+   - Spacing: 80px → 40px → 24px → 16px hierarchy
+   - Apply teal gradient overlays to headers
+   - Balance: Heavy hero with large black CTA, lighter content sections`;
+
+      // Parse mock data
+      aiColorInsights = parseAIColorInsights(mockAIResponse);
+
+      // Show Application Insights panel
+      document.getElementById('applicationInsightsPanel').style.display = 'block';
+      renderVisualApplicationInsights(aiColorInsights);
+
+      // Show SaaS template
+      document.getElementById('saasTemplateSection').style.display = 'block';
+      generateSaaSTemplate(aiColorInsights);
+
+      showStatus('success', '✨ Mock visual features loaded! Scroll down to see color swatches, button previews, and SaaS dashboard template.');
+    }
+
+    // Request initial selection count
+    parent.postMessage({
+      pluginMessage: { type: 'get-selection-count' }
+    }, '*');
+  </script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+# Color Token Rules
+# Defines when, why, and how to use color tokens in the design system
+
+metadata:
+  version: "1.0"
+  last_updated: "2025-01-27"
+  description: "Color token usage guidelines and semantic mapping rules"
+
+# Semantic Color Categories
+categories:
+  brand:
+    description: "Primary brand colors that represent the company identity"
+    tokens:
+      - brand-primary
+      - brand-secondary
+      - brand-accent
+    usage:
+      - "Primary CTAs and key interactive elements"
+      - "Brand headers and navigation"
+      - "Logo and brand elements"
+    avoid:
+      - "Large background areas (use surface tokens instead)"
+      - "Text content (use text tokens instead)"
+
+  kpi:
+    description: "Colors for displaying metrics and data visualization"
+    tokens:
+      - kpi-positive
+      - kpi-negative
+      - kpi-neutral
+      - kpi-warning
+    usage:
+      - "Success states and positive metrics"
+      - "Error states and negative metrics"
+      - "Warning indicators"
+      - "Data visualization charts"
+    avoid:
+      - "Decorative elements"
+      - "Non-data related UI elements"
+
+  surface:
+    description: "Background colors for different UI surfaces"
+    tokens:
+      - surface-base
+      - surface-elevated
+      - surface-overlay
+      - surface-interactive
+    usage:
+      - "Card backgrounds"
+      - "Modal overlays"
+      - "Hover states"
+      - "Elevated components"
+    avoid:
+      - "Text content"
+      - "Border colors"
+
+  text:
+    description: "Text colors for different content hierarchies"
+    tokens:
+      - text-primary
+      - text-secondary
+      - text-tertiary
+      - text-inverse
+    usage:
+      - "Main content text"
+      - "Secondary information"
+      - "Placeholder text"
+      - "Text on dark backgrounds"
+    avoid:
+      - "Background colors"
+      - "Border colors"
+
+  interactive:
+    description: "Colors for interactive elements and states"
+    tokens:
+      - interactive-primary
+      - interactive-secondary
+      - interactive-hover
+      - interactive-active
+      - interactive-disabled
+    usage:
+      - "Button states"
+      - "Link colors"
+      - "Form inputs"
+      - "Interactive feedback"
+    avoid:
+      - "Static content"
+      - "Background surfaces"
+
+  border:
+    description: "Border and divider colors"
+    tokens:
+      - border-default
+      - border-subtle
+      - border-strong
+      - border-focus
+    usage:
+      - "Component borders"
+      - "Dividers and separators"
+      - "Focus indicators"
+      - "Input field borders"
+    avoid:
+      - "Text content"
+      - "Large background areas"
+
+# Color Accessibility Rules
+accessibility:
+  contrast_requirements:
+    aa: 4.5
+    aaa: 7.0
+  minimum_ratios:
+    text_primary: 4.5
+    text_secondary: 3.0
+    interactive_elements: 4.5
+    large_text: 3.0
+
+# Color Combinations
+recommended_combinations:
+  light_theme:
+    primary_text: "text-primary on surface-base"
+    secondary_text: "text-secondary on surface-base"
+    interactive: "interactive-primary on surface-base"
+    success: "kpi-positive on surface-base"
+    error: "kpi-negative on surface-base"
+  
+  dark_theme:
+    primary_text: "text-primary on surface-base"
+    secondary_text: "text-secondary on surface-base"
+    interactive: "interactive-primary on surface-base"
+    success: "kpi-positive on surface-base"
+    error: "kpi-negative on surface-base"
+
+# Primitive Color Mapping
+primitive_mapping:
+  pi-red:
+    description: "Primary red palette for errors, warnings, and negative states"
+    shades: [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
+    base_shade: 500
+    usage: "kpi-negative, error states, destructive actions"
+  
+  pi-green:
+    description: "Primary green palette for success, positive states, and growth"
+    shades: [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
+    base_shade: 500
+    usage: "kpi-positive, success states, positive actions"
+  
+  pi-blue:
+    description: "Primary blue palette for brand, interactive, and informational states"
+    shades: [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
+    base_shade: 500
+    usage: "brand-primary, interactive elements, informational content"
+  
+  pi-yellow:
+    description: "Primary yellow palette for warnings, highlights, and attention"
+    shades: [50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950]
+    base_shade: 500
+    usage: "kpi-warning, highlight states, attention-grabbing elements"
+
+# Usage Examples
+examples:
+  button_primary:
+    background: "brand-primary"
+    text: "text-inverse"
+    border: "brand-primary"
+    hover: "interactive-hover"
+  
+  button_secondary:
+    background: "surface-elevated"
+    text: "text-primary"
+    border: "border-default"
+    hover: "surface-interactive"
+  
+  card:
+    background: "surface-base"
+    border: "border-subtle"
+    text: "text-primary"
+    shadow: "shadow-sm"
+  
+  input:
+    background: "surface-base"
+    border: "border-default"
+    text: "text-primary"
+    placeholder: "text-tertiary"
+    focus: "border-focus"
+
+# Anti-patterns
+anti_patterns:
+  - "Using brand colors for large background areas"
+  - "Using primitive colors directly in components"
+  - "Inconsistent color usage across similar components"
+  - "Colors that don't meet accessibility contrast requirements"
+  - "Hard-coded hex values instead of tokens"
+  - "Using colors that don't have semantic meaning"
