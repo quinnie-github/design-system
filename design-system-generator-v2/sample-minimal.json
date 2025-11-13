@@ -1,0 +1,76 @@
+{
+  "systemName": "Minimal Portfolio Design System",
+  "colors": {
+    "primary": [
+      "#18181b",
+      "#27272a"
+    ],
+    "secondary": [
+      "#71717a",
+      "#a1a1aa"
+    ],
+    "text": [
+      "#18181b",
+      "#52525b",
+      "#a1a1aa"
+    ],
+    "background": [
+      "#ffffff",
+      "#fafafa"
+    ],
+    "accent": [
+      "#6366f1"
+    ]
+  },
+  "typography": {
+    "fontFamilies": [
+      "Playfair Display",
+      "Inter"
+    ],
+    "fontSizes": [
+      "14px",
+      "16px",
+      "20px",
+      "32px",
+      "56px"
+    ],
+    "fontWeights": [
+      "400",
+      "700"
+    ],
+    "lineHeights": [
+      "1.6"
+    ]
+  },
+  "spacing": {
+    "scale": [
+      "8px",
+      "16px",
+      "32px",
+      "64px",
+      "96px"
+    ]
+  },
+  "buttons": {
+    "variants": [
+      {
+        "name": "Primary",
+        "description": "View Work / Contact Me",
+        "style": "outline",
+        "color": "#18181b"
+      }
+    ]
+  },
+  "applicationInsights": {
+    "type": "Portfolio Website",
+    "purpose": "Showcase creative work and attract potential clients",
+    "targetAudience": "Creative directors, potential clients, hiring managers",
+    "designStyle": "Minimal, elegant, typography-focused with generous whitespace",
+    "keyFeatures": [
+      "Project showcase",
+      "About section",
+      "Contact form",
+      "Image galleries"
+    ]
+  }
+}

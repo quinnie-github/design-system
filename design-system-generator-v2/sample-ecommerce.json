@@ -1,0 +1,91 @@
+{
+  "systemName": "E-Commerce Design System",
+  "colors": {
+    "primary": [
+      "#3b82f6",
+      "#2563eb",
+      "#1d4ed8"
+    ],
+    "secondary": [
+      "#f97316",
+      "#ea580c",
+      "#c2410c"
+    ],
+    "text": [
+      "#18181b",
+      "#3f3f46",
+      "#71717a"
+    ],
+    "background": [
+      "#ffffff",
+      "#fafafa",
+      "#f4f4f5"
+    ],
+    "accent": [
+      "#10b981",
+      "#059669"
+    ]
+  },
+  "typography": {
+    "fontFamilies": [
+      "Poppins",
+      "Inter"
+    ],
+    "fontSizes": [
+      "12px",
+      "14px",
+      "16px",
+      "20px",
+      "24px",
+      "32px",
+      "40px"
+    ],
+    "fontWeights": [
+      "400",
+      "600",
+      "700"
+    ],
+    "lineHeights": [
+      "1.5"
+    ]
+  },
+  "spacing": {
+    "scale": [
+      "8px",
+      "16px",
+      "24px",
+      "32px",
+      "48px"
+    ]
+  },
+  "buttons": {
+    "variants": [
+      {
+        "name": "Primary",
+        "description": "Add to Cart / Buy Now buttons",
+        "style": "solid",
+        "color": "#3b82f6"
+      },
+      {
+        "name": "Secondary",
+        "description": "View Details / Compare buttons",
+        "style": "outline",
+        "color": "#f97316"
+      }
+    ]
+  },
+  "applicationInsights": {
+    "type": "E-Commerce Storefront",
+    "purpose": "Sell products online with an intuitive shopping experience",
+    "targetAudience": "Online shoppers aged 25-45, mobile-first users",
+    "designStyle": "Modern, vibrant, trust-building with clear CTAs",
+    "keyFeatures": [
+      "Product catalog",
+      "Shopping cart",
+      "Checkout flow",
+      "Product reviews",
+      "Wishlist",
+      "Order tracking"
+    ]
+  }
+}
