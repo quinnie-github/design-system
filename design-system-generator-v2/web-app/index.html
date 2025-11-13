@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Design System Generator v2.0 - AI-Powered Analysis</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 40px;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 32px;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .header p {
+      font-size: 16px;
+      opacity: 0.9;
+    }
+
+    .content {
+      padding: 40px;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .section:last-child {
+      margin-bottom: 0;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .section-title .emoji {
+      font-size: 24px;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      color: #475569;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="file"] {
+      width: 100%;
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: all 0.2s;
+    }
+
+    input[type="text"]:focus,
+    input[type="file"]:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .file-upload-wrapper {
+      position: relative;
+      border: 2px dashed #cbd5e1;
+      border-radius: 8px;
+      padding: 40px;
+      text-align: center;
+      transition: all 0.2s;
+      cursor: pointer;
+    }
+
+    .file-upload-wrapper:hover {
+      border-color: #667eea;
+      background: #f8fafc;
+    }
+
+    .file-upload-wrapper.dragover {
+      border-color: #667eea;
+      background: #eef2ff;
+    }
+
+    #fileInput {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    .upload-icon {
+      font-size: 48px;
+      margin-bottom: 12px;
+    }
+
+    .upload-text {
+      font-size: 16px;
+      color: #475569;
+      margin-bottom: 8px;
+    }
+
+    .upload-subtext {
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      border: none;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #cbd5e1;
+    }
+
+    .btn-secondary:hover {
+      background: #e2e8f0;
+    }
+
+    .status-message {
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      display: none;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .status-message.show {
+      display: flex;
+    }
+
+    .status-message.info {
+      background: #dbeafe;
+      color: #1e40af;
+      border: 1px solid #93c5fd;
+    }
+
+    .status-message.success {
+      background: #dcfce7;
+      color: #166534;
+      border: 1px solid #86efac;
+    }
+
+    .status-message.error {
+      background: #fee2e2;
+      color: #991b1b;
+      border: 1px solid #fca5a5;
+    }
+
+    .status-message.warning {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fcd34d;
+    }
+
+    .spinner {
+      border: 3px solid #e2e8f0;
+      border-top-color: #667eea;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    #imagePreview {
+      max-width: 100%;
+      border-radius: 8px;
+      margin-top: 16px;
+      border: 1px solid #e2e8f0;
+      display: none;
+    }
+
+    #imagePreview.show {
+      display: block;
+    }
+
+    .results-container {
+      display: none;
+      margin-top: 40px;
+      padding-top: 40px;
+      border-top: 2px solid #e2e8f0;
+    }
+
+    .results-container.show {
+      display: block;
+    }
+
+    .result-section {
+      margin-bottom: 32px;
+    }
+
+    .result-section h3 {
+      font-size: 16px;
+      font-weight: 600;
+      color: #334155;
+      margin-bottom: 16px;
+    }
+
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .color-item {
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      overflow: hidden;
+      background: white;
+    }
+
+    .color-swatch {
+      height: 80px;
+      width: 100%;
+    }
+
+    .color-info {
+      padding: 12px;
+    }
+
+    .color-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 4px;
+    }
+
+    .color-value {
+      font-size: 12px;
+      color: #64748b;
+      font-family: 'SF Mono', Monaco, monospace;
+    }
+
+    .list-group {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .list-item {
+      padding: 12px;
+      background: white;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      color: #334155;
+    }
+
+    .list-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .code-block {
+      background: #1e293b;
+      color: #e2e8f0;
+      padding: 20px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-family: 'SF Mono', Monaco, monospace;
+      font-size: 13px;
+      line-height: 1.6;
+      margin-top: 12px;
+    }
+
+    .export-buttons {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .tab-container {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    .tab {
+      padding: 12px 20px;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-size: 14px;
+      font-weight: 500;
+      color: #64748b;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: -2px;
+    }
+
+    .tab.active {
+      color: #667eea;
+      border-bottom-color: #667eea;
+    }
+
+    .tab:hover {
+      color: #667eea;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .info-card {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-radius: 8px;
+      padding: 16px;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #166534;
+    }
+
+    .info-card strong {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .settings-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .setting-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 8px;
+      padding: 12px 16px;
+    }
+
+    .setting-item label {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+    }
+
+    .setting-item input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎨 Design System Generator v2.0</h1>
+      <p>AI-powered design analysis with Claude Vision API</p>
+    </div>
+
+    <div class="content">
+      <!-- Configuration Section -->
+      <div class="section">
+        <div class="section-title">
+          <span class="emoji">⚙️</span>
+          <span>Configuration</span>
+        </div>
+
+        <div class="input-group">
+          <label for="apiKey">Claude API Key</label>
+          <input
+            type="text"
+            id="apiKey"
+            placeholder="sk-ant-api03-..."
+            autocomplete="off"
+          >
+          <div class="info-card" style="margin-top: 12px;">
+            <strong>Need an API key?</strong>
+            Get your Claude API key from <a href="https://console.anthropic.com/" target="_blank" style="color: #166534; text-decoration: underline;">console.anthropic.com</a>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="proxyUrl">Proxy Server URL</label>
+          <input
+            type="text"
+            id="proxyUrl"
+            value="http://localhost:3002"
+            placeholder="http://localhost:3002"
+          >
+        </div>
+      </div>
+
+      <!-- Upload Section -->
+      <div class="section">
+        <div class="section-title">
+          <span class="emoji">📸</span>
+          <span>Upload Design Screenshot</span>
+        </div>
+
+        <div class="tab-container">
+          <button class="tab active" data-tab="upload">Upload File</button>
+          <button class="tab" data-tab="url">Image URL</button>
+        </div>
+
+        <div id="uploadTab" class="tab-content active">
+          <div class="file-upload-wrapper" id="fileUploadWrapper">
+            <input type="file" id="fileInput" accept="image/*">
+            <div class="upload-icon">📁</div>
+            <div class="upload-text">Drop your design screenshot here</div>
+            <div class="upload-subtext">or click to browse (PNG, JPG, WebP)</div>
+          </div>
+        </div>
+
+        <div id="urlTab" class="tab-content">
+          <div class="input-group">
+            <label for="imageUrl">Image URL</label>
+            <input
+              type="text"
+              id="imageUrl"
+              placeholder="https://example.com/design.png"
+            >
+          </div>
+        </div>
+
+        <img id="imagePreview" alt="Preview">
+      </div>
+
+      <!-- Analysis Options -->
+      <div class="section">
+        <div class="section-title">
+          <span class="emoji">🎯</span>
+          <span>Analysis Options</span>
+        </div>
+
+        <div class="settings-grid">
+          <div class="setting-item">
+            <label>
+              <input type="checkbox" id="extractColors" checked>
+              <span>Extract colors and create palette</span>
+            </label>
+          </div>
+          <div class="setting-item">
+            <label>
+              <input type="checkbox" id="extractTypography" checked>
+              <span>Analyze typography (fonts, sizes, weights)</span>
+            </label>
+          </div>
+          <div class="setting-item">
+            <label>
+              <input type="checkbox" id="extractSpacing" checked>
+              <span>Detect spacing patterns</span>
+            </label>
+          </div>
+          <div class="setting-item">
+            <label>
+              <input type="checkbox" id="extractButtons" checked>
+              <span>Identify button styles</span>
+            </label>
+          </div>
+          <div class="setting-item">
+            <label>
+              <input type="checkbox" id="extractGradients" checked>
+              <span>Extract gradients</span>
+            </label>
+          </div>
+          <div class="setting-item">
+            <label>
+              <input type="checkbox" id="appInsights" checked>
+              <span>Generate application insights</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Status Message -->
+      <div id="statusMessage" class="status-message"></div>
+
+      <!-- Action Buttons -->
+      <div class="section">
+        <button id="analyzeBtn" class="btn btn-primary">
+          <span>✨ Analyze Design</span>
+        </button>
+      </div>
+
+      <!-- Results -->
+      <div id="resultsContainer" class="results-container">
+        <div class="section-title">
+          <span class="emoji">📊</span>
+          <span>Analysis Results</span>
+        </div>
+
+        <div id="resultsContent"></div>
+
+        <div class="export-buttons">
+          <button id="exportJsonBtn" class="btn btn-primary">
+            <span>💾 Download JSON</span>
+          </button>
+          <button id="copyJsonBtn" class="btn btn-secondary">
+            <span>📋 Copy to Clipboard</span>
+          </button>
+        </div>
+
+        <div class="info-card" style="margin-top: 24px;">
+          <strong>Next Step:</strong>
+          Import this JSON into the Figma plugin to generate your design system with variables and components.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

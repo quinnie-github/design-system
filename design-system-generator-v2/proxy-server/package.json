@@ -1,0 +1,27 @@
+{
+  "name": "design-system-generator-v2-proxy",
+  "version": "2.0.0",
+  "description": "Proxy server for Design System Generator v2.0 - handles Claude Vision API requests",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "NODE_ENV=development node server.js",
+    "test": "curl http://localhost:3002/health"
+  },
+  "keywords": [
+    "design-system",
+    "claude",
+    "vision-api",
+    "proxy",
+    "figma"
+  ],
+  "author": "Quinnie Chen",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
