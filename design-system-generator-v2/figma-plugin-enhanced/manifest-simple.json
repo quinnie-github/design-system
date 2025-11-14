@@ -1,0 +1,11 @@
+{
+  "name": "Design System Generator Simple",
+  "id": "design-system-gen-simple-2025",
+  "api": "1.0.0",
+  "main": "code-simple.js",
+  "ui": "ui.html",
+  "editorType": ["figma"],
+  "networkAccess": {
+    "allowedDomains": ["none"]
+  }
+}
