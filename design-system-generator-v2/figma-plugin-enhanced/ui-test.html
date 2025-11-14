@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 20px;
+      text-align: center;
+    }
+    button {
+      padding: 12px 24px;
+      font-size: 14px;
+      background: #0066FF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h1>Test Plugin</h1>
+  <p>If you can see this, the plugin loaded successfully!</p>
+  <button onclick="test()">Test Communication</button>
+
+  <script>
+    function test() {
+      parent.postMessage({ pluginMessage: { type: 'test' } }, '*');
+    }
+  </script>
+</body>
+</html>
